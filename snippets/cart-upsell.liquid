@@ -1,0 +1,182 @@
+{% comment %}
+    Renders upsell product list in cart page
+
+    Usage:
+    {% render 'cart-upsell' %}
+{% endcomment %}
+{%- liquid  
+  if settings.number_of_product_shown > section.settings.number_of_columns_on_desktop
+    assign enable_carousel = true
+  else 
+    assign enable_carousel = false
+  endif
+
+  assign disable_quickview = true
+  if section.settings.show_quickview
+    assign disable_quickview = false
+  endif 
+-%}
+{%- style -%}
+  .spacing--{{ section.id }} {
+    gap: {{ section.settings.spacing_mobile }}px;
+  }
+  @media screen and (min-width: 768px) {
+    .spacing--{{ section.id }} {
+      gap: {{ section.settings.spacing }}px;
+    }
+  }
+{%- endstyle -%}
+<div class="pt-[{{ section.settings.padding_top_mobile }}px] md:pt-[{{ section.settings.padding_top }}px] pb-[{{ section.settings.padding_bottom_mobile }}px] md:pb-[{{ section.settings.padding_bottom }}px]{% if template == 'cart' %} border-t{% endif %}"
+  x-data="{ show: false, productCount: 0, enable_carousel: {{ enable_carousel }} }"
+  x-show="show"
+  x-cloak
+  x-transition>
+  {%- if settings.cart_upsell_section_label != blank -%}
+    <div class="mb-7 lg:mb-14 page-width mx-auto">
+      <{{ section.settings.heading_tag }} class="text-center h2 heading--{{ section.id }}">{{ settings.cart_upsell_section_label }}</{{ section.settings.heading_tag }}>
+    </div>
+  {%- endif -%}
+  <div class="page-width" :class="enable_carousel && 'carousel-mobile full-width-mobile carousel-tablet'">
+    <div id="x-upsell-{{ section.id }}"
+      class="relative" 
+      :class="enable_carousel && 'overflow-hidden x-splide splide md:cursor-grab'"
+      x-intersect.once.margin.200px='enable_carousel && $store.xSplide.load($el, {
+        "speed": 1000,
+        "pagination": false, 
+        "mediaQuery": "min",
+        "progressBar": 4,
+        {%- if settings.lang_direction contains request.locale.iso_code %} 
+          "direction": "rtl",
+        {%- endif %}
+        "breakpoints": {
+          300: {
+            "padding": {
+              "right": "33%",
+              "left": 20
+            },
+            "focus": "right",
+            "gap": "{{ section.settings.spacing_mobile }}px",
+            "perPage": 1 
+          },
+          768: {  
+            "padding": {
+              "right": 20,
+              "left": 20
+            },
+            "gap": "{{ section.settings.spacing }}px",
+            "perPage": 4,
+            "perMove": 4
+          },
+          1024: {
+            "padding": 0,
+            "perPage": {{ section.settings.number_of_columns_on_desktop }},
+            "perMove": {{ section.settings.number_of_columns_on_desktop }}
+          }
+        }, 
+        "classes": {
+          "arrows": "splide__arrows block", 
+        }
+      })'
+    >
+      <div class="splide__arrows lg:inline-flex gap-2 hidden" x-show="enable_carousel">
+        <button class="splide__arrow splide__arrow--prev button-arrow hidden lg:block absolute top-1/2 -mt-6 p-4 rounded-full none_border z-10 w-12 h-12 after:text-[20px] rtl:right-0 rtl:-rotate-90 rtl:left-auto left-0 rotate-90 duration-200 opacity-60 hover:opacity-100 disabled:cursor-not-allowed transition-all ease-in-out lg:-translate-x-full rtl:lg:translate-x-full disabled:opacity-30" aria-label="previous slide">
+          {% render 'icon-alls', icon: 'icon-caret' %}
+        </button>
+        <button class="splide__arrow splide__arrow--next button-arrow hidden lg:block absolute top-1/2 -mt-6 p-4 rounded-full none_border z-10 w-12 h-12 after:text-[20px] rtl:left-0 rtl:rotate-90 rtl:right-auto right-0 -rotate-90 duration-200 opacity-60 hover:opacity-100 disabled:cursor-not-allowed transition-all ease-in-out lg:translate-x-full rtl:lg:-translate-x-full disabled:opacity-30" aria-label="previous slide">
+          {% render 'icon-alls', icon: 'icon-caret' %}
+        </button>
+      </div>
+      <div class="splide__track pt-0.5">
+        <div id="cart-upsell" class="splide__list w-full flex" :class="!enable_carousel && 'grid grid-cols-1 md:grid md:grid-cols-4 lg:grid-cols-{{ section.settings.number_of_columns_on_desktop }} spacing--{{ section.id }}'">
+          {%- liquid 
+            assign productCount = 0
+            assign productIds = cart.items | map: 'product_id' | uniq | join: ', ' | append: ","
+            assign maxItems = settings.number_of_product_shown
+            for item in cart.items
+              if forloop.first
+                assign product_id = item.product.id
+              endif
+              if item.product.metafields.cart.upsell.value.count > 0
+                for prod in item.product.metafields.cart.upsell.value
+                  if prod.available
+                    assign productId = prod.id | append: ","
+                    unless productIds contains productId
+                      assign productIds = productIds | append: productId
+                      assign productCount = productCount | plus: 1
+                      render 'card-product', card_product: prod, extend_height: true, class_slide: 'splide__slide x-splide-slide', index: forloop.index, columns_desktop: section.settings.number_of_columns_on_desktop, block_id: forloop.index, disable_quickview: disable_quickview, section_id: section.id, product_card_id: forloop.index
+                    endunless
+                  endif
+                  if productCount >= maxItems
+                    break
+                  endif
+                endfor
+              endif
+            endfor
+            if productCount < maxItems
+              for prod in settings.cart_upsell_product_list
+                if prod.available
+                  assign productId = prod.id | append: ","
+                  unless productIds contains productId
+                    assign productIds = productIds | append : productId
+                    assign productCount = productCount | plus : 1
+                    render 'card-product', card_product: prod, extend_height: true, class_slide: 'splide__slide x-splide-slide', index: forloop.index, columns_desktop: section.settings.number_of_columns_on_desktop, block_id: forloop.index, disable_quickview: disable_quickview, section_id: section.id, product_card_id: forloop.index
+                  endunless
+                endif
+                if productCount >= maxItems
+                  break
+                endif
+              endfor
+            endif
+          -%} 
+        </div>
+        {% if productCount < maxItems %}
+          <div x-init="$store.xProductRecommendations.load($el, '{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product_id }}&limit={{ maxItems | plus: cart.items.size }}&intent=related')" class="product-recommendations">
+            {% if recommendations.performed and recommendations.products_count > 0 %}
+              {% for recommendation in recommendations.products %}
+                {% assign productId = recommendation.id | append: "," %}
+                {% unless productIds contains productId %}
+                  <template x-teleport="#cart-upsell">
+                  {% render 'card-product', 
+                    card_product: recommendation, 
+                    extend_height: true, 
+                    class_slide: 'splide__slide x-splide-slide', 
+                    index: forloop.index, 
+                    columns_desktop: section.settings.number_of_columns_on_desktop, block_id: forloop.index, disable_quickview: disable_quickview
+                  %}
+                  </template>
+                  {% liquid 
+                    assign productIds = productIds | append : productId 
+                    assign productCount = productCount | plus : 1
+                  %}
+                {% endunless %}
+                {% liquid
+                  if productCount >= maxItems
+                    break
+                  endif 
+                %}
+              {% endfor %}
+            {% endif %}
+          </div>
+          <script src="{{ 'product-recommendations.js' | asset_url }}" defer></script>
+        {% endif %} 
+        <div x-show="enable_carousel" class="hidden lg:flex items-center mt-5 w-3/4 ml-auto mr-auto">
+          <div class="splide-progress inline-block grow">
+            {% liquid
+              assign my_float = section.settings.number_of_columns_on_desktop | times: 1.0
+              assign widthBar = my_float | divided_by: productCount 
+            %} 
+            <div class="splide-progress-bar" style="width: {{ widthBar | times: 100 }}%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% if productCount %}
+    <div x-init="() => { 
+      productCount = {{ productCount }}; 
+      if (productCount > 0) show = true;  
+      if (productCount <= {{ section.settings.number_of_columns_on_desktop }}) enable_carousel = false;
+    }"></div>
+  {% endif %}
+</div>
+<script src="{{ 'preview-color-swatches.js' | asset_url }}" defer></script>

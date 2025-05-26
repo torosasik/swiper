@@ -1,0 +1,93 @@
+{%- liquid
+  if use_variant
+    assign target = product.selected_or_first_available_variant
+  else
+    assign target = product
+  endif
+
+  assign compare_at_price = target.compare_at_price
+  assign price = target.price | default: 1999
+  if settings.currency_code_enable
+    assign money_price = price | money_with_currency
+  else
+    assign money_price = price | money
+  endif
+
+  if target == product and product.price_varies
+    assign money_price = 'products.product.price.from_price_html' | t: price: money_price
+  endif
+-%}
+<div class="{{ container }} price leading-none text-[{{ settings.text_base_size | times: 0.007875 }}rem] md:text-[{{ settings.text_base_size | times: 0.00875 }}rem]">
+  <div class="no-collage:mb-2">
+    <div class="hidden">{{ target.price }}</div>
+    {%- if compare_at_price > price %}
+      <div class="{% if price_class != blank %}{{ price_class }}{% endif %}">
+        {%- unless product.price_varies == false and product.compare_at_price_varies %}
+          <small class="cap rtl:inline-block">
+            <s class="rtl:leading-tight">
+              {%- if settings.currency_code_enable -%}
+                {{- compare_at_price | money_with_currency -}}
+              {%- else -%}
+                {{- compare_at_price | money -}}
+              {%- endif -%}
+            </s>
+          </small>
+        {%- endunless -%}
+        <span
+          {% unless product.price_varies == false and product.compare_at_price_varies %}
+            class="price-sale selection:bg-text-[rgb(var(--colors-price-sale),0.2)] ml-1 rtl:mr-1 rtl:ml-0"
+          {% endunless %}
+        >
+          {{- money_price -}}{% if product.metafields.measuringunitsatd.measuring_units_atd != blank %} / {{ product.metafields.measuringunitsatd.measuring_units_atd }}{% endif %}
+        </span>
+      </div>
+    {%- else -%}
+      <p class="price{% if price_class != blank %} {{ price_class }}{% endif %}">
+        <span>{{ money_price }}</span>{% if product.metafields.measuringunitsatd.measuring_units_atd != blank %} / {{ product.metafields.measuringunitsatd.measuring_units_atd }}{% endif %}
+      </p>
+    {%- endif -%}
+    <small class="text-[70%]{% if product.selected_or_first_available_variant.unit_price_measurement == nil %} hidden{% endif %}">
+      <span class="hidden">{{ 'products.product.price.unit_price' | t }}</span>
+      <span class="up price-item price-item--last">
+        <span>
+          {%- if settings.currency_code_enable %}
+            {{- product.selected_or_first_available_variant.unit_price | money_with_currency -}}
+          {% else %}
+            {{- product.selected_or_first_available_variant.unit_price | money -}}
+          {% endif %}
+        </span>
+        <span aria-hidden="true">/</span>
+        <span class="hidden">&nbsp;{{ 'accessibility.unit_price_separator' | t }}&nbsp;</span>
+        <span>
+          {%- if product.selected_or_first_available_variant.unit_price_measurement.reference_value != 1 -%}
+            {{- product.selected_or_first_available_variant.unit_price_measurement.reference_value -}}
+          {%- endif -%}
+          {{ product.selected_or_first_available_variant.unit_price_measurement.reference_unit }}
+        </span>
+      </span>
+    </small>
+  </div>
+</div>
+
+<style>
+    .sold-by {
+      display: flex;
+      margin: 10px 0;
+      color: #000;
+  }
+</style>
+{% assign sold_by_variations = 'Sold by,Sold By,SOLD BY' | split: ',' %}
+{% for variation in sold_by_variations %}
+  {% if product.description contains variation %}
+    {% assign sold_by_parts = product.description | split: variation %}
+    {% assign seller_info = sold_by_parts[1] | split: '.' | first | strip %}
+    {% assign seller_info_words = seller_info | split: ' ' | slice: 0, 2 | join: ' ' %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+{% if product.metafields.my_fields.box_area != blank %}
+  {% assign box_area = product.metafields.my_fields.box_area %}
+  {% assign price_squared = product.price | divided_by: box_area | round: 2 %}
+  {% assign price_squared = price_squared | money %}
+  <p class="sold-by-text">{{ price_squared }} / Sq. Ft</p>
+{% endif %}

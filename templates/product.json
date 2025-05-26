@@ -1,0 +1,266 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "product_name_xkPbAa": {
+          "type": "product_name",
+          "settings": {
+            "title_size": 70,
+            "heading_tag": "h1"
+          }
+        },
+        "rating_AeRdFJ": {
+          "type": "rating",
+          "disabled": true,
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {
+            "show_tax_and_shipping": false
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "calculator_BpUXYf": {
+          "type": "calculator",
+          "settings": {}
+        },
+        "dealeasy_app_block_rpx7EG": {
+          "type": "shopify:\/\/apps\/dealeasy\/blocks\/app-block\/e47a8634-0496-480d-9e46-6f7fafd34b30",
+          "settings": {
+            "lb-product-handle": "",
+            "lb-product-id": ""
+          }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": false,
+            "show_gift_card_recipient": true,
+            "pickup_availability": false,
+            "hide_when_pre_order": false,
+            "preorder_show": "no",
+            "preorder_button_label": "Pre-order",
+            "preorder_message": "<p>This product will be available for sale in 2 weeks, but you can pre-order now to receive 10% discount!<\/p>",
+            "preorder_show_dynamic_button": false,
+            "show_background": false,
+            "box_type": "square",
+            "background_color_light": "rgba(0,0,0,0)",
+            "message_color_light": "rgba(0,0,0,0)",
+            "background_color_dark": "rgba(0,0,0,0)",
+            "message_color_dark": "rgba(0,0,0,0)",
+            "button_light": "rgba(0,0,0,0)",
+            "button_text_light": "rgba(0,0,0,0)",
+            "button_hover_light": "rgba(0,0,0,0)",
+            "button_text_hover_light": "rgba(0,0,0,0)",
+            "secondary_button_light": "rgba(0,0,0,0)",
+            "secondary_button_text_light": "rgba(0,0,0,0)",
+            "button_dark": "rgba(0,0,0,0)",
+            "button_text_dark": "rgba(0,0,0,0)",
+            "button_hover_dark": "rgba(0,0,0,0)",
+            "button_text_hover_dark": "rgba(0,0,0,0)",
+            "secondary_button_dark": "rgba(0,0,0,0)",
+            "secondary_button_text_dark": "rgba(0,0,0,0)"
+          }
+        },
+        "product_samples_app_block_LyfNcF": {
+          "type": "shopify:\/\/apps\/product-samples\/blocks\/app-block\/4f181f24-29df-48f7-859c-60e47224d06d",
+          "settings": {
+            "enable_form": false,
+            "enabled": true,
+            "corner_radius": 6,
+            "border_width": 0,
+            "border_style": "solid",
+            "width": 100,
+            "width_unit": "%",
+            "background": "#1c4170",
+            "color": "#ffffff",
+            "border_color": "#1c4170",
+            "hover_background": "#1c4170",
+            "hover_color": "#0a1e33",
+            "hover_border_color": "#000000",
+            "inherit_font": true,
+            "font": "helvetica_n4",
+            "font_size": 14,
+            "font_weight": "inherit",
+            "text_transform": "capitalize"
+          }
+        },
+        "mega_better_price_app_block_wEkdb3": {
+          "type": "shopify:\/\/apps\/mega-better-price\/blocks\/app-block\/7a5fb689-a902-4695-8f78-75bdd89e88e7",
+          "settings": {
+            "buttonType": "button",
+            "buttonText": "Found a better price? Click here for verification!",
+            "text_align": "center",
+            "overlay": true,
+            "animation": false,
+            "fontColor": "#ffffff",
+            "bannerBackground": "#2596be",
+            "popupFooterColor": "#1c4170",
+            "fontSize": 15,
+            "buttonWidth": 100,
+            "minPriceEnabled": false,
+            "minPrice": 0,
+            "hideCart": false
+          }
+        },
+        "groupmate_pdp_variant_selector_9XMHXN": {
+          "type": "shopify:\/\/apps\/groupmate\/blocks\/pdp_variant-selector\/6e6d41ff-b0ad-49c2-a226-69e76a2e1525",
+          "settings": {
+            "show_label": true,
+            "show_swatch_titles": true,
+            "show_border": false,
+            "swatch_size": 6,
+            "only_available": false,
+            "order_active": false,
+            "custom_css": "span.title {\n    font-size: 13px !important;\n}\n.mw_groupmate__container .mw_groupmate__swatchlist {\n\t--border-radius: 0.2rem;\n}\n.mw_groupmate__container .--sold_out a {\n\topacity: 0.5;\n}\n.mw_groupmate__container .--sold_out a:after {\n\tbackground: linear-gradient(\n\t\tto top left,\n\t\trgba(0, 0, 0, 0) 0%,\n\t\trgba(0, 0, 0, 0) calc(50% - 0.8px),\n\t\trgba(0, 0, 0, 1) 50%,\n\t\trgba(0, 0, 0, 0) calc(50% + 0.8px),\n\t\trgba(0, 0, 0, 0) 100%\n\t);\n}",
+            "disable_app_css": false
+          }
+        },
+        "html_rBUyem": {
+          "type": "html",
+          "settings": {
+            "custom_html": "<div class=\"sharethis-inline-share-buttons\"><\/div>"
+          }
+        },
+        "tabbed_information_6wfDWz": {
+          "type": "tabbed_information",
+          "settings": {
+            "description": "PRODUCT ATTRIBUTES",
+            "tab_1": "SHIPPING & RETURNS",
+            "content_1": "<p>Shipping is available within the 48 continental US States.<\/p><p>Special arrangements may be made for international buyers.<\/p><p>For large orders and all other shipping-related inquiries, please contact our shipping department.<\/p><p><\/p><p>To get detailed information about returns please read our <a href=\"https:\/\/www.americantiledepot.com\/pages\/policies-procedures#:~:text=Return%20Policy%20%26%20Procedures%2C%20Exchanges%20%26%20Refunds\" target=\"_blank\" title=\"https:\/\/www.americantiledepot.com\/pages\/policies-procedures#:~:text=Return%20Policy%20%26%20Procedures%2C%20Exchanges%20%26%20Refunds\"><strong>Return Policy.<\/strong><\/a><\/p>",
+            "tab_2": "ADDITIONAL DETAIL",
+            "content_2": "<p><strong>- <\/strong><em><strong>Please keep in mind that each piece of natural stone has unique features that vary it from the others in terms of color, texture and homogeneity. Expect to have some variation between individual pieces when ordering in large quantities.<\/strong><\/em><\/p><p><\/p><p><strong>- <\/strong><em><strong>Installation of the product requires sealing products and these need to be purchased separately. (Only the item described in the listing will be shipped out).<\/strong><\/em><\/p>",
+            "tab_3": "",
+            "content_3": ""
+          }
+        },
+        "social-sharing": {
+          "type": "social_sharing",
+          "disabled": true,
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "product_name_xkPbAa",
+        "rating_AeRdFJ",
+        "price",
+        "quantity_selector",
+        "calculator_BpUXYf",
+        "dealeasy_app_block_rpx7EG",
+        "buy_buttons",
+        "product_samples_app_block_LyfNcF",
+        "mega_better_price_app_block_wEkdb3",
+        "groupmate_pdp_variant_selector_9XMHXN",
+        "html_rBUyem",
+        "tabbed_information_6wfDWz",
+        "social-sharing"
+      ],
+      "custom_css": [
+        ".shopify-buy__btn-wrapper {margin-top: 20px !important; display: flex !important; justify-content: left !important; text-align: left !important;}",
+        ".shopify-buy__layout-vertical .shopify-buy__btn,.shopify-buy__layout-vertical .shopify-buy__quantity-container,.shopify-buy__layout-horizontal .shopify-buy__btn,.shopify-buy__layout-horizontal .shopify-buy__quantity-container {margin: 0 !important;}",
+        ".shopify-app-block[id^=\"shopify-block-product_samples_app_block\"] {width: 100%;}"
+      ],
+      "settings": {
+        "enable_sticky_image": true,
+        "show_product_name": false,
+        "title_size": 100,
+        "heading_tag": "h1",
+        "show_vendor": false,
+        "make_content_center": false,
+        "desktop_layout": "left",
+        "desktop_media_layout": "thumbnail_slider",
+        "show_arrow_button": true,
+        "mobile_media_size": "full_width",
+        "show_thumnail_mobile": false,
+        "image_ratio": "natural",
+        "thumbnail_position": "vertical",
+        "enable_image_zoom": false,
+        "enable_video_autoplay": true,
+        "enable_video_loop": true,
+        "show_first_image_avaiable": true,
+        "show_media_with_variant_selected": true,
+        "option_to_classify_variant_media": "",
+        "show_breadcrumbs": false,
+        "show_breadcrumbs_border": true,
+        "full_width_breadcrumb": true,
+        "desktop_content_alignment": "text-center",
+        "mobile_content_alignment": "text-center",
+        "background_color_light": "rgba(0,0,0,0)",
+        "text_color_light": "rgba(0,0,0,0)",
+        "textlink_color_light": "rgba(0,0,0,0)",
+        "background_color_dark": "rgba(0,0,0,0)",
+        "text_color_dark": "rgba(0,0,0,0)",
+        "textlink_color_dark": "rgba(0,0,0,0)",
+        "full_width": true,
+        "spacing_col": "default",
+        "padding_top": 12,
+        "padding_bottom": 0,
+        "padding_top_mobile": 40,
+        "padding_bottom_mobile": 28
+      }
+    },
+    "173395170781c447eb": {
+      "type": "apps",
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "1718024691c710985e": {
+      "type": "apps",
+      "blocks": {
+        "yotpo_product_reviews_ugc_reviews_eChbwM": {
+          "type": "shopify:\/\/apps\/yotpo-product-reviews\/blocks\/reviews\/eb7dfd7d-db44-4334-bc49-c893b51b36cf",
+          "settings": {
+            "product": "{{product}}"
+          }
+        }
+      },
+      "block_order": [
+        "yotpo_product_reviews_ugc_reviews_eChbwM"
+      ],
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "product-recommendations": {
+      "type": "product-recommendations",
+      "disabled": true,
+      "settings": {
+        "heading": "You May Also Like...",
+        "heading_size": 100,
+        "heading_tag": "h2",
+        "heading_alignment": "center",
+        "products_to_show": 5,
+        "background_color_light": "",
+        "background_color_dark": "",
+        "show_vendor": false,
+        "show_rating": true,
+        "show_quickview": true,
+        "enable_carousel_desktop": false,
+        "enable_swiper_mobile": true,
+        "columns_desktop": 5,
+        "full_width": true,
+        "show_section_divider": false,
+        "spacing": 28,
+        "padding_top": 56,
+        "padding_bottom": 88,
+        "columns_mobile": "1",
+        "show_section_divider_mobile": false,
+        "spacing_mobile": 16,
+        "padding_top_mobile": 0,
+        "padding_bottom_mobile": 20
+      }
+    }
+  },
+  "order": [
+    "main",
+    "173395170781c447eb",
+    "1718024691c710985e",
+    "product-recommendations"
+  ]
+}

@@ -1,0 +1,86 @@
+{% comment %}
+  Elysium Products Visibility Control
+  Hides specific elements for guest users viewing Elysium products
+{% endcomment %}
+
+{% if customer == nil %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Check if current product is in the Elysium Products collection
+  var isElysiumProduct = false;
+  
+  {% if product != blank %}
+    {% for collection in product.collections %}
+      {% if collection.handle == 'elysium-products' %}
+        isElysiumProduct = true;
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+  
+  if (isElysiumProduct) {
+    // Use a simple function to hide elements
+    function hideElement(selector) {
+      var elements = document.querySelectorAll(selector);
+      if (elements && elements.length > 0) {
+        for (var i = 0; i < elements.length; i++) {
+          elements[i].style.display = 'none';
+        }
+      }
+    }
+    
+    // Find and hide the specific elements
+    // 1. Cross-Link Swatches
+    hideElement('.mw_groupmate__container');
+    hideElement('[id*="groupmate"]');
+    
+    // 2. Better Price - Target more specific selectors
+    hideElement('#betterPriceWrapper');
+    hideElement('.betterPriceLink');
+    hideElement('a[href*="better-price"]');
+    hideElement('[id*="mega-better-price"]');
+    hideElement('div[class*="docapp-"]');
+    hideElement('div[id*="better"]');
+    hideElement('#betterPriceWrapper');
+    
+    // Hide by content
+    var allLinks = document.querySelectorAll('a');
+    for (var i = 0; i < allLinks.length; i++) {
+      if (allLinks[i].textContent && allLinks[i].textContent.toLowerCase().includes('better price')) {
+        allLinks[i].style.display = 'none';
+        
+        // Also hide parent elements that might be containers
+        if (allLinks[i].parentElement) {
+          allLinks[i].parentElement.style.display = 'none';
+          
+          // Try one level up too
+          if (allLinks[i].parentElement.parentElement) {
+            allLinks[i].parentElement.parentElement.style.display = 'none';
+          }
+        }
+      }
+    }
+    
+    // 3. Shipping Calculator
+    hideElement('[href*="shipping"]');
+    var buttons = document.querySelectorAll('a.btn, button.btn');
+    for (var i = 0; i < buttons.length; i++) {
+      if (buttons[i].textContent && buttons[i].textContent.includes('shipping cost')) {
+        buttons[i].style.display = 'none';
+      }
+    }
+    
+    // 4. Calculator elements
+    hideElement('.calculator_container');
+    hideElement('#calculator-footage-section');
+    hideElement('[class*="calculator"]');
+    
+    // Add a small delay to catch elements that might load later
+    setTimeout(function() {
+      hideElement('#betterPriceWrapper');
+      hideElement('.betterPriceLink');
+      hideElement('[id*="docapp"]');
+    }, 500);
+  }
+});
+</script>
+{% endif %} 

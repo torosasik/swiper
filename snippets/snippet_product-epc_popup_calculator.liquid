@@ -1,0 +1,2265 @@
+{%- comment -%}
+  This file has been modified by the Yoast SEO for Shopify app.
+  You can learn more about this (and learn how to cleanly revert these changes) at https://yoa.st/removing-theme-changes.
+{%- endcomment -%}
+
+{% assign epc_settings = shop.metafields.epc_custom_fields %}
+
+{% if epc_settings.measureupcalcpopup == 'enabled' %}
+  {% if product.metafields.epc_custom_fields.measureupcalc != blank
+    and product.metafields.epc_custom_fields.measureupcalc == 'enabled'
+  %}
+    <div id="MeasureUpCalcPopUp" style="display:none">
+      <div id="MeasureUpCalcPopUpContent">
+        <button type="button" class="MeasureUpCalcPopUpCloseBtn" onclick="MeasureUpCalcPopUpClose()">X</button>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+        <style>
+            div#container {
+              width: 100%;
+              display: flex;
+          }
+          /*
+           .calc-total {
+              margin-bottom: 10px;
+          }
+
+
+          .calc-total {
+              width: 70%;
+              float: left;
+              left: 0;
+          }
+
+            @media (max-width: 767px) and (min-width: 500px){
+
+              .calc-total {
+                  width: 60%;
+                  float: left;
+                  left: 0;
+              }
+
+            }*/
+
+            .OpenMeasureUpCalcPopUpInnerBtn {
+
+              background-color: #00e8ae;
+              color: white;
+              border: none;
+              opacity: 1;
+              position: inherit;
+              width: 100%;
+              top: 0px;
+              height: 60px;
+              text-align: center;
+              cursor: pointer;
+              box-shadow: 0px 0px 14px 14px #1919190d;
+              font-size: 20px;
+              margin: auto;
+              bottom: 0px;
+              left: auto;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              z-index: 999999;
+              margin-top: 10px !important;
+              margin-bottom: 10px !important;
+          }
+
+            .OpenMeasureUpCalcPopUp {
+              background-color: #00e8ae;
+              color: white;
+              border: none;
+              opacity: 1;
+              position: fixed;
+              right: -151px;
+              width: 363px;
+              top: 0px;
+              border-top-left-radius: 0px;
+              border-bottom-left-radius: 0px;
+              height: 60px;
+              text-align: center;
+              transform: rotate(-90deg);
+              cursor: pointer;
+              box-shadow: 0px 0px 14px 14px #1919190d;
+              padding: 15px 75px;
+              font-size: 20px;
+              margin: auto;
+              bottom: 0px;
+              transition: 0.3s ease;
+              left: auto;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              z-index: 999999;
+          }
+          .OpenMeasureUpCalcPopUpButtonInfo {
+              border: 0px;
+              opacity: 1;
+              position: fixed;
+              right: -289px;
+              top: 0px;
+              border-top-left-radius: 0px;
+              border-bottom-left-radius: 0px;
+              height: 360px;
+              text-align: center;
+              cursor: pointer;
+              transition: 0.3s ease;
+              box-shadow: none;
+              padding: 0px;
+              font-size: 21px;
+              margin: auto;
+              bottom: 0px;
+              left: auto;
+              font-weight: 600;
+              line-height: 1;
+              display: flex;
+              justify-content: center;
+              background: #fff;
+              box-shadow: 0px 0px 2px #ddd;
+              z-index: 99999;
+              width: 350px;
+              align-items: center;
+          }
+          .OpenMeasureUpCalcPopUpButtonInfo:hover {
+              right: 2px;
+          }
+          .OpenMeasureUpCalcPopUpButtonInfo:hover .OpenMeasureUpCalcPopUp {
+              right: 200px;
+          }
+
+            /*Responsive CALC CSS*/
+            @media (max-width:767px){
+              #squarefoot{
+                width:100% !important;
+                text-align:left !important;
+                  padding-left: 10px !important;
+                padding-right: 10px !important;
+                  font-size:14px !important;
+              }
+              .price_per_unit_val h3{
+                font-size:14px !important;
+              }
+              .prod_sku_vend .price_part .price_per_unit h3.prd_tspi{
+                font-size:14px !important;
+                padding-top:0px !important;
+              }
+              .price_per_unit_val {
+                text-align: center !important;
+            }
+              .prod_sku_vend .price_part .price_per_unit h3.prd_prc{
+                padding-top:0px !important;
+              }
+              .pro_main_c.easy_price_calculator_main h3.prj_specs{
+                font-size:18px !important;
+              }
+              .MeasureUpCalcPopUpCloseBtn{
+                right:5px !important;
+              }
+
+            }
+
+            /*Responsive CALC CSS END */
+
+            /*POPUP CSS*/
+            .MeasureUpCalcPopUpCloseBtn{
+              background-color: #fff;
+              padding: 5px 14px;
+              color: #000;
+              border: none;
+              position: absolute;
+              right: 0px;
+              top: 0px;
+              border-radius: 50%;
+              font-weight: 400;
+              font-size: 14px;
+              border: 1px solid #b5aeae;
+              height: 40px;
+              width: 40px;
+
+            }
+            #MeasureUpCalcPopUp{
+              display: none; /* Hidden by default */
+              position: fixed; /* Stay in place */
+              z-index: 99999999; /* Sit on top */
+              left: 0;
+              top: 0;
+              width: 100%; /* Full width */
+              height: 100%; /* Full height */
+              overflow: auto; /* Enable scroll if needed */
+              background-color: rgb(0,0,0); /* Fallback color */
+              background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+              overflow:visible;
+            }
+            #MeasureUpCalcPopUpContent{
+            background-color: transparent;
+            margin: 0px auto;
+            padding: 20px;
+            top: 50%;
+            border: none;
+            width: 50%;
+            position: relative;
+            transform: translate(0%, -50%);
+            }
+
+
+          .OpenMeasureUpCalcPopUp {
+              background-color: #00e8ae;
+              color: white;
+              border: none;
+              opacity: 1;
+              position: fixed;
+              right: -151px;
+              width: 363px;
+              top: 0px;
+              border-top-left-radius: 0px;
+              border-bottom-left-radius: 0px;
+              height: 60px;
+              text-align: center;
+              transform: rotate(-90deg);
+              cursor: pointer;
+              box-shadow: 0px 0px 14px 14px #1919190d;
+              padding: 15px 75px;
+              font-size: 20px;
+              margin: auto;
+              bottom: 0px;
+              left: auto;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              z-index:999999;
+          }
+            .OpenMeasureUpCalcPopUp:focus {
+
+              outline: none;
+              border:none;
+              box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.84);
+          }
+          .MeasureUpCalcPopUpCloseBtn:focus {
+
+              outline: none;
+              border:none;
+              background-color: #fff;
+              padding: 5px 14px;
+              color: #000;
+              border: none;
+              position: absolute;
+              right: 0px;
+              top: 0px;
+              border-radius: 50%;
+              font-weight: 400;
+              font-size: 14px;
+              border: 1px solid #b5aeae;
+              height: 40px;
+              width: 40px;
+          }
+
+          .OpenMeasureUpCalcPopUp p {
+              width: 1px;
+              word-wrap: break-word;
+              color: #fff;
+              font-family: monospace;
+              line-height: 1.3em;
+              margin-left: 20px;
+              white-space: pre-wrap;
+              font-weight: 600;
+              font-size: 16px;
+          }
+
+            .pro_main_c.easy_price_calculator_main .variant-inventory-custom{
+                display:none !important;
+            }
+            /*POPUP CSS END*/
+           .lbox {
+              width: 100% !important;
+              float: left !important;
+              display: inline-block !important;
+          }
+
+            /* Magnific Popup CSS */
+            .mfp-move-from-top.mfp-ready .mfp-with-anim {
+              opacity: 1;
+              -ms-filter: none;
+              filter: none;
+              -webkit-transform: translateY(0);
+              -moz-transform: translateY(0);
+              -o-transform: translateY(0);
+              -ms-transform: translateY(0);
+              transform: translateY(0);
+          }
+          .mfp-move-from-top .mfp-with-anim {
+              opacity: 0;
+              -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+              filter: alpha(opacity=0);
+              -webkit-transition: 0.2s;
+              -moz-transition: 0.2s;
+              -o-transition: 0.2s;
+              -ms-transition: 0.2s;
+              transition: 0.2s;
+              -webkit-transform: translateY(-100px);
+              -moz-transform: translateY(-100px);
+              -o-transform: translateY(-100px);
+              -ms-transform: translateY(-100px);
+              transform: translateY(-100px);
+          }
+
+          .modal-popup {
+              background: #fff;
+              padding: 20px 30px;
+              margin: 40px auto;
+              text-align: left;
+              /* max-width: 650px; */
+              max-width: 767px;
+              position: relative;
+          }
+          .mfp-close-btn-in .mfp-close {
+              color: #333;
+          }
+
+          button.mfp-close, button.mfp-arrow {
+              overflow: visible;
+              cursor: pointer;
+              background: transparent;
+              border: 0;
+              -webkit-appearance: none;
+              -moz-appearance: none;
+              appearance: none;
+              display: block;
+              padding: 0;
+              z-index: 1046;
+          }
+
+          .mfp-close {
+              width: 44px;
+              height: 44px;
+              line-height: 44px;
+              position: absolute;
+              right: 0;
+              top: 0;
+              text-decoration: none;
+              text-align: center;
+              opacity: 0.65;
+              -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=65)";
+              filter: alpha(opacity=65);
+              padding: 0 0 18px 10px;
+              color: #fff;
+              font-style: normal;
+              font-size: 28px;
+          }
+            #open-popup {padding:20px}
+          .white-popup {
+            position: relative;
+            background: #FFF;
+            padding: 40px;
+            width: auto;
+            max-width: 200px;
+            margin: 20px auto;
+            text-align: center;
+          }
+          /* Magnific Popup CSS */
+          .mfp-bg {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1042;
+            overflow: hidden;
+            position: fixed;
+            background: #0b0b0b;
+            opacity: 0.8; }
+
+          .mfp-wrap {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1043;
+            position: fixed;
+            outline: none !important;
+            -webkit-backface-visibility: hidden; }
+
+          .mfp-container {
+            text-align: center;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            padding: 0 8px;
+            box-sizing: border-box; }
+
+          .mfp-container:before {
+            content: '';
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle; }
+
+          .mfp-align-top .mfp-container:before {
+            display: none; }
+
+          .mfp-content {
+            position: relative;
+            display: inline-block;
+            vertical-align: middle;
+            margin: 0 auto;
+            text-align: left;
+            z-index: 1045; }
+
+          .mfp-inline-holder .mfp-content,
+          .mfp-ajax-holder .mfp-content {
+            width: 100%;
+            cursor: auto; }
+
+          .mfp-ajax-cur {
+            cursor: progress; }
+
+          .mfp-zoom-out-cur, .mfp-zoom-out-cur .mfp-image-holder .mfp-close {
+            cursor: -moz-zoom-out;
+            cursor: -webkit-zoom-out;
+            cursor: zoom-out; }
+
+          .mfp-zoom {
+            cursor: pointer;
+            cursor: -webkit-zoom-in;
+            cursor: -moz-zoom-in;
+            cursor: zoom-in; }
+
+          .mfp-auto-cursor .mfp-content {
+            cursor: auto; }
+
+          .mfp-close,
+          .mfp-arrow,
+          .mfp-preloader,
+          .mfp-counter {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none; }
+
+          .mfp-loading.mfp-figure {
+            display: none; }
+
+          .mfp-hide {
+            display: none !important; }
+
+          .mfp-preloader {
+            color: #CCC;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            text-align: center;
+            margin-top: -0.8em;
+            left: 8px;
+            right: 8px;
+            z-index: 1044; }
+            .mfp-preloader a {
+              color: #CCC; }
+              .mfp-preloader a:hover {
+                color: #FFF; }
+
+          .mfp-s-ready .mfp-preloader {
+            display: none; }
+
+          .mfp-s-error .mfp-content {
+            display: none; }
+
+          button.mfp-close,
+          button.mfp-arrow {
+            overflow: visible;
+            cursor: pointer;
+            background: transparent;
+            border: 0;
+            -webkit-appearance: none;
+            display: block;
+            outline: none;
+            padding: 0;
+            z-index: 1046;
+            box-shadow: none;
+            touch-action: manipulation; }
+
+          button::-moz-focus-inner {
+            padding: 0;
+            border: 0; }
+
+          .mfp-close {
+            width: 44px;
+            height: 44px;
+            line-height: 44px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            text-decoration: none;
+            text-align: center;
+            opacity: 0.65;
+            padding: 0 0 18px 10px;
+            color: #FFF;
+            font-style: normal;
+            font-size: 28px;
+            font-family: Arial, Baskerville, monospace; }
+            .mfp-close:hover,
+            .mfp-close:focus {
+              opacity: 1; }
+            .mfp-close:active {
+              top: 1px; }
+
+          .mfp-close-btn-in .mfp-close {
+            color: #333; }
+
+          .mfp-image-holder .mfp-close,
+          .mfp-iframe-holder .mfp-close {
+            color: #FFF;
+            right: -6px;
+            text-align: right;
+            padding-right: 6px;
+            width: 100%; }
+
+          .mfp-counter {
+            position: absolute;
+            top: 0;
+            right: 0;
+            color: #CCC;
+            font-size: 12px;
+            line-height: 18px;
+            white-space: nowrap; }
+
+          .mfp-arrow {
+            position: absolute;
+            opacity: 0.65;
+            margin: 0;
+            top: 50%;
+            margin-top: -55px;
+            padding: 0;
+            width: 90px;
+            height: 110px;
+            -webkit-tap-highlight-color: transparent; }
+            .mfp-arrow:active {
+              margin-top: -54px; }
+            .mfp-arrow:hover,
+            .mfp-arrow:focus {
+              opacity: 1; }
+            .mfp-arrow:before,
+            .mfp-arrow:after {
+              content: '';
+              display: block;
+              width: 0;
+              height: 0;
+              position: absolute;
+              left: 0;
+              top: 0;
+              margin-top: 35px;
+              margin-left: 35px;
+              border: medium inset transparent; }
+            .mfp-arrow:after {
+              border-top-width: 13px;
+              border-bottom-width: 13px;
+              top: 8px; }
+            .mfp-arrow:before {
+              border-top-width: 21px;
+              border-bottom-width: 21px;
+              opacity: 0.7; }
+
+          .mfp-arrow-left {
+            left: 0; }
+            .mfp-arrow-left:after {
+              border-right: 17px solid #FFF;
+              margin-left: 31px; }
+            .mfp-arrow-left:before {
+              margin-left: 25px;
+              border-right: 27px solid #3F3F3F; }
+
+          .mfp-arrow-right {
+            right: 0; }
+            .mfp-arrow-right:after {
+              border-left: 17px solid #FFF;
+              margin-left: 39px; }
+            .mfp-arrow-right:before {
+              border-left: 27px solid #3F3F3F; }
+
+          .mfp-iframe-holder {
+            padding-top: 40px;
+            padding-bottom: 40px; }
+            .mfp-iframe-holder .mfp-content {
+              line-height: 0;
+              width: 100%;
+              max-width: 900px; }
+            .mfp-iframe-holder .mfp-close {
+              top: -40px; }
+
+          .mfp-iframe-scaler {
+            width: 100%;
+            height: 0;
+            overflow: hidden;
+            padding-top: 56.25%; }
+            .mfp-iframe-scaler iframe {
+              position: absolute;
+              display: block;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+              background: #000; }
+
+          /* Main image in popup */
+          img.mfp-img {
+            width: auto;
+            max-width: 100%;
+            height: auto;
+            display: block;
+            line-height: 0;
+            box-sizing: border-box;
+            padding: 40px 0 40px;
+            margin: 0 auto; }
+
+          /* The shadow behind the image */
+          .mfp-figure {
+            line-height: 0; }
+            .mfp-figure:after {
+              content: '';
+              position: absolute;
+              left: 0;
+              top: 40px;
+              bottom: 40px;
+              display: block;
+              right: 0;
+              width: auto;
+              height: auto;
+              z-index: -1;
+              box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+              background: #444; }
+            .mfp-figure small {
+              color: #BDBDBD;
+              display: block;
+              font-size: 12px;
+              line-height: 14px; }
+            .mfp-figure figure {
+              margin: 0; }
+
+          .mfp-bottom-bar {
+            margin-top: -36px;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            cursor: auto; }
+
+          .mfp-title {
+            text-align: left;
+            line-height: 18px;
+            color: #F3F3F3;
+            word-wrap: break-word;
+            padding-right: 36px; }
+
+          .mfp-image-holder .mfp-content {
+            max-width: 100%; }
+
+          .mfp-gallery .mfp-image-holder .mfp-figure {
+            cursor: pointer; }
+
+          @media screen and (max-width: 800px) and (orientation: landscape), screen and (max-height: 300px) {
+            /**
+                 * Remove all paddings around the image on small screen
+                 */
+            .mfp-img-mobile .mfp-image-holder {
+              padding-left: 0;
+              padding-right: 0; }
+            .mfp-img-mobile img.mfp-img {
+              padding: 0; }
+            .mfp-img-mobile .mfp-figure:after {
+              top: 0;
+              bottom: 0; }
+            .mfp-img-mobile .mfp-figure small {
+              display: inline;
+              margin-left: 5px; }
+            .mfp-img-mobile .mfp-bottom-bar {
+              background: rgba(0, 0, 0, 0.6);
+              bottom: 0;
+              margin: 0;
+              top: auto;
+              padding: 3px 5px;
+              position: fixed;
+              box-sizing: border-box; }
+              .mfp-img-mobile .mfp-bottom-bar:empty {
+                padding: 0; }
+            .mfp-img-mobile .mfp-counter {
+              right: 5px;
+              top: 3px; }
+            .mfp-img-mobile .mfp-close {
+              top: 0;
+              right: 0;
+              width: 35px;
+              height: 35px;
+              line-height: 35px;
+              background: rgba(0, 0, 0, 0.6);
+              position: fixed;
+              text-align: center;
+              padding: 0; } }
+
+
+          /*MFP END*/
+
+
+          @media all and (max-width: 900px) {
+            .mfp-arrow {
+              -webkit-transform: scale(0.75);
+              transform: scale(0.75); }
+            .mfp-arrow-left {
+              -webkit-transform-origin: 0;
+              transform-origin: 0; }
+            .mfp-arrow-right {
+              -webkit-transform-origin: 100%;
+              transform-origin: 100%; }
+            .mfp-container {
+              padding-left: 6px;
+              padding-right: 6px; } }
+          .opt-order-estimator-inner {
+              display: flex;
+              width: 100%;
+              margin-left: 15px;
+              margin-right: 15px;
+              margin-top: 5px;
+              margin-bottom: 5px;
+          }
+            .opt-order-estimator-inner .calculator-form-ele {
+              display: block;
+              float: left;
+              width: 49%;
+          }
+            @media (max-width:1100px){
+          .opt-qty-section {
+              display: flex;
+              width: 100%;
+              flex-direction: column;
+          }
+          .opt-qty-section .opt-order-estimator {
+              display: none;
+              justify-content: space-around;
+              align-items: center;
+              border: 1px solid #808080;
+              position: relative;
+              margin-left: 0px;
+              flex-grow: 2;
+              margin-top: 12px;
+              flex-direction: column;
+              width: 100%;
+          }
+          .opt-qty-section .opt-order-estimator::before, .opt-qty-section .opt-order-estimator::after {
+              content: '';
+              display: block;
+              position: absolute;
+              top: -15px;
+              left: 10px;
+              height: 0;
+              width: 0;
+              border: 10px solid transparent;
+              border-left: 0;
+              border-right-color: #808080;
+              transform: rotate(90deg);
+          }
+          .opt-qty-section .opt-order-estimator::after {
+              border-right-color: white;
+              left: 10px;
+          }
+            }
+
+            .pro_main_c.easy_price_calculator_main {
+
+              padding: 10px;
+          }
+
+            .hidden{
+            display:none;
+            }
+            form#AddToCartForm{
+            display:none;
+            }
+          .calc-inst1 {
+              display: inherit;
+              padding-top: 10px;
+              padding-bottom: 10px;
+          }
+
+          .prod_sku_vend {
+              padding: 5px;
+              display:flex;
+          }
+
+          .price_part {
+              width: calc(100% /3);
+              float: left;
+              display: flex;
+          }
+          .no-padding {
+              padding: 0 !important;
+          }
+
+          .price_per_unit {
+              float: left;
+              width: 100%;
+
+          }
+          span.totalPrice {
+              font-size: 24px;
+              color: #25ab48;
+              font-weight: 700;
+          }
+
+            .calc-total {
+              font-size: 18px;
+              font-weight: 700;
+              color: #000000;
+          }
+          .price_per_unit_val h3 {
+              color: #25ab48;
+              font-size: 18px;
+              line-height: normal;
+              margin: 0;
+              padding: 0;
+              font-weight: 700;
+              font-size:26px;
+          }
+
+          .price_per_unit_val small {
+              color: #000;
+              font-weight: 600;
+              font-size:14px;
+          }
+
+          .calc-inst1 .price-attr {
+              border-bottom: none !important;
+          }
+
+          .opt-qty-section {
+              display: flex;
+          }
+
+          .calculator-form-ele {
+              float: left;
+          }
+          .calc-1, .calc-2, .calc-3 {
+              width: auto;
+              float: left;
+          }
+
+          .opt-qty-input {
+              border: 2px solid black;
+          }
+
+          fieldset.opt-qty-input{
+
+            margin: 0;
+              padding: 0;
+
+          }
+
+          .opt-qty-input legend {
+              margin: 0 10px;
+              padding: 5px;
+              width: auto;
+              text-transform: lowercase;
+              font-weight: normal;
+              font-size: 12px;
+              border: 0;
+              display: block;
+              line-height: inherit;
+              color: #333;
+          }
+
+          #squarefoot {
+              width: 95px;
+              border: 0;
+              background: transparent;
+              font-size: 20px;
+              font-weight: bold;
+              padding: 20px 0 15px;
+              text-align: center;
+              margin: 0;
+              color: #000 !important;
+          }
+
+          .opt-order-estimator {
+              display: none;
+              justify-content: space-around;
+              align-items: center;
+              border: 1px solid #808080;
+              position: relative;
+              margin-left: 10px;
+              flex-grow: 2;
+              margin-top: 12px;
+          }
+
+          div#calc_errors {
+              padding: 5px;
+          }
+
+          .opt-order-estimator::before, .opt-order-estimator::after {
+              content: '';
+              display: block;
+              position: absolute;
+              top: calc(50% - 10px);
+              left: -11px;
+              height: 0;
+              width: 0;
+              border: 10px solid transparent;
+              border-left: 0;
+              border-right-color: #808080;
+          }
+
+          .opt-order-estimator::after {
+              border-right-color: white;
+              left: -10px;
+          }
+
+
+          .calculator-form-ele {
+              float: left;
+          }
+
+          .calc-1, .calc-2, .calc-3 {
+              width: auto;
+              float: left;
+          }
+          .text-center {
+              text-align: center !important;
+          }
+          .main-qty {
+              width: 100%;
+              border: 0;
+              background: transparent;
+              font-size: 14px;
+              font-weight: bold;
+              line-height: 14px;
+              text-align: center;
+              margin: 0;
+              color: #000 !important;
+          }
+            .unitType {
+              font-size: 14px;
+              font-weight: 600;
+              color: #000;
+          }
+          .opt-order-estimator .info {
+              color: #5E5F5E;
+              font-weight: 400;
+              font-size: 14px;
+              line-height: 1.7em;
+              margin:0px;
+          }
+            .calc-sub {
+              font-weight: bold;
+              color: #25ab48;
+          }
+          .opt-order-estimator .subtotal {
+              color: #000;
+              font-size: 14px;
+          }
+
+          #addItemsToCart {
+              margin-top: 10px;
+              margin-bottom: 10px;
+              text-transform:capitalize;
+          }
+
+            .btn_c {
+              height: 40px;
+              font-size: 14px;
+              line-height: 40px;
+              color: #ffffff;
+              display: block;
+              margin: 30px auto 0;
+              padding: 0 20px;
+              font-weight: 700;
+              max-width: 250px;
+              background: #5e5e5e;
+              border-radius: 18px;
+              border: none;
+              text-align: center;
+              cursor: pointer;
+              position: relative;
+              -moz-transition: all 0.3s;
+              -webkit-transition: all 0.3s;
+              -o-transition: all 0.3s;
+          }
+            input#qty {
+              border: 0px;
+              margin:0px;
+              padding-top: 0px;
+              padding-bottom: 0px;
+              outline:0px;
+              text-align:center;
+              border-radius: 0px;
+              background: transparent;
+              width: 100% !important;
+              height: 20px;
+              font-size:18px;
+          }
+            input#squarefoot{
+              outline:0px;
+            }
+            #squarefoot {
+              width: 95px;
+              border: 0;
+              background: transparent;
+              font-size: 20px;
+              font-weight: bold;
+              padding: 20px 0 15px;
+              text-align: center;
+              margin: 0;
+              color: #000 !important;
+          }
+          .calc-inst1 .price-attr {
+              border-bottom: none !important;
+          }
+
+          .opt-qty-section {
+              display: flex;
+          }
+
+          /*calculator css    */
+            .prod_sku_vend .price_part .price_per_unit h3.prd_psprc small {
+              color: #25ab48;
+              font-size: 12px;
+              font-weight: normal;
+              text-transform: lowercase;
+          }
+            .prod_sku_vend .price_part .price_per_unit h3.prd_psprc{
+             color: #25ab48;
+          }
+          .prod_sku_vend .price_part .price_per_unit h3.prd_prc{
+             color:#000;
+             font-size: 23px;
+             padding-top: 2px;
+          }
+          .prod_sku_vend .price_part .price_per_unit h3.prd_prc small{
+             font-weight:normal;
+              font-size: 12px;
+              font-weight: normal
+              text-transform: lowercase;
+          }
+            .prod_sku_vend .price_part .price_per_unit h3.prd_tspi{
+             font-size: 18px;
+             padding-top: 10px;
+             color:#000;
+             font-weight:600;
+          }
+          .prod_sku_vend .price_part .price_per_unit h3.prd_tspi small{
+             font-weight:normal;
+              font-size: 12px;
+              font-weight: normal;
+            text-transform: lowercase;
+          }
+          .prod_sku_vend {
+              padding: 15px 5px!important;
+              border-bottom: 1px dotted #978e8e;
+               border-top: 1px dotted #978e8e;
+              margin-top: 10px;
+          }
+          #addItemsToCart:hover {
+              background-color: #20a218;
+              box-shadow: 2px 2px 2px 2px #888888;
+          }
+          .pro_main_c.easy_price_calculator_main .btn_c {
+              height: 40px;
+              font-size: 18px;
+              margin: 0;
+              padding: 0px 40px;
+              background: #2a2626;
+              max-width:240px;
+          }
+          .pro_main_c.easy_price_calculator_main .variant-inventory-custom {
+              color: #000;
+              font-size: 12px;
+              font-style: italic;
+          }
+            .product-single h1{
+            text-transform:capitalize;
+          }
+            .pro_main_c.easy_price_calculator_main  {
+              background-color: #fbfbfb;
+              padding: 20px;
+              border-radius: 0px;
+              min-width: 100%;
+              max-width:100%;
+              margin-top:10px;
+            }
+
+            .pro_main_c.easy_price_calculator_main .opt-order-estimator .info {
+              text-transform: capitalize;
+          }
+           .pro_main_c.easy_price_calculator_main h3.prj_specs {
+              font-size: 20px;
+              color: #000;
+              background-color: #eee;
+              padding: 10px;
+              margin: -20px -15px 0px -15px;
+          }
+
+            @media (max-width:767px){
+              #MeasureUpCalcPopUpContent{
+                width: 100%;
+
+              }
+
+              .OpenMeasureUpCalcPopUp {
+                  right: -100px;
+                  width: 250px;
+                  top: 0px;
+                  height: 50px;
+                  padding: 15px 15px;
+                  font-size: 18px;
+              }
+            }
+          @media (max-width:991px){
+              .pro_main_c.easy_price_calculator_main h3.prj_specs {
+              font-size: 18px;
+              margin: -20px -5px 0px -5px;
+              }
+              .pro_main_c.easy_price_calculator_main {
+                  padding: 20px 10px;
+                  margin-top: 10px;
+              }
+              .prod_sku_vend {
+                  margin-top: 0px;
+              }
+              .prod_sku_vend .price_part .price_per_unit h3.prd_psprc small, .prod_sku_vend .price_part .price_per_unit h3.prd_tspi small {
+                  font-size: 14px;
+                  display: block;
+              }
+              .prod_sku_vend .price_part .price_per_unit h3.prd_prc small {
+                  display: block;
+                  font-size: 14px;
+                  font-weight: normal;
+                  text-transform: lowercase;
+              }
+              .prod_sku_vend .price_part .price_per_unit h3.prd_tspi {
+                  font-size: 18px;
+                  padding-top: 8px;
+              }
+              .easy_price_calculator_main .opt-order-estimator-inner {
+                  display: flex;
+                  width: 100%;
+                  margin-left: 15px;
+                  flex-direction: column;
+                  padding: 0px 10px;
+                  margin-top: 0px;
+                  margin-bottom: 5px;
+              }
+              .easy_price_calculator_main input#qty {
+                  border: 0px;
+                  margin: 0px;
+                  padding-top: 0px;
+                  padding-bottom: 0px;
+                  outline: 0px;
+                  display: block !important;
+                  text-align: left;
+                  width: 100% !important;
+                  padding-left: 0px;
+                  height: 20px;
+                  font-size:18px;
+              }
+              .easy_price_calculator_main .unitType {
+                  font-size: 14px;
+                  font-weight: 600;
+                  width: auto !important;
+                  color: #000;
+              }
+              .pro_main_c.easy_price_calculator_main .opt-order-estimator .info {
+                  display: inline-block;
+                  font-size: 14px;
+                  text-transform: capitalize;
+              }
+              .easy_price_calculator_main .opt-order-estimator-inner .calculator-form-ele {
+                  display: flex;
+                  width: 100%;
+                  flex-direction: column;
+                  margin-top: 5px;
+                  text-align: left !important;
+              }
+              .easy_price_calculator_main #squarefoot {
+                  width: 100%;
+                  border: 0;
+                  background: transparent;
+                  font-size: 20px;
+                  font-weight: bold;
+                  padding: 20px 0 15px 10px;
+                  text-align: left;
+                  margin: 0;
+                  color: #000 !important;
+              }
+              .easy_price_calculator_main .opt-order-estimator .subtotal {
+                  color: #000;
+                  font-size: 14px;
+                  order: 2;
+              }
+          }
+
+          .form-fields--qty .form-field--qty-select .form-field-select-wrapper {
+          position: unset;
+          width: 100%;
+          }
+        </style>
+
+        <!-- Get the Currency -->
+        {%- assign shp_cur = shop.currency -%}
+        {% assign curs = 'AED=>&#1583;.&#1573;,AFN=>&#65;&#102;,ALL=>&#76;&#101;&#107;,AMD=>,ANG=>&#402;,AOA=>&#75;&#122;,ARS=>&#36;,AUD=>&#36;,AWG=>&#402;,AZN=>&#1084;&#1072;&#1085;,BAM=>&#75;&#77;,BBD=>&#36;,BDT=>&#2547;,BGN=>&#1083;&#1074;,BHD=>.&#1583;.&#1576;,BIF=>&#70;&#66;&#117;,BMD=>&#36;,BND=>&#36;,BOB=>&#36;&#98;,BRL=>&#82;&#36;,BSD=>&#36;,BTN=>&#78;&#117;&#46;,BWP=>&#80;,BYR=>&#112;&#46;,BZD=>&#66;&#90;&#36;,CAD=>&#36;,CDF=>&#70;&#67;,CHF=>&#67;&#72;&#70;,CLF=>,CLP=>&#36;,CNY=>&#165;,COP=>&#36;,CRC=>&#8353;,CUP=>&#8396;,CVE=>&#36;,CZK=>&#75;&#269;,DJF=>&#70;&#100;&#106;,DKK=>&#107;&#114;,DOP=>&#82;&#68;&#36;,DZD=>&#1583;&#1580;,EGP=>&#163;,ETB=>&#66;&#114;,EUR=>&#8364;,FJD=>&#36;,FKP=>&#163;,GBP=>&#163;,GEL=>&#4314;,GHS=>&#162;,GIP=>&#163;,GMD=>&#68;,GNF=>&#70;&#71;,GTQ=>&#81;,GYD=>&#36;,HKD=>&#36;,HNL=>&#76;,HRK=>&#107;&#110;,HTG=>&#71;,HUF=>&#70;&#116;,IDR=>&#82;&#112;,ILS=>&#8362;,INR=>&#8377;,IQD=>&#1593;.&#1583;,IRR=>&#65020;,ISK=>&#107;&#114;,JEP=>&#163;,JMD=>&#74;&#36;,JOD=>&#74;&#68;,JPY=>&#165;,KES=>&#75;&#83;&#104;,KGS=>&#1083;&#1074;,KHR=>&#6107;,KMF=>&#67;&#70;,KPW=>&#8361;,KRW=>&#8361;,KWD=>&#1583;.&#1603;,KYD=>&#36;,KZT=>&#1083;&#1074;,LAK=>&#8365;,LBP=>&#163;,LKR=>&#8360;,LRD=>&#36;,LSL=>&#76;,LTL=>&#76;&#116;,LVL=>&#76;&#115;,LYD=>&#1604;.&#1583;,MAD=>&#1583;.&#1605;.,//?MDL=>&#76;,MGA=>&#65;&#114;,MKD=>&#1076;&#1077;&#1085;,MMK=>&#75;,MNT=>&#8366;,MOP=>&#77;&#79;&#80;&#36;,MRO=>&#85;&#77;,MUR=>&#8360;,MVR=>.&#1923;,MWK=>&#77;&#75;,MXN=>&#36;,MYR=>&#82;&#77;,MZN=>&#77;&#84;,NAD=>&#36;,NGN=>&#8358;,NIO=>&#67;&#36;,NOK=>&#107;&#114;,NPR=>&#8360;,NZD=>&#36;,OMR=>&#65020;,PAB=>&#66;&#47;&#46;,PEN=>&#83;&#47;&#46;,PGK=>&#75;,PHP=>&#8369;,PKR=>&#8360;,PLN=>&#122;&#322;,PYG=>&#71;&#115;,QAR=>&#65020;,RON=>&#108;&#101;&#105;,RSD=>&#1044;&#1080;&#1085;&#46;,RUB=>&#1088;&#1091;&#1073;,RWF=>&#1585;.&#1587;,SAR=>&#65020;,SBD=>&#36;,SCR=>&#8360;,SDG=>&#163;,SEK=>&#107;&#114;,SGD=>&#36;,SHP=>&#163;,SLL=>&#76;&#101;,SOS=>&#83;,SRD=>&#36;,STD=>&#68;&#98;,SVC=>&#36;,SYP=>&#163;,SZL=>&#76;,THB=>&#3647;,TJS=>&#84;&#74;&#83;,TJS(guess)TMT=>&#109;,TND=>&#1583;.&#1578;,TOP=>&#84;&#36;,TRY=>&#8356;,TTD=>&#36;,TWD=>&#78;&#84;&#36;,TZS=>,UAH=>&#8372;,UGX=>&#85;&#83;&#104;,USD=>&#36;,UYU=>&#36;&#85;,UZS=>&#1083;&#1074;,VEF=>&#66;&#115;,VND=>&#8363;,VUV=>&#86;&#84;,WST=>&#87;&#83;&#36;,XAF=>&#70;&#67;&#70;&#65;,XCD=>&#36;,XDR=>,XOF=>,XPF=>&#70;,YER=>&#65020;,ZAR=>&#82;,ZMK=>&#90;&#75;,ZWL=>&#90;&#36;'
+          | split: ','
+        %}
+
+        {% for cur in curs %}
+          {%- assign new_cur = cur | split: '=>' -%}
+          {%- assign epc_currency = new_cur[0] -%}
+
+          {%- assign epc_symbol = new_cur[1] -%}
+
+          {% if shp_cur == epc_currency %}
+            {% assign epc_shop_currency = epc_symbol %}
+          {% endif %}
+        {% endfor %}
+        <!-- Ent getting  the Currency -->
+
+        {% assign collection_link = collection.url %}
+        {% assign productDescriptionContent = product.description %}
+        {% assign descriptionParts = product.description | split: '<!-- split -->' %}
+        {% if descriptionParts.size > 1 %}
+          {% assign descriptionFirstPart = descriptionParts | first %}
+          {% assign descriptionSecondPart = descriptionParts | last %}
+        {% endif %}
+
+        <div
+          {% if disabled_by_yoast_seo %}
+            itemscope
+          {% endif %}
+          {% if disabled_by_yoast_seo %}
+            itemtype="http://schema.org/Product"
+          {% endif %}
+        >
+          {%- comment -%}Auto-disabled. Yoast plugin is taking care of Meta Tags output.{%- endcomment -%}
+          {%- if disabled_by_yoast_seo -%}
+            <meta
+              {% if disabled_by_yoast_seo %}
+                itemprop="url"
+              {% endif %}
+              content="{{ shop.url }}{{ product.url }}"
+            >
+            {%- comment -%} End Yoast auto-disable. {%- endcomment -%}
+          {%- endif -%}
+          {%- comment -%}Auto-disabled. Yoast plugin is taking care of Meta Tags output.{%- endcomment -%}
+          {%- if disabled_by_yoast_seo -%}
+            <meta
+              {% if disabled_by_yoast_seo %}
+                itemprop="image"
+              {% endif %}
+              content="{{ product.featured_image.src | product_img_url: '800x' }}"
+            >
+            {%- comment -%} End Yoast auto-disable. {%- endcomment -%}
+          {%- endif -%}
+
+          <div id="content">
+            <div
+              id="container"
+              data-section-id="{{ section.id }}"
+              data-section-type="product-page-section"
+              data-reviews-stars="{% if section.settings.product_reviews or section.settings.show_product_reviews_stars %}true{% else %}false{% endif%}"
+            >
+              <input id="product-handle" type="hidden" value="{{product.handle}}">
+              <!-- using for JS -->
+
+              <div class="title clearfix">
+                <!-- <h1 {% if disabled_by_yoast_seo %}itemprop="name"{% endif %}>{{ product.title | escape }}</h1> -->
+                <!-- its commented for requirement -->
+                <!--
+                  <div class="title_right">
+                    <div class="next-prev">
+                      {% if collection %}
+                      {% if collection.previous_product %}
+                      <a href="{{ collection.previous_product }}"><i class="fa fa-angle-double-left"></i> {{ 'products.general.previous_product' | t }}</a>
+                      {% endif %}
+                      {% if collection.next_product %}
+                      {% if collection.previous_product %} | {% endif %}
+                      <a href="{{ collection.next_product }}">{{ 'products.general.next_product' | t }} <i class="fa fa-angle-double-right"></i></a>
+                      {% endif %}
+                      {% endif %}
+                    </div>
+                  </div>
+                -->
+              </div>
+              <div class="pro_main_c easy_price_calculator_main">
+                <div class="row swatch-product-id-{{product.id}}">
+                  <div class="col-lg-12 col-sm-12">
+                    <div
+                      {% if disabled_by_yoast_seo %}
+                        itemprop="offers"
+                      {% endif %}
+                      class="offers"
+                      {% if disabled_by_yoast_seo %}
+                        itemscope
+                      {% endif %}
+                      {% if disabled_by_yoast_seo %}
+                        itemtype="http://schema.org/Offer"
+                      {% endif %}
+                    >
+                      {%- comment -%}Auto-disabled. Yoast plugin is taking care of Meta Tags output.{%- endcomment -%}
+                      {%- if disabled_by_yoast_seo -%}
+                        <meta
+                          {% if disabled_by_yoast_seo %}
+                            itemprop="priceCurrency"
+                          {% endif %}
+                          content="{{ shop.currency }}"
+                        >
+                        {%- comment -%} End Yoast auto-disable. {%- endcomment -%}
+                      {%- endif -%}
+                      {% if product.selected_or_first_available_variant.available %}
+                        {%- comment -%}Auto-disabled. Yoast plugin is taking care of Meta Tags output.{%- endcomment -%}
+                        {%- if disabled_by_yoast_seo -%}
+                          <link
+                            {% if disabled_by_yoast_seo %}
+                              itemprop="availability"
+                            {% endif %}
+                            href="http://schema.org/InStock"
+                          >
+                          {%- comment -%} End Yoast auto-disable. {%- endcomment -%}
+                        {%- endif -%}
+                      {% else %}
+                        {%- comment -%}Auto-disabled. Yoast plugin is taking care of Meta Tags output.{%- endcomment -%}
+                        {%- if disabled_by_yoast_seo -%}
+                          <link
+                            {% if disabled_by_yoast_seo %}
+                              itemprop="availability"
+                            {% endif %}
+                            href="http://schema.org/OutOfStock"
+                          >
+                          {%- comment -%} End Yoast auto-disable. {%- endcomment -%}
+                        {%- endif -%}
+                      {% endif %}
+
+                      {% form 'product', product %}
+                        <div class="desc_blk">
+                          <!-- variations section -->
+
+                          {% if section.settings.show_product_cart_postion == 'top' %}
+                            <div class="variations mt15">
+                              <div class="row">
+                                <div class="col-sm-12">
+                                  {% unless product.options.size == 1
+                                    and product.variants[0].title contains 'Default'
+                                  %}
+                                    {% for option in product.options_with_values %}
+                                      <div class="selector-wrapper main-product-select">
+                                        <label
+                                          {% if option.name == 'default' %}
+                                            class="hidden"
+                                          {% endif %}
+                                          for="product-select-{{ option.name }}"
+                                        >
+                                          {{ option.name }}
+                                        </label>
+                                        <select
+                                          class="single-option-selector"
+                                          id="SingleOptionSelector-{{ forloop.index0 }}"
+                                        >
+                                          {% for value in option.values %}
+                                            <option
+                                              {% if option.selected_value == value %}
+                                                selected
+                                              {% endif %}
+                                            >
+                                              {{ value }}
+                                            </option>
+                                          {% endfor %}
+                                        </select>
+                                      </div>
+                                    {% endfor %}
+                                  {% endunless %}
+                                  <select
+                                    name="id"
+                                    id="product-select-{{ product.id }}"
+                                    class="product-variants form-control hidden"
+                                  >
+                                    {% for variant in product.variants %}
+                                      {% if variant.available %}
+                                        <option
+                                          {% if section.settings.show_product_quantity %}
+                                            data-inventory_management="{{variant.inventory_management}}"
+                                            data-inventory_policy="{{variant.inventory_policy}}"
+                                            data-inventory_quantity="{{variant.inventory_quantity}}"
+                                          {% endif %}
+                                          {% if variant == product.selected_or_first_available_variant %}
+                                            selected="selected"
+                                          {% endif %}
+                                          data-sku="{{ variant.sku }}"
+                                          value="{{ variant.id }}"
+                                        >
+                                          {{ variant.title | escape }} - {{ variant.price | money_with_currency }}
+                                        </option>
+                                      {% else %}
+                                        <option
+                                          {% if section.settings.show_product_quantity %}
+                                            data-inventory_management="{{variant.inventory_management}}"
+                                            data-inventory_policy="{{variant.inventory_policy}}"
+                                            data-inventory_quantity="{{variant.inventory_quantity}}"
+                                          {% endif %}
+                                          disabled="disabled"
+                                          value="{{ variant.id }}"
+                                        >
+                                          {{ variant.title | escape }} - {{ 'products.product.sold_out' | t }}
+                                        </option>
+                                      {% endif %}
+                                    {% endfor %}
+                                  </select>
+
+                                  {% if section.settings.show_product_swatches %}
+                                    {% if product.variants.size > 1 %}
+                                      {% for option in product.options %}
+                                        {% render 'swatch' with option %}
+                                      {% endfor %}
+                                    {% endif %}
+                                  {% endif %}
+                                </div>
+                              </div>
+                            </div>
+
+                            {% if product.metafields.epc_custom_fields.product_type != blank %}
+                              {% assign p_type = product.metafields.epc_custom_fields.product_type %}
+
+                              {% if p_type == 'BOX'
+                                or p_type == 'TILES'
+                                or p_type == 'PIECE'
+                                or p_type == 'LINEAL'
+                                or p_type == 'ROLL'
+                                or p_type == 'CROWN'
+                              %}
+                                {% assign c_hide = 'hide' %}
+                              {% endif %}
+                            {% endif %}
+
+                            <div class="desc_blk_bot clearfix {{ c_hide }}">
+                              {% unless product.price_max == 0 and settings.hide_price0_box_and_button %}
+                                <div class="qty product-page-qty">
+                                  <a class="minus_btn"></a>
+
+                                  <input type="text" id="quantity" name="quantity" class="txtbox" value="1" min="1">
+                                  <a class="plus_btn"></a>
+                                </div>
+                              {% endunless %}
+                              <div class="price  {% if section.settings.show_smart_checkout %} smart_checkout_price_pos {% endif %}">
+                                {% unless product.price_max == 0 and settings.custom_price0_text != blank %}
+                                  <span
+                                    id="productPrice"
+                                    class="money"
+                                    {% if disabled_by_yoast_seo %}
+                                      itemprop="price"
+                                    {% endif %}
+                                    content="{{ product.selected_or_first_available_variant.price | money_without_currency }}"
+                                  >
+                                  </span>
+                                {% else %}
+                                  <span>
+                                    {{ settings.custom_price0_text }}
+                                  </span>
+                                {% endunless %}
+
+                                {% if product.selected_or_first_available_variant.price
+                                    < product.selected_or_first_available_variant.compare_at_price
+                                %}
+                                  <span id="comparePrice" class="money">
+                                    {{ product.selected_or_first_available_variant.compare_at_price | money }}
+                                  </span>
+                                {% endif %}
+                              </div>
+
+                              {% unless product.price_max == 0 and settings.hide_price0_box_and_button %}
+                                {% if section.settings.show_smart_checkout %}
+                                  <div class="product_payments_btns">
+                                    <input
+                                      type="submit"
+                                      name="add"
+                                      class="btn_c"
+                                      id="addToCart"
+                                      value="{{ 'products.product.add_to_cart' | t }}"
+                                    >
+                                    {{ form | payment_button }}
+                                  </div>
+                                {% else %}
+                                  <input
+                                    type="submit"
+                                    name="add"
+                                    class="btn_c"
+                                    id="addToCart"
+                                    value="{{ 'products.product.add_to_cart' | t }}"
+                                  >
+                                {% endif %}
+                              {% endunless %}
+                            </div>
+                          {% endif %}
+
+                          <!-- product variant sku, vendor -->
+
+                          {% if section.settings.show_product_sku
+                            or section.settings.show_product_vendor
+                            or section.settings.show_product_quantity
+                            or section.settings.show_product_size
+                          %}
+                            <div class="var_sku_size_main_div  col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding">
+                              <!-- Product Custom Size -->
+                              {% if section.settings.show_product_size %}
+                                {% if product.metafields.epc_custom_fields.size != blank %}
+                                  <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="prod_sku_vend">
+                                      <div class="product-vendor">
+                                        <strong> Size: </strong> {{ product.metafields.epc_custom_fields.size }}
+                                      </div>
+                                    </div>
+                                  </div>
+                                {% endif %}
+                              {% endif %}
+                              <!-- Product Custom Size  End -->
+
+                              {% if section.settings.show_product_sku %}
+                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                  <div class="prod_sku_vend">
+                                    <div class="variant-sku">
+                                      <strong>{{ 'products.general.product_sku' | t }}: </strong>
+                                      {{ product.variants[0].sku }}
+                                    </div>
+                                  </div>
+                                </div>
+                              {% endif %}
+
+                              {% if section.settings.show_product_vendor %}
+                                <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 no-padding">
+                                  <div class="prod_sku_vend">
+                                    <!--
+                                      <div class="product-vendor"><strong>{{'products.general.product_vendor' | t }}: </strong> {{ product.vendor | link_to_vendor }}</div>
+                                    -->
+                                    <div class="product-vendor">
+                                      <strong> by &nbsp; &nbsp;</strong> {{ product.vendor | link_to_vendor }}
+                                    </div>
+                                  </div>
+                                </div>
+                              {% endif %}
+                            </div>
+                          {% endif %}
+
+                          <!-- end product variant sku, vendor -->
+
+                          <!-- calc start -->
+                          {% render 'product_details_calculator_popup' %}
+                          <!-- calc end -->
+
+                          <!-- bottom variations section -->
+
+                          <div class="variations pl10">
+                            <div class="row">
+                              <div class="col-sm-12">
+                                {% unless product.options.size == 1 and product.variants[0].title contains 'Default' %}
+                                  {% for option in product.options_with_values %}
+                                    <div class="selector-wrapper main-product-select">
+                                      <label
+                                        {% if option.name == 'default' %}
+                                          class="hidden"
+                                        {% endif %}
+                                        for="product-select-{{ option.name }}"
+                                      >
+                                        {{ option.name }}
+                                      </label>
+                                      <select
+                                        class="single-option-selector"
+                                        id="SingleOptionSelector-{{ forloop.index0 }}"
+                                      >
+                                        {% for value in option.values %}
+                                          <option
+                                            {% if option.selected_value == value %}
+                                              selected
+                                            {% endif %}
+                                          >
+                                            {{ value }}
+                                          </option>
+                                        {% endfor %}
+                                      </select>
+                                    </div>
+                                  {% endfor %}
+                                {% endunless %}
+
+                                <select
+                                  name="id"
+                                  id="product-select-{{ product.id }}"
+                                  class="product-variants form-control hidden"
+                                >
+                                  {% for variant in product.variants %}
+                                    {% if variant.available %}
+                                      <option
+                                        {% if section.settings.show_product_quantity %}
+                                          data-inventory_management="{{variant.inventory_management}}"
+                                          data-inventory_policy="{{variant.inventory_policy}}"
+                                          data-inventory_quantity="{{variant.inventory_quantity}}"
+                                        {% endif %}
+                                        {% if variant == product.selected_or_first_available_variant %}
+                                          selected="selected"
+                                        {% endif %}
+                                        data-sku="{{ variant.sku }}"
+                                        value="{{ variant.id }}"
+                                      >
+                                        {{ variant.title | escape }} - {{ variant.price | money_with_currency }}
+                                      </option>
+                                    {% else %}
+                                      <option
+                                        {% if section.settings.show_product_quantity %}
+                                          data-inventory_management="{{variant.inventory_management}}"
+                                          data-inventory_policy="{{variant.inventory_policy}}"
+                                          data-inventory_quantity="{{variant.inventory_quantity}}"
+                                        {% endif %}
+                                        disabled="disabled"
+                                        value="{{ variant.id }}"
+                                      >
+                                        {{ variant.title | escape }} - {{ 'products.product.sold_out' | t }}
+                                      </option>
+                                    {% endif %}
+                                  {% endfor %}
+                                </select>
+
+                                {% if section.settings.show_product_swatches %}
+                                  {% if product.variants.size > 1 %}
+                                    {% for option in product.options %}
+                                      {% render 'swatch' with option %}
+                                    {% endfor %}
+                                  {% endif %}
+                                {% endif %}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      {% endform %}
+
+                      <!-- cart section end -->
+                      <div class="desc_blk">
+                        <!-- Accessories -->
+                        {% if section.settings.accessories_products %}
+                          {% if section.settings.product_grid_layout == '4-col' %}
+                            {% assign grid_item_width = '3' %}
+                          {% elsif section.settings.product_grid_layout == '3-col' %}
+                            {% assign grid_item_width = '4' %}
+                          {% else %}
+                            {% assign grid_item_width = '6' %}
+                          {% endif %}
+                          {% render 'accessories-products' %}
+                        {% endif %}
+                        <!-- Accessories End -->
+                        <!-- Custom AddCart -->
+                        {% if product.metafields.epc_custom_fields.product_type != blank %}
+                          {% assign p_type = product.metafields.epc_custom_fields.product_type %}
+
+                          {% if p_type == 'BOX'
+                            or p_type == 'TILES'
+                            or p_type == 'PIECE'
+                            or p_type == 'LINEAL'
+                            or p_type == 'ROLL'
+                            or p_type == 'CROWN'
+                          %}
+                            <div class="calc-total">
+                              Total Order » <span class="totalPrice">{{ epc_shop_currency }}0.00</span>
+                            </div>
+                            <!-- Custom add to cart button -->
+                            <button type="button" name="add" class="addItemsToCart btn_c cart_btn_1">
+                              Add to cart <span title="Help" class="fa fa-shopping-cart" style="color:#fff;"></span>
+                            </button>
+                            <!-- Custom add to cart button End -->
+                          {% endif %}
+                        {% endif %}
+                        <!-- Custom End AddCart -->
+
+                        {% if section.settings.show_product_quantity %}
+                          <div class="tag_c clearfix product_tags">
+                            <div id="variant-inventory"></div>
+                          </div>
+                        {% endif %}
+                        <!-- product tags -->
+
+                        {% if section.settings.show_product_tags %}
+                          {% if product.tags.size > 0 %}
+                            <div class="tag_c clearfix product_tags">
+                              {% if product.tags.size > 0 %}
+                                <ul>
+                                  <li>
+                                    <span
+                                      ><b
+                                        ><span class="fa fa-tags"></span>{{ 'products.general.product_tags' | t }} :</b
+                                      ></span
+                                    >
+                                    {% for tag in product.tags %}
+                                      <a class="tag" href="/collections/all/{{ tag | handleize }}">{{ tag }}</a>
+                                    {% endfor %}
+                                  </li>
+                                </ul>
+                              {% endif %}
+                            </div>
+                          {% endif %}
+                        {% endif %}
+                        <!-- end product tags -->
+
+                        <div class="review_row clearfix">
+                          {% if section.settings.product_reviews %}
+                            <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {% if section.settings.enable_description_enhancements %}
+                  {% if product.description contains '[TABS]' %}
+                    {% assign product_reviews_tab_index = false %}
+                    {% assign tabsContent = product.description | split: '[TABS]' | last | remove: '[/TABS]' %}
+                    {% assign tabsContentArray = tabsContent | split: '<h5>' %}
+                    {% capture tabsContentArrayNoBlank %} 
+         {% for part in tabsContentArray %}
+       {% if part != blank %}{{ part }}___{% endif %}
+          {% endfor %}
+          {% endcapture %}
+                    {% assign tabsContentArrayFormated = tabsContentArrayNoBlank | split: '___' %}
+                    <div class="tabing">
+                      <ul class="nav nav-tabs">
+                        {% for part in tabsContentArrayFormated %}
+                          {% if part != blank %}
+                            {% assign title_part = part | split: '</h5>' | first %}
+                            {% if title_part contains 'Reviews' %}
+                              {% assign product_reviews_tab_index = forloop.index %}
+                            {% endif %}
+                            <li class="{% if forloop.first %} active{% endif %}">
+                              <a href="#tab{{forloop.index}}" data-toggle="tab">{{ title_part }}</a>
+                            </li>
+                          {% endif %}
+                        {% endfor %}
+                      </ul>
+
+                      <div class="tab-content">
+                        {% for part in tabsContentArrayFormated %}
+                          {% if part != blank %}
+                            {% assign content_part = part | split: '</h5>' | last %}
+
+                            <div class="tab-pane {% if forloop.first %} active{% endif %}" id="tab{{forloop.index}}">
+                              {% if forloop.index == product_reviews_tab_index %}
+                                {% if section.settings.product_reviews %}
+                                  {% comment %} This is place for reviews app code {% endcomment %}
+                                  <div id="shopify-product-reviews" data-id="{{ product.id }}">
+                                    {{ product.metafields.spr.reviews }}
+                                  </div>
+                                {% else %}
+                                  <div class="rte">
+                                    {{ content_part }}
+                                  </div>
+                                {% endif %}
+                              {% else %}
+                                <div class="rte">
+                                  {{ content_part }}
+                                </div>
+                              {% endif %}
+                            </div>
+                          {% endif %}
+                        {% endfor %}
+                      </div>
+                    </div>
+                  {% endif %}
+
+                {% else %}
+                  {% if section.settings.show_product_tab_1 %}
+                    <div class="tabing">
+                      <ul class="nav nav-tabs">
+                        <li class="active">
+                          <a href="#tab1" data-toggle="tab">{{ section.settings.tab_1_title | escape }}</a>
+                        </li>
+                        {% if section.settings.show_product_tab_2 %}
+                          <li>
+                            <a href="#tab2" data-toggle="tab">{{ section.settings.tab_2_title | escape }}</a>
+                          </li>
+                        {% endif %}
+                        {% if section.settings.show_product_tab_3 %}
+                          <li>
+                            <a href="#tab3" data-toggle="tab">{{ section.settings.tab_3_title | escape }}</a>
+                          </li>
+                        {% endif %}
+                        {% if section.settings.show_product_tab_4 %}
+                          <li>
+                            <a href="#tab4" data-toggle="tab">{{ section.settings.tab_4_title | escape }}</a>
+                          </li>
+                        {% endif %}
+                      </ul>
+
+                      <!-- My Tabs -->
+                      <!-- Tab panes -->
+                      <div class="tab-content">
+                        <div class="tab-pane active" id="tab1">
+                          <div class="rte specification">
+                            {% if section.settings.product_tab_1_page != '' %}
+                              {% if pages[section.settings.product_tab_1_page].content contains '[specification]' %}
+                                {% comment %}
+                                  {{ pages[section.settings.product_tab_1_page].content }}
+                                {% endcomment %}
+
+                                <!-- Specification -->
+                                {% if product.metafields.epc_custom_fields.specification_product_type != blank %}
+                                  <div class="custom-field col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_title">Product Type</div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_descr">
+                                      {{ product.metafields.epc_custom_fields.specification_product_type }}
+                                    </div>
+                                  </div>
+                                {% endif %}
+                                {% if product.metafields.epc_custom_fields.product_line != blank %}
+                                  <div class="custom-field col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_title">Product Line</div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_descr">
+                                      {{ product.metafields.epc_custom_fields.product_line }}
+                                    </div>
+                                  </div>
+                                {% endif %}
+                                {% if product.metafields.epc_custom_fields.each_box_covers != blank %}
+                                  <div class="custom-field col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6  spec_title">Each box covers</div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_descr">
+                                      {{ product.metafields.epc_custom_fields.each_box_covers }}
+                                    </div>
+                                  </div>
+                                {% endif %}
+                                {% if product.metafields.epc_custom_fields.warranty != blank %}
+                                  <div class="custom-field col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_title">Warranty</div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_descr">
+                                      {{ product.metafields.epc_custom_fields.warranty }}
+                                    </div>
+                                  </div>
+                                {% endif %}
+
+                                {% if product.metafields.epc_custom_fields.edge_type != blank %}
+                                  <div class="custom-field col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_title">Edge Type</div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_descr">
+                                      {{ product.metafields.epc_custom_fields.edge_type }}
+                                    </div>
+                                  </div>
+                                {% endif %}
+
+                                {% if product.metafields.epc_custom_fields.thickness != blank %}
+                                  <div class="custom-field col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_title">Thickness</div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_descr">
+                                      {{ product.metafields.epc_custom_fields.thickness }}
+                                    </div>
+                                  </div>
+                                {% endif %}
+
+                                {% if product.metafields.epc_custom_fields.width != blank %}
+                                  <div class="custom-field col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_title">Width</div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_descr">
+                                      {{ product.metafields.epc_custom_fields.width }}
+                                    </div>
+                                  </div>
+                                {% endif %}
+
+                                {% if product.metafields.epc_custom_fields.length != blank %}
+                                  <div class="custom-field col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_title">Length</div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_descr">
+                                      {{ product.metafields.epc_custom_fields.length }}
+                                    </div>
+                                  </div>
+                                {% endif %}
+
+                                {% if product.metafields.epc_custom_fields.hardness_rating != blank %}
+                                  <div class="custom-field col-xs-12 col-sm-6 col-md-6 col-lg-6 custom-field">
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_title">Hardness Rating</div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_descr">
+                                      {{ product.metafields.epc_custom_fields.hardness_rating }}
+                                    </div>
+                                  </div>
+                                {% endif %}
+
+                                {% if product.metafields.epc_custom_fields.special_order != blank %}
+                                  <div class="custom-field col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_title">SPECIAL ORDER</div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_descr">
+                                      {{ product.metafields.epc_custom_fields.special_order }}
+                                    </div>
+                                  </div>
+                                {% endif %}
+
+                                {% if product.metafields.epc_custom_fields.instock != blank %}
+                                  <div class="custom-field col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_title">INSTOCK</div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_descr">
+                                      {{ product.metafields.epc_custom_fields.instock }}
+                                    </div>
+                                  </div>
+                                {% endif %}
+
+                                {% if product.metafields.epc_custom_fields.category != blank %}
+                                  <div class="custom-field col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_title">CATEGORY</div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_descr">
+                                      {{ product.metafields.epc_custom_fields.category }}
+                                    </div>
+                                  </div>
+                                {% endif %}
+
+                                {% if product.metafields.epc_custom_fields.color != blank %}
+                                  <div class="custom-field col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_title">COLOR</div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_descr">
+                                      {{ product.metafields.epc_custom_fields.color }}
+                                    </div>
+                                  </div>
+                                {% endif %}
+
+                                {% if product.metafields.epc_custom_fields.height != blank %}
+                                  <div class="custom-field col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_title">HEIGHT</div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_descr">
+                                      {{ product.metafields.epc_custom_fields.height }}
+                                    </div>
+                                  </div>
+                                {% endif %}
+
+                                {% if product.metafields.epc_custom_fields.brand != blank %}
+                                  <div class="custom-field col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_title">BRAND</div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_descr">
+                                      {{ product.metafields.epc_custom_fields.brand }}
+                                    </div>
+                                  </div>
+                                {% endif %}
+
+                                {% if product.metafields.epc_custom_fields.specie != blank %}
+                                  <div class="custom-field col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_title">SPECIE</div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_descr">
+                                      {{ product.metafields.epc_custom_fields.specie }}
+                                    </div>
+                                  </div>
+                                {% endif %}
+
+                                {% if product.metafields.epc_custom_fields.material != blank %}
+                                  <div class="custom-field col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_title">MATERIAL</div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_descr">
+                                      {{ product.metafields.epc_custom_fields.material }}
+                                    </div>
+                                  </div>
+                                {% endif %}
+
+                                {% if product.metafields.epc_custom_fields.price != blank %}
+                                  <div class="custom-field col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_title">PRICE</div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_descr">
+                                      {{ product.metafields.epc_custom_fields.price }}
+                                    </div>
+                                  </div>
+                                {% endif %}
+
+                                {% if product.metafields.epc_custom_fields.product_type_to_show != blank %}
+                                  <div class="custom-field col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_title">
+                                      PRODUCT TYPE to Show
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_descr">
+                                      {{ product.metafields.epc_custom_fields.product_type_to_show }}
+                                    </div>
+                                  </div>
+                                {% endif %}
+
+                                {% if product.metafields.epc_custom_fields.size != blank %}
+                                  <div class="custom-field col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_title">SIZE</div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_descr">
+                                      {{ product.metafields.epc_custom_fields.size }}
+                                    </div>
+                                  </div>
+                                {% endif %}
+
+                                {% if product.metafields.epc_custom_fields.wear_layer != blank %}
+                                  <div class="custom-field col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_title">WEAR LAYER</div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_descr">
+                                      {{ product.metafields.epc_custom_fields.wear_layer }}
+                                    </div>
+                                  </div>
+                                {% endif %}
+
+                                {% if product.metafields.epc_custom_fields.instalation_type != blank %}
+                                  <div class="custom-field col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_title">INSTALATION TYPE</div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 spec_descr">
+                                      {{ product.metafields.epc_custom_fields.instalation_type }}
+                                    </div>
+                                  </div>
+                                {% endif %}
+                                <!-- Specification -->
+                              {% endif %}
+
+                            {% else %}
+                              <p>{{ 'products.general.tab_no_page' | t }}</p>
+                            {% endif %}
+                          </div>
+                        </div>
+
+                        {% if section.settings.show_product_tab_2 %}
+                          <div class="tab-pane active" id="tab2">
+                            {% if section.settings.product_reviews %}
+                              <div id="shopify-product-reviews" data-id="{{ product.id }}">
+                                {{ product.metafields.spr.reviews }}
+                              </div>
+                            {% else %}
+                              <div class="rte">
+                                {% if section.settings.product_tab_2_page != '' %}
+                                  {{ pages[section.settings.product_tab_2_page].content }}
+                                {% else %}
+                                  <p>{{ 'products.general.tab_no_page' | t }}</p>
+                                {% endif %}
+                              </div>
+                            {% endif %}
+                          </div>
+                        {% endif %}
+                        {% if section.settings.show_product_tab_3 %}
+                          <div class="tab-pane active" id="tab3">
+                            <div class="rte">
+                              {% if section.settings.product_tab_3_page != '' %}
+                                {% if pages[section.settings.product_tab_3_page].content
+                                    contains '[product_description]'
+                                %}
+                                  <br>
+                                  <h2 class="spr-header-title">Description</h2>
+
+                                  {{ product.description }}
+                                {% endif %}
+                              {% else %}
+                                <p>{{ 'products.general.tab_no_page' | t }}</p>
+                              {% endif %}
+                            </div>
+                          </div>
+                        {% endif %}
+                        {% if section.settings.show_product_tab_4 %}
+                          <div class="tab-pane active" id="tab4">
+                            <div class="rte">
+                              {% if section.settings.product_tab_4_page != '' %}
+                                {{ pages[section.settings.product_tab_4_page].content }}
+                              {% else %}
+                                <p>{{ 'products.general.tab_no_page' | t }}</p>
+                              {% endif %}
+                            </div>
+                          </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                  {% endif %}
+                {% endif %}
+
+                {% if section.settings.related_products %}
+                  {% if section.settings.product_grid_layout == '4-col' %}
+                    {% assign grid_item_width = '3' %}
+                  {% elsif section.settings.product_grid_layout == '3-col' %}
+                    {% assign grid_item_width = '4' %}
+                  {% else %}
+                    {% assign grid_item_width = '6' %}
+                  {% endif %}
+                  {% render 'related-products' %}
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <script>
+          $(document).ready(function(){
+               $(".plus_btn,.minus_btn").click(function(e){
+                 setTimeout(chage_quant,500);
+                 $("#addToCart").removeAttr('disabled');
+                 $("#addToCart").removeClass('disabled');
+               });
+
+              $("#quantity").change(function(e){
+                 setTimeout(chage_quant,500);
+                $("#addToCart").removeAttr('disabled');
+                $("#addToCart").removeClass('disabled');
+               });
+
+              function chage_quant(){
+                 var current_p = parseInt($("#quantity").val());
+                 $(".main-qty").val(current_p).trigger('keyup');
+                $("#addToCart").removeAttr('disabled');
+                $("#addToCart").removeClass('disabled');
+              }
+
+              });
+        </script>
+
+        <a class="no-more-products" style="display:none;" href="#">Open popup</a>
+      </div>
+    </div>
+    <script type="text/javascript">
+      (function() {
+
+        if(window.innerWidth > 1024 ){
+
+      var MeasureUpcalCbtn = document.createElement("BUTTON");
+      MeasureUpcalCbtn.innerHTML = "Floor area calculator";
+      MeasureUpcalCbtn.classList.add("OpenMeasureUpCalcPopUp");
+      MeasureUpcalCbtn.setAttribute("onclick", "MeasureUpCalcPopUpOpen()");
+      MeasureUpcalCbtn.setAttribute("type", "button");
+
+
+          var MeasureUpcalCInnerbtn = document.createElement("BUTTON");
+      MeasureUpcalCInnerbtn.innerHTML = "Floor area calculator";
+      MeasureUpcalCInnerbtn.classList.add("OpenMeasureUpCalcPopUpInnerBtn");
+      MeasureUpcalCInnerbtn.setAttribute("onclick", "MeasureUpCalcPopUpOpen()");
+      MeasureUpcalCInnerbtn.setAttribute("type", "button");
+
+        var OpenMeasureUpCalcPopUpButtonInfo = document.createElement("div");
+
+        var OpenMeasureUpCalcPopUpInfo = document.createElement("div");
+
+
+        OpenMeasureUpCalcPopUpInfo.classList.add("OpenMeasureUpCalcPopUpInfo");
+        OpenMeasureUpCalcPopUpInfo.innerHTML = "Floor area calculator to identify number of tiles &amp; required budget.";
+          OpenMeasureUpCalcPopUpInfo.setAttribute("onclick", "MeasureUpCalcPopUpOpen()");
+
+
+        OpenMeasureUpCalcPopUpButtonInfo.classList.add("OpenMeasureUpCalcPopUpButtonInfo");
+
+        OpenMeasureUpCalcPopUpButtonInfo.setAttribute("onclick", "MeasureUpCalcPopUpOpen()");
+
+        OpenMeasureUpCalcPopUpButtonInfo.appendChild(MeasureUpcalCbtn);
+        OpenMeasureUpCalcPopUpButtonInfo.appendChild(OpenMeasureUpCalcPopUpInfo);
+
+      /*document.body.appendChild(OpenMeasureUpCalcPopUpButtonInfo);*/
+
+      /*var PForAdjust = document.createElement("P");
+      PForAdjust.innerHTML = "Floor area calculator";
+      MeasureUpcalCbtn.appendChild(PForAdjust);*/
+
+      /*document.body.appendChild(MeasureUpcalCbtn);*/
+
+
+      var MeasureUpCalcPopUpToMove = document.getElementById("MeasureUpCalcPopUp");
+
+      var MeasureUpCalcPopUpToCopy = MeasureUpCalcPopUpToMove;
+
+      MeasureUpCalcPopUpToMove.remove();
+
+
+          if(Shopify.theme.name.includes("Warehouse")){
+          var FoundParent = document.getElementsByClassName("product-form--atc-button")[0].parentElement;
+            }else if(Shopify.theme.name.includes("Install-me-wokiee")){
+
+              var FoundParent = document.getElementsByClassName("btn-addtocart")[0].parentElement;
+
+
+            }else{
+
+              if(document.getElementsByName("add").length>0){
+                var FoundParent = document.getElementsByName("add")[0].parentElement;
+              }else{
+                var form_found = false;
+                var forms = document.getElementsByTagName("FORM");
+                for (let i = 0; i < forms.length; i++) {
+                    var form_action = forms[i].getAttribute("action");
+                    if(form_action == "/cart/add"){
+                        var FoundParent = forms[i];
+                        form_found = true;
+                    }
+
+                    if(form_found){
+                        break;
+                    }
+                }
+              }
+
+            }
+      FoundParent.insertBefore(MeasureUpcalCInnerbtn,FoundParent.firstChild);
+
+      document.body.appendChild(MeasureUpCalcPopUpToCopy);
+
+
+          }
+
+
+          if(window.innerWidth < 1024 ){
+
+            var MeasureUpcalCInnerbtn = document.createElement("BUTTON");
+      MeasureUpcalCInnerbtn.innerHTML = "Floor area calculator";
+      MeasureUpcalCInnerbtn.classList.add("OpenMeasureUpCalcPopUpInnerBtn");
+      MeasureUpcalCInnerbtn.setAttribute("onclick", "MeasureUpCalcPopUpOpen()");
+      MeasureUpcalCInnerbtn.setAttribute("type", "button");
+
+      var MeasureUpcalCbtn = document.createElement("BUTTON");
+      MeasureUpcalCbtn.innerHTML = "Floor area calculator";
+      MeasureUpcalCbtn.classList.add("OpenMeasureUpCalcPopUp");
+      MeasureUpcalCbtn.setAttribute("onclick", "MeasureUpCalcPopUpOpen()");
+
+
+
+      /*document.body.appendChild(MeasureUpcalCbtn);*/
+
+      /*document.body.appendChild(MeasureUpcalCbtn);*/
+
+
+      var MeasureUpCalcPopUpToMove = document.getElementById("MeasureUpCalcPopUp");
+
+      var MeasureUpCalcPopUpToCopy = MeasureUpCalcPopUpToMove;
+
+      MeasureUpCalcPopUpToMove.remove();
+
+            if(Shopify.theme.name.includes("Warehouse")){
+            var FoundParent = document.getElementsByClassName("product-form--atc-button")[0].parentElement;
+            }else if(Shopify.theme.name.includes("Install-me-wokiee")){
+
+              var FoundParent = document.getElementsByClassName("btn-addtocart")[0].parentElement;
+
+
+            }else{
+
+              var form_found = false;
+              var forms = document.getElementsByTagName("FORM");
+              for (let i = 0; i < forms.length; i++) {
+                  var form_action = forms[i].getAttribute("action");
+                  if(form_action == "/cart/add"){
+                      var FoundParent = forms[i];
+                      form_found = true;
+                  }
+
+                  if(form_found){
+                      break;
+                  }
+              }
+            }
+
+
+      FoundParent.insertBefore(MeasureUpcalCInnerbtn,FoundParent.firstChild);
+
+      document.body.appendChild(MeasureUpCalcPopUpToCopy);
+
+
+
+          }
+      })();
+
+        function MeasureUpCalcPopUpOpen(){
+          document.getElementById("MeasureUpCalcPopUp").style.display = "block";
+          document.getElementById("MeasureUpCalcPopUp").classList.remove("popClose");
+          document.getElementById("MeasureUpCalcPopUp").classList.add("popOpen");
+
+        }
+
+        function MeasureUpCalcPopUpClose(){
+
+          document.getElementById("MeasureUpCalcPopUp").style.display = "none";
+          document.getElementById("MeasureUpCalcPopUp").classList.remove("popOpen");
+          document.getElementById("MeasureUpCalcPopUp").classList.add("popClose");
+
+        }
+    </script>
+  {% endif %}
+{% endif %}
+
+{% if epc_settings.measureupcalcpopup == 'disabled' %}
+  {% render 'snippet_product-epc_custom_fields' %}
+{% endif %}

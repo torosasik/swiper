@@ -1,0 +1,1 @@
+window.Eurus.loadedScript.includes("scrolling-promotion.js")||(window.Eurus.loadedScript.push("scrolling-promotion.js"),requestAnimationFrame((()=>{document.addEventListener("alpine:init",(()=>{Alpine.store("xScrollPromotion",{load(e){let n=e.getElementsByClassName("el_animate");for(let e=0;e<n.length;e++)n[e].classList.add("animate-scroll-banner")}})}))})));

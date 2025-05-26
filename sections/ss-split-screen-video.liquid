@@ -1,0 +1,2297 @@
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+/>
+{%- liquid
+  assign padding_horizontal = section.settings.padding_horizontal
+  assign padding_horizontal_mobile = section.settings.padding_horizontal_mobile
+  assign padding_top = section.settings.padding_top
+  assign padding_bottom = section.settings.padding_bottom
+  assign border_color = section.settings.border_color
+  assign border_thickness = section.settings.border_thickness
+  assign margin_top = section.settings.margin_top
+  assign margin_bottom = section.settings.margin_bottom
+  assign background_color = section.settings.background_color
+  assign background_gradient = section.settings.background_gradient
+  assign content_width = section.settings.content_width
+
+  
+-%}
+{% style %}
+  .section-{{ section.id }} {
+    border-top: solid {{ border_color }} {{ border_thickness }}px;
+    border-bottom: solid {{ border_color }} {{ border_thickness }}px;
+    margin-top: {{ margin_top | times: 0.75 | round: 0 }}px;
+    margin-bottom: {{ margin_bottom | times: 0.75 | round: 0 }}px;
+  }
+  
+  .section-{{ section.id }}-settings {
+    max-width: {{ content_width }}rem;
+    margin: 0 auto;
+    padding-top: {{ padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ padding_bottom | times: 0.75 | round: 0 }}px;
+    padding-left: {{ padding_horizontal_mobile }}rem;
+    padding-right: {{ padding_horizontal_mobile }}rem;
+  }
+
+    @media(min-width: 768px) {
+
+      .section-{{ section.id }} {
+        margin-top: {{ margin_top }}px;
+        margin-bottom: {{ margin_bottom }}px;
+      }
+      
+      .section-{{ section.id }}-settings {
+        padding: 0 5rem;
+        padding-top: {{ padding_top }}px;
+        padding-bottom: {{ padding_bottom }}px;
+        padding-left: {{ padding_horizontal }}rem;
+        padding-right: {{ padding_horizontal }}rem;
+      }
+      
+    }
+  
+  .split-slider-{{ section.id }} {
+    touch-action: pan-y;
+  }
+
+  .swiper-wrapper {
+    align-items: center;
+  }
+
+{% endstyle %}
+
+{% for block in section.blocks %}
+  <style>
+
+    {{ block.settings.heading_font | font_face: font_display: 'swap' }}
+    {{ block.settings.sub_heading_font | font_face: font_display: 'swap' }}
+    {{ block.settings.text_font | font_face: font_display: 'swap' }}
+    {{ block.settings.link_font | font_face: font_display: 'swap' }}
+  
+    .split-slider-{{ section.id }} .split-slide-{{ block.id }} {
+      display: flex;
+      align-items: stratch;
+      justify-content: space-between;
+      gap: {{ block.settings.columns_gap_mobile }}px;
+      background-color: {{ block.settings.slide_bg_color }};
+      flex-direction: {{ block.settings.slide_media_position_mobile }};
+    }
+  
+    .split-slide-text-{{ block.id }} {
+      padding: {{ block.settings.text_padding_vertical_mobile }}px {{ block.settings.text_padding_horizontal_mobile }}px;
+      background-color: {{ block.settings.slide_text_bg_color }};
+      border: {{ block.settings.text_border_thickness }}px solid {{ block.settings.slide_text_border_color }};
+      border-radius: {{ block.settings.text_radius }}px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .split-slide-text-{{ block.id }} h2 {
+      margin: 0;
+      font-size: {{ block.settings.heading_size | times: 0.85 }}px;
+      color: {{ block.settings.slide_heading_color }};
+      line-height: {{ block.settings.heading_height }}%;
+      letter-spacing: {{ block.settings.heading_letter }}px;
+      text-transform: unset;
+      text-align: {{ block.settings.heading_align }};
+    }
+    
+    .split-slide-text-{{ block.id }} h3 {
+      margin: 0;
+      margin-top: {{ block.settings.sub_heading_mt | times: 0.75 | round: 0 }}px;
+      font-size: {{ block.settings.sub_heading_size | times: 0.85 }}px;
+      color: {{ block.settings.slide_sub_heading_color }};
+      line-height: {{ block.settings.sub_heading_height }}%;
+      letter-spacing: {{ block.settings.sub_heading_letter }}px;
+      text-transform: unset;
+      text-align: {{ block.settings.sub_heading_align }};
+    }
+
+    .split-slide-text-{{ block.id }} p {
+      margin: 0;
+      margin-top: {{ block.settings.text_mt | times: 0.75 | round: 0 }}px;
+      font-size: {{ block.settings.text_size | times: 0.85 }}px;
+      color: {{ block.settings.slide_text_color }};
+      line-height: {{ block.settings.text_height }}%;
+      letter-spacing: {{ block.settings.text_letter }}px;
+      text-transform: unset;
+      text-align: {{ block.settings.text_align }};
+    }
+
+    .split-slide-text-{{ block.id }} a {
+      position: relative;
+      display: block;
+      width: fit-content;
+      margin: 0;
+      margin-top: {{ block.settings.link_mt | times: 0.75 | round: 0 }}px;
+      font-size: {{ block.settings.link_size | times: 0.85 }}px;
+      color: {{ block.settings.slide_link_color }};
+      line-height: {{ block.settings.link_height }}%;
+      letter-spacing: {{ block.settings.link_letter }}px;
+      text-transform: unset;
+      text-decoration: none;
+      transition: all 0.1s ease 0s;
+    }
+
+    .split-slide-text-{{ block.id }} a:hover {
+      transition: all 0.1s ease 0s;
+      color: {{ block.settings.slide_link_hover_color }};
+    }
+
+    .split-slide-media-{{ block.id }} {
+      display: flex;
+      align-items: stretch;
+      gap: {{ block.settings.media_gap }}px;
+    }
+    
+    .split-slide-image-{{ block.id }} {
+      display: none;
+    }
+    
+    .split-slide-first-{{ block.id }},
+    .split-slide-first-{{ block.id }} img,
+    .split-slide-first-{{ block.id }} svg,
+    .split-slide-first-{{ block.id }} iframe,
+    .split-slide-first-{{ block.id }} .split-slide-overlay-{{ block.id }} {
+      border-radius: {{ block.settings.slide_media_radius }}px;
+    }
+
+    .split-slide-first-{{ block.id }} > svg,
+    .split-slide-third-{{ block.id }} > svg {
+      background-color: #DCDCDC;
+    }
+  
+    .split-slide-third-{{ block.id }},
+    .split-slide-third-{{ block.id }} img,
+    .split-slide-third-{{ block.id }} svg,
+    .split-slide-third-{{ block.id }} iframe,
+    .split-slide-third-{{ block.id }} .split-slide-overlay-{{ block.id }} {
+       border-radius: {{ block.settings.secondary_slide_media_radius }}px; 
+    }
+    
+    .split-slide-first-{{ block.id }} img,
+    .split-slide-third-{{ block.id }} img,
+    .split-slide-first-{{ block.id }} svg,
+    .split-slide-third-{{ block.id }} svg,
+    .split-slide-first-{{ block.id }} video,
+    .split-slide-third-{{ block.id }} video {
+       display: block;
+       object-fit: cover;
+       width: 100%;
+       height: 100%;
+     }
+
+    .split-slider-{{ section.id }} .swiper-pagination {
+      left: 50% !important;
+      bottom: {{ section.settings.bullets_mb_mobile }}px;
+      transform: translate3d(0,0,0) translateX(-50%) !important;
+      background-color: {{ section.settings.bullets_bg_color }};
+      padding: {{ section.settings.bullets_padding_vertical | times: 0.75 | round: 0 }}px {{ section.settings.bullets_padding_horizontal | times: 0.75 | round: 0 }}px;
+      border-radius: {{ section.settings.slide_bullets_radius }}px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: fit-content !important;
+    }
+    
+    .split-slider-{{ section.id }} .swiper-pagination .swiper-pagination-bullet {
+      background-color: {{ section.settings.bullets_color }};
+      width: 12px;
+      height: 12px;
+    }
+
+    .split-slide-btn-prev-{{ section.id }},
+    .split-slide-btn-next-{{ section.id }} {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: {{ section.settings.btn_bg_color }};
+      cursor: pointer;
+      transition: all 0.5s ease 0s;
+    }
+
+    .split-slide-btn-prev-{{ section.id }}:hover,
+    .split-slide-btn-next-{{ section.id }}:hover {
+      transition: all 0.5s ease 0s;
+      background-color: {{ section.settings.btn_bg_hover_color }};
+    } 
+    
+    .split-slide-btn-prev-{{ section.id }} svg,
+    .split-slide-btn-next-{{ section.id }} svg {
+      width: 15px;
+      height: 15px;
+      display: block;
+      object-fit: contain;
+    }
+  
+    .split-slide-btn-prev-{{ section.id }} svg path,
+    .split-slide-btn-next-{{ section.id }} svg path {
+      fill: #FFFFFF;
+    }
+    
+    .split-slide-btn-prev-{{ section.id }} {
+      left: 15px;
+    }
+  
+    .split-slide-btn-next-{{ section.id }} {
+      right: 15px;
+    }
+  
+    .split-slide-btn-prev-{{ section.id }} svg{
+      transform: rotate(90deg);
+    }
+    
+    .split-slide-btn-next-{{ section.id }} svg{
+      transform: rotate(-90deg);
+    }
+  
+    .split-slide-btn-prev-{{ section.id }}.swiper-button-disabled,
+    .split-slide-btn-next-{{ section.id }}.swiper-button-disabled {
+      opacity: 0.2;
+    }
+
+    .split-slide-video-{{ block.id }}.split-hide {
+      display: none;
+    }
+  
+    .split-slide-video-{{ block.id }} {
+      position: relative;
+    }
+
+    .split-slide-video-{{ block.id }} iframe {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border: 0;
+    }
+      
+    .split-slide-overlay-{{ block.id }} {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #DCDCDC;
+      z-index: 2;
+    }
+
+    .split-slide-overlay-{{ block.id }}:empty {
+      display: block
+    }
+  
+    .split-slide-overlay-{{ block.id }}.split-hide {
+      display: none;
+    }
+
+    .split-slide-overlay-{{ block.id }} img,
+    .split-slide-overlay-{{ block.id }} svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  
+    .split-slide-video-btn-{{ block.id }} {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      z-index: 4;
+    }
+
+    .split-slide-video-btn-{{ block.id }}.split-hide {
+      display: none;
+    }
+
+    .split-slide-btn-{{ block.id }} {
+      border-radius: 50%;
+      cursor: pointer;
+      position: relative;
+      -moz-background-clip: border;
+      -webkit-background-clip: border;
+      background-clip: border-box;
+  
+      -moz-background-clip: padding;
+      -webkit-background-clip: padding;
+      background-clip: padding-box;
+  
+      -moz-background-clip: content;
+      -webkit-background-clip: content;
+      background-clip: content-box;
+    }
+
+    .split-slide-video-first-{{ block.id }} .split-slide-btn-{{ block.id }} {
+      width: {{ block.settings.slide_icon_size | times: 0.75 | round: 0 }}px;
+      height: {{ block.settings.slide_icon_size | times: 0.75 | round: 0 }}px;
+    }
+    
+    .split-slide-video-third-{{ block.id }} .split-slide-btn-{{ block.id }} {
+      width: {{ block.settings.secondary_slide_icon_size | times: 0.75 | round: 0 }}px;
+      height: {{ block.settings.secondary_slide_icon_size | times: 0.75 | round: 0 }}px;
+    }
+
+    .split-slide-btn-{{ block.id }} img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .split-slide-{{ block.id }} > .split-slide-video-element {
+      display: none;
+    }
+    
+    @media(min-width: 768px) {
+      .split-slider-{{ section.id }} .split-slide-{{ block.id }} {
+        gap: {{ block.settings.columns_gap }}px;
+      }
+
+      .split-slide-video-{{ block.id }} iframe {
+          display: block;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border: 0;
+          box-shadow: none;
+        }
+      
+      .split-slide-text-{{ block.id }} {
+        padding: {{ block.settings.text_padding_vertical }}px {{ block.settings.text_padding_horizontal }}px;
+      }
+  
+      .split-slide-text-{{ block.id }} h2 {
+        font-size: {{ block.settings.heading_size }}px;
+      }
+
+      .split-slide-text-{{ block.id }} h3 {
+        margin-top: {{ block.settings.sub_heading_mt }}px;
+        font-size: {{ block.settings.sub_heading_size }}px;
+      }
+
+      .split-slide-text-{{ block.id }} p {
+        margin-top: {{ block.settings.text_mt }}px;
+        font-size: {{ block.settings.text_size }}px;
+      }
+
+      .split-slide-text-{{ block.id }} a {
+        margin-top: {{ block.settings.link_mt }}px;
+        font-size: {{ block.settings.link_size }}px;
+      }
+      
+      .split-slide-image-{{ block.id }}  {
+        display: block;
+      }
+      
+      .split-slide-{{ block.id }} > .split-slide-video-element {
+        display: block;
+      }
+
+      .split-slide-media-{{ block.id }} {
+        display: none;
+      }
+
+      .split-slider-{{ section.id }} .swiper-pagination {
+        bottom: {{ section.settings.bullets_mb }}px;
+        padding: {{ section.settings.bullets_padding_vertical }}px {{ section.settings.bullets_padding_horizontal }}px;
+      }
+      
+      .split-slide-btn-prev-{{ section.id }},
+      .split-slide-btn-next-{{ section.id }} {
+        width: 40px;
+        height: 40px;
+      }
+      
+      .split-slide-btn-prev-{{ section.id }} svg,
+      .split-slide-btn-next-{{ section.id }} svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .split-slide-video-{{ block.id }}.split-hide {
+        display: block;
+      }
+      
+      .split-slide-video-first-{{ block.id }} .split-slide-btn-{{ block.id }} {
+        width: {{ block.settings.slide_icon_size }}px;
+        height: {{ block.settings.slide_icon_size }}px;
+      }
+
+      .split-slide-video-third-{{ block.id }} .split-slide-btn-{{ block.id }} {
+        width: {{ block.settings.secondary_slide_icon_size }}px;
+        height: {{ block.settings.secondary_slide_icon_size }}px;
+      }
+    }
+  </style>
+
+  {% if block.settings.link_style == "button" %}
+    <style>
+      .split-slide-text-{{ block.id }} a {
+        padding: {{ block.settings.link_padding_vertical | times: 0.75 | round: 0 }}px {{ block.settings.link_padding_horizontal | times: 0.75 | round: 0 }}px;
+        background-color: {{ block.settings.slide_link_bg_color }};
+        border: {{ block.settings.link_border_thickness }}px solid {{ block.settings.slide_link_border_color }};
+        border-radius: {{ block.settings.link_radius }}px;
+      }
+      .split-slide-text-{{ block.id }} a:hover {
+        background-color: {{ block.settings.slide_link_bg_hover_color }};
+        border: {{ block.settings.link_border_thickness }}px solid {{ block.settings.slide_link_border_hover_color }};
+      }
+
+      @media(min-width: 768px) {
+        .split-slide-text-{{ block.id }} a {
+          padding: {{ block.settings.link_padding_vertical }}px {{ block.settings.link_padding_horizontal }}px;
+        }
+      }
+    </style>
+  {% endif %}
+
+  {% if block.settings.link_align == "center" %}
+    <style>
+      .split-slide-text-{{ block.id }} a {
+        margin-left: auto;
+        margin-right: auto;
+      }
+    </style>
+  {% elsif block.settings.link_align == "right" %}
+    <style>
+      .split-slide-text-{{ block.id }} a {
+        margin-left: auto;
+      }
+    </style>
+  {% endif %}
+  
+  {% if block.settings.slide_columns == "3" %}
+    <style>
+      .split-slide-first-{{ block.id }},
+      .split-slide-second-{{ block.id }},
+      .split-slide-third-{{ block.id }} {
+        flex: 1 1 33.33%;
+      }
+      @media(min-width: 768px) {
+        .split-slider-{{ section.id }} .split-slide-{{ block.id }} {
+          flex-direction: row;
+        }
+      }
+    </style>
+  {% else %}
+    <style>
+      .split-slide-first-{{ block.id }} {
+        flex: 1 1 {{ block.settings.slide_media_width }}%;
+      }
+      .split-slide-second-{{ block.id }} {
+        flex: 1 1 calc(100% - {{ block.settings.slide_media_width }}%);
+      }
+      @media(min-width: 768px) {
+        .split-slider-{{ section.id }} .split-slide-{{ block.id }} {
+          flex-direction: {{ block.settings.slide_layout }};
+        }
+      }
+    </style>
+  {% endif %}
+
+  {% if block.settings.slide_columns == "3" and block.settings.slide_layout_big == "first" %}
+    <style>
+      .split-slide-first-{{ block.id }} {
+        order: 2;
+      }
+      .split-slide-second-{{ block.id }} {
+        order: 1;
+      }
+      .split-slide-third-{{ block.id }} {
+        order: 3;
+      }
+    </style>
+  {% elsif block.settings.slide_columns == "3" and block.settings.slide_layout_big == "second" %}
+    <style>
+      .split-slide-first-{{ block.id }} {
+        order: 1;
+      }
+      .split-slide-second-{{ block.id }} {
+        order: 2;
+      }
+      .split-slide-third-{{ block.id }} {
+        order: 3;
+      }
+    </style>
+  {% elsif block.settings.slide_columns == "3" and block.settings.slide_layout_big == "third" %}
+    <style>
+      .split-slide-first-{{ block.id }} {
+        order: 1;
+      }
+      .split-slide-second-{{ block.id }} {
+        order: 3;
+      }
+      .split-slide-third-{{ block.id }} {
+        order: 2;
+      }
+    </style>
+  {% endif %}
+
+  {% if section.settings.hide_navigation %}
+    <style>
+      .split-slide-pagination-{{ section.id }},
+      .split-slide-btn-prev-{{ section.id }},
+      .split-slide-btn-next-{{ section.id }} {
+        display: none;
+      }
+      @media(min-width: 768px) {
+        .split-slide-btn-prev-{{ section.id }},
+        .split-slide-btn-next-{{ section.id }} {
+          display: block;
+        }
+        .split-slide-pagination-{{ section.id }} {
+          display: flex;
+        }
+      }
+    </style>
+  {% endif %}
+
+  {% if block.settings.media_custom %}
+    <style>
+      .split-slide-first-{{ block.id }},
+      .split-slide-first-{{ block.id }} img,
+      .split-slide-first-{{ block.id }} svg,
+      .split-slide-first-{{ block.id }} iframe
+      .split-slide-first-{{ block.id }} video {
+        height: {{ block.settings.media_height_mobile }}px;
+      }
+      
+      @media(min-width: 768px) {
+        .split-slide-first-{{ block.id }},
+        .split-slide-first-{{ block.id }} img,
+        .split-slide-first-{{ block.id }} svg,
+        .split-slide-first-{{ block.id }} iframe
+        .split-slide-first-{{ block.id }} video {
+          height: {{ block.settings.media_height }}px;
+        }
+      }
+    </style>
+  {% endif %}
+
+  {% if block.settings.secondary_media_custom %}
+    <style>
+      .split-slide-third-{{ block.id }},
+      .split-slide-third-{{ block.id }} img,
+      .split-slide-third-{{ block.id }} svg,
+      .split-slide-third-{{ block.id }} iframe
+      .split-slide-third-{{ block.id }} video {
+        height: {{ block.settings.secondary_media_height_mobile }}px;
+      }
+      
+      @media(min-width: 768px) {
+        .split-slide-third-{{ block.id }},
+        .split-slide-third-{{ block.id }} img,
+        .split-slide-third-{{ block.id }} svg,
+        .split-slide-third-{{ block.id }} iframe
+        .split-slide-third-{{ block.id }} video {
+          height: {{ block.settings.secondary_media_height }}px;
+        }
+      }
+    </style>
+  {% endif %}
+
+  {% if block.settings.heading_custom %}
+    <style>
+      .split-slide-text-{{ block.id }} h2 {
+        font-family: {{ block.settings.heading_font.family }}, {{ block.settings.heading_font.fallback_families }};
+        font-weight: {{ block.settings.heading_font.weight }};
+        font-style: {{ block.settings.heading_font.style }};
+      }
+    </style>
+  {% endif %}
+
+  {% if block.settings.sub_heading_custom %}
+    <style>
+      .split-slide-text-{{ block.id }} h3 {
+        font-family: {{ block.settings.sub_heading_font.family }}, {{ block.settings.sub_heading_font.fallback_families }};
+        font-weight: {{ block.settings.sub_heading_font.weight }};
+        font-style: {{ block.settings.sub_heading_font.style }};
+      }
+    </style>
+  {% endif %}
+
+  {% if block.settings.text_custom %}
+    <style>
+      .split-slide-text-{{ block.id }} p {
+        font-family: {{ block.settings.text_font.family }}, {{ block.settings.text_font.fallback_families }};
+        font-weight: {{ block.settings.text_font.weight }};
+        font-style: {{ block.settings.text_font.style }};
+      }
+    </style>
+  {% endif %}
+
+  {% if block.settings.link_custom %}
+    <style>
+      .split-slide-text-{{ block.id }} a {
+        font-family: {{ block.settings.link_font.family }}, {{ block.settings.link_font.fallback_families }};
+        font-weight: {{ block.settings.link_font.weight }};
+        font-style: {{ block.settings.link_font.style }};
+      }
+    </style>
+  {% endif %}
+  
+{% endfor %}
+
+
+<div class="section-{{ section.id }}" style="background-color:{{ background_color }}; background-image: {{ background_gradient }};">
+  <div class="page-width section-{{ section.id }}-settings">
+    <div class="split-slider-{{ section.id }} swiper">
+      <div class="swiper-wrapper">
+        
+        {% for block in section.blocks %}
+
+          {% assign video_id = block.settings.slide_video.id | default: block.settings.slide_video_url.id %}
+          {% assign secondary_video_id = block.settings.secondary_slide_video.id | default: block.settings.secondary_slide_video_url.id %}
+          
+          {% if block.settings.slide_controls == false %}
+            {% assign hide = "split-hide" %}  
+          {% endif %}
+          
+          {% if block.settings.slide_loop %}
+            {% assign loop = '&loop=1&playlist=' | append: video_id %}  
+          {% endif %}
+
+          {% if block.settings.slide_autoplay %}
+            {% assign autoplay = "&muted=1&autoplay=1" %}  
+          {% endif %}
+
+          {% if block.settings.secondary_slide_controls == false %}
+            {% assign secondary_hide = "split-hide" %}  
+          {% endif %}
+          
+          {% if block.settings.secondary_slide_loop %}
+            {% assign secondary_loop = '&loop=1&playlist=' | append: secondary_video_id %}  
+          {% endif %}
+
+          {% if block.settings.secondary_slide_autoplay %}
+            {% assign secondary_autoplay = "&muted=1&autoplay=1" %}  
+          {% endif %}
+          
+          <div class="swiper-slide split-slide-{{ block.id }}">
+
+            <div class="split-slide-media-{{ block.id }} split-slide-media-mobile">
+              
+              {% if block.settings.slide_media == "image" %}
+                {% if block.settings.slide_image == blank %}
+                  <div class="split-slide-first-{{ block.id }}">
+                    {{ 'image' | placeholder_svg_tag }}
+                  </div>
+                {% else %}
+                  <div class="split-slide-first-{{ block.id }}">
+                    <img data-wpsob="1" data-wpsob-height="1" height="1" data-wpsob-width="1" width="1" data-wpsob-lazy="1" loading="lazy" src="{{ block.settings.slide_image | image_url: width: 800 }}" alt="split-slide-first-{{ forloop.index }}">
+                  </div>
+                {% endif %}
+              {% else %}
+                <div class="split-slide-video-element split-slide-video-{{ block.id }} split-slide-video-first-{{ block.id }} split-slide-first-{{ block.id }}">
+  
+                  {% if block.settings.slide_poster != blank %}
+                    <div class="split-slide-overlay-element split-slide-overlay-{{ block.id }}">
+                      <img data-wpsob="1" data-wpsob-height="1" height="1" data-wpsob-width="1" width="1" data-wpsob-lazy="1" loading="lazy" src="{{ block.settings.slide_poster | image_url: width: 800 }}" alt="">
+                    </div>
+                  {% elsif block.settings.slide_poster == blank and  block.settings.slide_autoplay == false %}
+                    <div class="split-slide-overlay-element split-slide-overlay-{{ block.id }}">
+                       {{ 'lifestyle-1' | placeholder_svg_tag }}
+                    </div>
+                  {% endif %}
+  
+                  {% if block.settings.slide_controls and block.settings.slide_autoplay == false %}
+                    <div class="split-slide-video-btn-element split-slide-video-btn-{{ block.id }}">
+                      <div id="split-slide-btn-second" class="split-slide-btn-{{ block.id }}">
+                        {% if block.settings.slide_icon != blank %}
+                          <img data-wpsob="1" data-wpsob-height="1" height="1" data-wpsob-width="1" width="1" data-wpsob-lazy="1" loading="lazy" src="{{ block.settings.slide_icon | image_url: width: 800 }}" alt="">
+                        {% else %}
+                          <svg fill="#000000" version="1.1" id="Capa_1" width="800px" height="800px" viewBox="0 0 408.221 408.221" xml:space="preserve">
+                            <g><g><path d="M204.11,0C91.388,0,0,91.388,0,204.111c0,112.725,91.388,204.11,204.11,204.11c112.729,0,204.11-91.385,204.11-204.11
+                                      C408.221,91.388,316.839,0,204.11,0z M286.547,229.971l-126.368,72.471c-17.003,9.75-30.781,1.763-30.781-17.834V140.012
+                                      c0-19.602,13.777-27.575,30.781-17.827l126.368,72.466C303.551,204.403,303.551,220.217,286.547,229.971z"/>
+                            </g></g>
+                          </svg>
+                        {% endif %}
+                      </div>
+                    </div>
+                  {% endif %}
+                
+                  {%- if block.settings.slide_video == null and block.settings.slide_video_url != null -%}
+                    {%- if block.settings.slide_video_url.type == 'youtube' -%}
+                      <iframe
+                        src="https://www.youtube.com/embed/{{ video_id }}?enablejsapi=1{% if block.settings.slide_autoplay %}&muted=1&autoplay=1{% endif %}{{ loop }}"
+                        class="js-youtube"
+                        allow="autoplay; encrypted-media"
+                        allowfullscreen
+                        title="Split Slide Video"
+                      ></iframe>
+                    {%- else -%}
+                      <iframe
+                        src="https://player.vimeo.com/video/{{ video_id }}{% if block.settings.slide_autoplay %}&muted=1&autoplay=1{% endif %}{{ loop }}"
+                        class="js-vimeo"
+                        allow="autoplay; encrypted-media"
+                        allowfullscreen
+                        title="Split Slide Video"
+                      ></iframe>
+                    {% endif %}
+                  
+                  {% else %}
+  
+                    {{ block.settings.slide_video | video_tag:
+                        autoplay: block.settings.slide_autoplay,
+                        loop: block.settings.slide_loop,
+                        controls: block.settings.slide_controls,
+                        muted: true,
+                        id: "vid"
+                    }}
+                  
+                  {% endif %}
+                </div>
+              {% endif %}
+
+              {% if block.settings.slide_columns == "3" %}
+                {% if block.settings.slide_columns_mobile == "second" %}
+                  {% if block.settings.secondary_slide_media == "image" %}
+                    {% if block.settings.secondary_slide_image == blank %}
+                      <div class="split-slide-third-{{ block.id }}">
+                        {{ 'image' | placeholder_svg_tag }}
+                      </div>
+                    {% else %}
+                      <div class="split-slide-third-{{ block.id }}">
+                        <img data-wpsob="1" data-wpsob-height="1" height="1" data-wpsob-width="1" width="1" data-wpsob-lazy="1" loading="lazy" src="{{ block.settings.secondary_slide_image | image_url: width: 800 }}" alt="split-slide-third-{{ forloop.index }}">
+                      </div>
+                    {% endif %}
+                  {% else %}
+                    <div class="split-slide-video-element split-slide-video-{{ block.id }} split-slide-video-third-{{ block.id }} split-slide-third-{{ block.id }}">
+      
+                      {% if block.settings.secondary_slide_poster != blank %}
+                        <div class="split-slide-overlay-element split-slide-overlay-{{ block.id }}">
+                          <img data-wpsob="1" data-wpsob-height="1" height="1" data-wpsob-width="1" width="1" data-wpsob-lazy="1" loading="lazy" src="{{ block.settings.secondary_slide_poster | image_url: width: 800 }}" alt="">
+                        </div>
+                      {% elsif block.settings.secondary_slide_poster == blank and  block.settings.secondary_slide_autoplay == false %}
+                        <div class="split-slide-overlay-element split-slide-overlay-{{ block.id }}">
+                          {{ 'lifestyle-1' | placeholder_svg_tag }}
+                        </div>
+                      {% endif %}
+      
+                      {% if block.settings.secondary_slide_controls and block.settings.secondary_slide_autoplay == false %}
+                        <div class="split-slide-video-btn-element split-slide-video-btn-{{ block.id }}">
+                          <div id="split-slide-btn-second" class="split-slide-btn-{{ block.id }}">
+                            {% if block.settings.secondary_slide_icon != blank %}
+                              <img data-wpsob="1" data-wpsob-height="1" height="1" data-wpsob-width="1" width="1" data-wpsob-lazy="1" loading="lazy" src="{{ block.settings.secondary_slide_icon | image_url: width: 800 }}" alt="">
+                            {% else %}
+                              <svg fill="#000000" version="1.1" id="Capa_1" width="800px" height="800px" viewBox="0 0 408.221 408.221" xml:space="preserve">
+                                <g><g><path d="M204.11,0C91.388,0,0,91.388,0,204.111c0,112.725,91.388,204.11,204.11,204.11c112.729,0,204.11-91.385,204.11-204.11
+                                          C408.221,91.388,316.839,0,204.11,0z M286.547,229.971l-126.368,72.471c-17.003,9.75-30.781,1.763-30.781-17.834V140.012
+                                          c0-19.602,13.777-27.575,30.781-17.827l126.368,72.466C303.551,204.403,303.551,220.217,286.547,229.971z"/>
+                                </g></g>
+                              </svg>
+                            {% endif %}
+                          </div>
+                        </div>
+                      {% endif %}
+                    
+                      {%- if block.settings.secondary_slide_video == null and block.settings.secondary_slide_video_url != null -%}
+                        {%- if block.settings.secondary_slide_video_url.type == 'youtube' -%}
+                          <iframe
+                            src="https://www.youtube.com/embed/{{ secondary_video_id }}?enablejsapi=1{% if block.settings.secondary_slide_autoplay %}&muted=1&autoplay=1{% endif %}{{ secondary_loop }}"
+                            class="js-youtube"
+                            allow="autoplay; encrypted-media"
+                            allowfullscreen
+                            title="Split Slide Video"
+                          ></iframe>
+                        {%- else -%}
+                          <iframe
+                            src="https://player.vimeo.com/video/{{ secondary_video_id }}{% if block.settings.secondary_slide_autoplay %}&muted=1&autoplay=1{% endif %}{{ secondary_loop }}"
+                            class="js-vimeo"
+                            allow="autoplay; encrypted-media"
+                            allowfullscreen
+                            title="Split Slide Video"
+                          ></iframe>
+                        {% endif %}
+                      
+                      {% else %}
+      
+                        {{ block.settings.secondary_slide_video | video_tag:
+                            autoplay: block.settings.secondary_slide_autoplay,
+                            loop: block.settings.secondary_slide_loop,
+                            controls: block.settings.secondary_slide_controls,
+                            muted: true,
+                            id: "vid"
+                        }}
+                      
+                      {% endif %}
+                    </div>
+                  {% endif %}
+                {% endif %}
+              {% endif %}
+              
+            </div>
+            
+            {% if block.settings.slide_media == "image" %}
+              {% if block.settings.slide_image == blank %}
+                <div class="split-slide-image-{{ block.id }} split-slide-first-{{ block.id }}">
+                  {{ 'image' | placeholder_svg_tag }} 
+                </div>
+              {% else %}
+                <div class="split-slide-image-{{ block.id }} split-slide-first-{{ block.id }}">
+                  <img data-wpsob="1" data-wpsob-height="1" height="1" data-wpsob-width="1" width="1" data-wpsob-lazy="1" loading="lazy" src="{{ block.settings.slide_image | image_url: width: 800 }}" alt="split-slide-first-{{ forloop.index }}">
+                </div>
+              {% endif %}
+            {% else %}
+              <div {% if block.settings.slide_media == "video" %}data-video="video"{% endif %} class="split-slide-media-desktop split-slide-video-element split-slide-video-{{ block.id }} split-slide-video-first-{{ block.id }} split-slide-first-{{ block.id }} split-hide">
+
+                {% if block.settings.slide_poster != blank %}
+                  <div class="split-slide-overlay-element split-slide-overlay-{{ block.id }}">
+                    <img data-wpsob="1" data-wpsob-height="1" height="1" data-wpsob-width="1" width="1" data-wpsob-lazy="1" loading="lazy" src="{{ block.settings.slide_poster | image_url: width: 800 }}" alt="">
+                  </div>
+                {% elsif block.settings.slide_poster == blank and  block.settings.slide_autoplay == false %}
+                  <div class="split-slide-overlay-element split-slide-overlay-{{ block.id }}">
+                    {{ 'lifestyle-1' | placeholder_svg_tag }}
+                  </div>
+                {% endif %}
+
+                {% if block.settings.slide_controls and block.settings.slide_autoplay == false %}
+                  <div class="split-slide-video-btn-element split-slide-video-btn-{{ block.id }}">
+                    <div id="split-slide-btn-second" class="split-slide-btn-{{ block.id }}">
+                      {% if block.settings.slide_icon != blank %}
+                        <img data-wpsob="1" data-wpsob-height="1" height="1" data-wpsob-width="1" width="1" data-wpsob-lazy="1" loading="lazy" src="{{ block.settings.slide_icon | image_url: width: 800 }}" alt="">
+                      {% else %}
+                        <svg fill="#000000" version="1.1" id="Capa_1" width="800px" height="800px" viewBox="0 0 408.221 408.221" xml:space="preserve">
+                          <g><g><path d="M204.11,0C91.388,0,0,91.388,0,204.111c0,112.725,91.388,204.11,204.11,204.11c112.729,0,204.11-91.385,204.11-204.11
+                                    C408.221,91.388,316.839,0,204.11,0z M286.547,229.971l-126.368,72.471c-17.003,9.75-30.781,1.763-30.781-17.834V140.012
+                                    c0-19.602,13.777-27.575,30.781-17.827l126.368,72.466C303.551,204.403,303.551,220.217,286.547,229.971z"/>
+                          </g></g>
+                        </svg>
+                      {% endif %}
+                    </div>
+                  </div>
+                {% endif %}
+              
+                {%- if block.settings.slide_video == null and block.settings.slide_video_url != null -%}
+                  {%- if block.settings.slide_video_url.type == 'youtube' -%}
+                    <iframe
+                      src="https://www.youtube.com/embed/{{ video_id }}?enablejsapi=1{% if block.settings.slide_autoplay %}&mute=1&autoplay=1{% endif %}{{ loop }}"
+                      class="js-youtube"
+                      allow="autoplay; encrypted-media"
+                      allowfullscreen
+                      title="Split Slide Video"
+                    ></iframe>
+                  {%- else -%}
+                    <iframe
+                      src="https://player.vimeo.com/video/{{ video_id }}{% if block.settings.slide_autoplay %}&mute=1&autoplay=1{% endif %}{{ loop }}"
+                      class="js-vimeo"
+                      allow="autoplay; encrypted-media"
+                      allowfullscreen
+                      title="Split Slide Video"
+                    ></iframe>
+                  {% endif %}
+                
+                {% else %}
+
+                  {{ block.settings.slide_video | video_tag:
+                      autoplay: block.settings.slide_autoplay,
+                      loop: block.settings.slide_loop,
+                      controls: block.settings.slide_controls,
+                      muted: true,
+                      id: "vid"
+                  }}
+                
+                {% endif %}
+              </div>
+            {% endif %}
+
+            <div class="split-slide-text-{{ block.id }} split-slide-second-{{ block.id }}">
+              {% if block.settings.heading != blank %}
+                <h2>{{ block.settings.heading }}</h2>
+              {% endif %}
+
+              {% if block.settings.sub_heading != blank %}
+                <h3>{{ block.settings.sub_heading }}</h3>
+              {% endif %}
+
+              {% if block.settings.text != blank %}
+                <p>{{ block.settings.text }}</p>
+              {% endif %}
+
+              {% if block.settings.link != blank %}
+                <a href="{{ block.settings.link_url }}">{{ block.settings.link }}</a>
+              {% endif %}
+            </div>
+              
+            {% if block.settings.slide_columns == "3" %}
+              {% if block.settings.secondary_slide_media == "image" %}
+                {% if block.settings.secondary_slide_image == blank %}
+                  <div class="split-slide-image-{{ block.id }} split-slide-third-{{ block.id }}">
+                    {{ 'image' | placeholder_svg_tag }} 
+                  </div>
+                {% else %}
+                  <div class="split-slide-image-{{ block.id }} split-slide-third-{{ block.id }}">
+                    <img data-wpsob="1" data-wpsob-height="1" height="1" data-wpsob-width="1" width="1" data-wpsob-lazy="1" loading="lazy" src="{{ block.settings.secondary_slide_image | image_url: width: 800 }}" alt="split-slide-third-{{ forloop.index }}">
+                  </div>
+                {% endif %}
+              {% else %}
+                <div class="split-slide-media-desktop split-slide-video-element split-slide-video-{{ block.id }} split-slide-video-third-{{ block.id }} split-slide-third-{{ block.id }} split-hide">
+  
+                  {% if block.settings.secondary_slide_poster != blank %}
+                    <div class="split-slide-overlay-element split-slide-overlay-{{ block.id }}">
+                      <img data-wpsob="1" data-wpsob-height="1" height="1" data-wpsob-width="1" width="1" data-wpsob-lazy="1" loading="lazy" src="{{ block.settings.secondary_slide_poster | image_url: width: 800 }}" alt="">
+                    </div>
+                  {% elsif block.settings.secondary_slide_poster == blank and block.settings.secondary_slide_autoplay == false %}
+                    <div class="split-slide-overlay-element split-slide-overlay-{{ block.id }}">
+                      {{ 'lifestyle-1' | placeholder_svg_tag }}
+                    </div>
+                  {% endif %}
+  
+                  {% if block.settings.secondary_slide_controls and block.settings.secondary_slide_autoplay == false %}
+                    <div class="split-slide-video-btn-element split-slide-video-btn-{{ block.id }}">
+                      <div id="split-slide-btn-second" class="split-slide-btn-{{ block.id }}">
+                        {% if block.settings.secondary_slide_icon != blank %}
+                          <img data-wpsob="1" data-wpsob-height="1" height="1" data-wpsob-width="1" width="1" data-wpsob-lazy="1" loading="lazy" src="{{ block.settings.secondary_slide_icon | image_url: width: 800 }}" alt="">
+                        {% else %}
+                          <svg fill="#000000" version="1.1" id="Capa_1" width="800px" height="800px" viewBox="0 0 408.221 408.221" xml:space="preserve">
+                            <g><g><path d="M204.11,0C91.388,0,0,91.388,0,204.111c0,112.725,91.388,204.11,204.11,204.11c112.729,0,204.11-91.385,204.11-204.11
+                                      C408.221,91.388,316.839,0,204.11,0z M286.547,229.971l-126.368,72.471c-17.003,9.75-30.781,1.763-30.781-17.834V140.012
+                                      c0-19.602,13.777-27.575,30.781-17.827l126.368,72.466C303.551,204.403,303.551,220.217,286.547,229.971z"/>
+                            </g></g>
+                          </svg>
+                        {% endif %}
+                      </div>
+                    </div>
+                  {% endif %}
+                
+                  {%- if block.settings.secondary_slide_video == null and block.settings.secondary_slide_video_url != null -%}
+                    {%- if block.settings.secondary_slide_video_url.type == 'youtube' -%}
+                      <iframe
+                        src="https://www.youtube.com/embed/{{ secondary_video_id }}?enablejsapi=1{% if block.settings.secondary_slide_autoplay %}&mute=1&autoplay=1{% endif %}{{ secondary_loop }}"
+                        class="js-youtube"
+                        allow="autoplay; encrypted-media"
+                        allowfullscreen
+                        title="Split Slide Video"
+                      ></iframe>
+                    {%- else -%}
+                      <iframe
+                        src="https://player.vimeo.com/video/{{ secondary_video_id }}{% if block.settings.secondary_slide_autoplay %}&mute=1&autoplay=1{% endif %}{{ secondary_loop }}"
+                        class="js-vimeo"
+                        allow="autoplay; encrypted-media"
+                        allowfullscreen
+                        title="Split Slide Video"
+                      ></iframe>
+                    {% endif %}
+                  
+                  {% else %}
+  
+                    {{ block.settings.secondary_slide_video | video_tag:
+                        autoplay: block.settings.secondary_slide_autoplay,
+                        loop: block.settings.secondary_slide_loop,
+                        controls: block.settings.secondary_slide_controls,
+                        muted: true,
+                        id: "vid"
+                    }}
+                  
+                  {% endif %}
+                </div>
+              {% endif %}
+            {% endif %}
+          
+          </div>
+        {% endfor %}
+        
+      </div>
+      {% if section.settings.slide_navigation == "bullets" %}
+        {% if section.blocks.size > 1 %}
+          <div class="split-slide-pagination-{{ section.id }} swiper-pagination"></div>
+        {% endif %}
+      {% else %}
+        <div class="split-slide-btn-prev-{{ section.id }}">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg>
+        </div>
+        <div class="split-slide-btn-next-{{ section.id }}">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+  function handleSlideChange() {
+    var activeSlideIndex = this.activeIndex;
+    var activeSlide = this.slides[activeSlideIndex];
+  
+    var inactiveSlides = document.querySelectorAll('.swiper-slide:not(.swiper-slide-active)');
+    if (inactiveSlides) {
+      inactiveSlides.forEach(element => {
+        let vidElements = element.querySelectorAll('video');
+        if (vidElements) {
+          vidElements.forEach(e => {
+            e.pause
+            e.muted = true;
+          })
+        }
+        let frames = element.querySelectorAll('iframe');
+        if (frames) {
+          frames.forEach(e => {
+            e.contentWindow.postMessage('{"event":"command","func":"' + 'stopVideo' + '","args":""}', '*');
+          })
+        }
+      })
+    }
+  
+    let vids = activeSlide.querySelectorAll('.split-slide-video-element');
+    if (vids.length > 0) {
+      vids.forEach(vid => {
+        let frames = vid.querySelectorAll('iframe');
+        if (frames) {
+          frames.forEach(frame => {
+            url = frame.src;
+            if (url.includes('autoplay')) {
+              frame.contentWindow.postMessage('{"event":"command","func":"' + 'playVideo' + '","args":""}', '*');
+            }
+          })
+        }
+        let vidElements = vid.querySelectorAll('video');
+        if (vidElements) {
+          vidElements.forEach(vidElement => {
+            auto = vidElement.getAttribute('autoplay');
+            if (auto == "autoplay") {
+              vidElement.play();
+               vidElement.muted = true; // ✅ Force mute on video HTML5
+            }
+          })
+        }
+      })
+    }
+  }
+  function initSplitUniq() {
+    const slider = new Swiper(".split-slider-{{ section.id }}", {
+      speed: 800,
+      spaceBetween: 20,
+      {% if section.blocks.size > 1 %}
+        loop: true,
+      {% endif %}
+      {% if section.blocks.size < 2 %}
+        simulateTouch: false,
+      {% endif %}
+      watchOverflow: false,
+      {% if section.settings.slider_autoplay %}
+      autoplay: {
+        delay: {{ section.settings.slider_autoplay_seconds }}000,
+      },
+      {% endif %}
+      navigation: {
+        nextEl: '.split-slide-btn-next-{{ section.id }}',
+        prevEl: '.split-slide-btn-prev-{{ section.id }}',
+      },
+      pagination: {
+        el: '.split-slide-pagination-{{ section.id }}',
+        type: 'bullets',
+        clickable: true,
+      }
+    });
+    
+    slider.addEventListener('slideChange', handleSlideChange);
+    
+    const videos = document.querySelectorAll('.split-slide-video-element');
+    if(videos) {
+      videos.forEach(video => {
+          let btn = video.querySelector('.split-slide-video-btn-element'); 
+          let frame = video.querySelector('iframe');  
+          let videoElement = video.querySelector('video');
+          let wrapper = video.querySelector('.split-slide-overlay-element');
+        
+        if (videoElement) {
+          videoElement.muted = true; // ✅ Force mute
+        }
+          
+          if(btn) {
+            btn.addEventListener('click', () => {
+              if(frame) {
+                frame.src += "&autoplay=1";
+              }
+              if(videoElement) {
+                videoElement.play();
+              }
+              btn.classList.add('hide');
+              wrapper.classList.add('hide');
+            });
+          }
+
+          if(wrapper) {
+            wrapper.addEventListener('click', () => {
+              if(frame) {
+                frame.src += "&autoplay=1";
+              }
+              if(videoElement) {
+                videoElement.play();
+              }
+              wrapper.classList.add('hide');
+              btn.classList.add('hide');
+            }) 
+          }
+      });
+    };
+  }
+  
+  document.addEventListener('DOMContentLoaded', initSplitUniq);
+  
+  if (Shopify.designMode) {
+     document.addEventListener('shopify:section:unload', initSplitUniq);
+     document.addEventListener('shopify:section:load', initSplitUniq);
+  }
+</script>
+            
+{% schema %}
+  {
+    "name": "SS - Split Slider Video",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Slider Settings"
+      },
+      {
+        "type": "select",
+        "id": "slide_navigation",
+        "label": "Slide Navigation",
+        "default": "bullets",
+        "options": [
+         {
+            "label": "Bullets",
+            "value": "bullets"
+          },
+          {
+            "label": "Arrows",
+            "value": "arrows"
+          }
+        ]
+      },
+      {
+        "type": "range",
+        "id": "slide_bullets_radius",
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "px",
+        "label": "Bullets Bar Radius",
+        "default": 30
+      },
+      {
+        "type": "range",
+        "id": "bullets_padding_horizontal",
+        "min": 0,
+        "max": 40,
+        "step": 4,
+        "unit": "px",
+        "label": "Bullets Padding Horizontal",
+        "default": 16
+      },
+      {
+        "type": "range",
+        "id": "bullets_padding_vertical",
+        "min": 0,
+        "max": 40,
+        "step": 4,
+        "unit": "px",
+        "label": "Bullets Padding Vertical",
+        "default": 8
+      },
+      {
+        "type": "range",
+        "id": "bullets_mb",
+        "min": 0,
+        "max": 40,
+        "step": 4,
+        "unit": "px",
+        "label": "Bullets Margin Bottom",
+        "default": 8
+      },
+      {
+        "type": "range",
+        "id": "bullets_mb_mobile",
+        "min": 0,
+        "max": 40,
+        "step": 4,
+        "unit": "px",
+        "label": "Bullets Margin Bottom - Mobile",
+        "default": 8
+      },
+      {
+        "type": "checkbox",
+        "id": "hide_navigation",
+        "label": "Hide Navigation - Mobile",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "slider_autoplay",
+        "label": "Enable Autoplay Slides",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "slider_autoplay_seconds",
+        "min": 1,
+        "max": 10,
+        "step": 1,
+        "unit": "s",
+        "label": "Seconds Between Slides",
+        "default": 2
+      },
+      {
+        "type": "header",
+        "content": "Section Colors"
+      },
+      {
+        "type": "color",
+        "label": "Section background",
+        "id": "background_color",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color_background",
+        "id": "background_gradient",
+        "label": "Section background gradient"
+      },
+      {
+        "type": "color",
+        "label": "Border",
+        "id": "border_color",
+        "default": "#000000"
+      },
+      {
+        "type": "color",
+        "id": "btn_bg_color",
+        "label": "Slide Btns Background Color",
+        "default": "#000000"
+      },
+      {
+        "type": "color",
+        "id": "btn_bg_hover_color",
+        "label": "Slide Btns Background Hover Color",
+        "default": "#000000"
+      },
+      {
+        "type": "color",
+        "id": "bullets_bg_color",
+        "label": "Slide Bullets Background Color",
+        "default": "#000000"
+      },
+      {
+        "type": "color",
+        "id": "bullets_color",
+        "label": "Slide Bullets Color",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "header",
+        "content": "Section margin (outside)"
+      },
+      {
+        "type": "range",
+        "id": "margin_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Margin top",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "margin_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Margin bottom",
+        "default": 0
+      },
+      {
+        "type": "header",
+        "content": "Section padding (inside)"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding top",
+        "default": 36
+      },
+      {
+         "type": "range",
+         "id": "padding_bottom",
+         "min": 0,
+         "max": 100,
+         "step": 4,
+         "unit": "px",
+         "label": "Padding bottom",
+         "default": 36
+      },
+      {
+        "type": "range",
+        "id": "padding_horizontal",
+        "min": 0,
+        "max": 30,
+        "step": 1,
+        "unit": "rem",
+        "label": "Padding sides",
+        "default": 5
+      },
+      {
+        "type": "range",
+        "id": "padding_horizontal_mobile",
+        "min": 0,
+        "max": 15,
+        "step": 0.5,
+        "unit": "rem",
+        "label": "Padding sides mobile",
+        "default": 1.5
+      },
+      {
+        "type": "header",
+        "content": "Section Settings"
+      },
+      {
+        "type": "range",
+        "id": "content_width",
+        "min": 0,
+        "max": 400,
+        "step": 10,
+        "unit": "rem",
+        "label": "Section content width",
+        "default": 120
+      },
+      {
+        "type": "range",
+        "id": "border_thickness",
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "unit": "px",
+        "label": "Border thickness",
+        "default": 0
+      }
+    ],
+    "blocks": [
+      {
+        "type": "slide",
+        "name": "Slide",
+        "settings": [
+          {
+            "type": "header",
+            "content": "Slide Columns"
+          },
+          {
+            "type": "select",
+            "id": "slide_columns",
+            "label": "Slide Columns Amount",
+            "default": "2",
+            "options": [
+             {
+                "label": "2",
+                "value": "2"
+              },
+              {
+                "label": "3",
+                "value": "3"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "slide_columns_mobile",
+            "label": "Slide Columns Amount - Mobile",
+            "info": "Only for 3 columns on Desktop",
+            "default": "second",
+            "options": [
+             {
+                "label": "Only One Media Element",
+                "value": "first"
+              },
+              {
+                "label": "Both Media Elements",
+                "value": "second"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "slide_layout",
+            "label": "Slide Layout",
+            "info": "Only for 2 columns",
+            "default": "row",
+            "options": [
+             {
+                "label": "Text | Media",
+                "value": "row-reverse"
+              },
+              {
+                "label": "Media | Text",
+                "value": "row"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "slide_layout_big",
+            "label": "Slide Layout",
+            "info": "Only for 3 columns",
+            "default": "second",
+            "options": [
+             {
+                "label": "Media | Media | Text",
+                "value": "first"
+              },
+              {
+                "label": "Media | Text | Media",
+                "value": "second"
+              },
+              {
+                "label": "Text | Media | Media",
+                "value": "third"
+              }
+            ]
+          },
+          {
+            "type": "range",
+            "id": "columns_gap",
+            "min": 0,
+            "max": 50,
+            "step": 2,
+            "unit": "px",
+            "label": "Slide Columns Gap",
+            "default": 12
+          },
+          {
+            "type": "range",
+            "id": "columns_gap_mobile",
+            "min": 0,
+            "max": 50,
+            "step": 2,
+            "unit": "px",
+            "label": "Slide Columns Gap - Mobile",
+            "default": 12
+          },
+          {
+            "type": "range",
+            "id": "media_gap",
+            "min": 0,
+            "max": 50,
+            "step": 2,
+            "unit": "px",
+            "label": "Slide Media Gap - Mobile",
+            "default": 12
+          },
+          {
+            "type": "header",
+            "content": "Slide Media"
+          },
+          {
+            "type": "select",
+            "id": "slide_media",
+            "label": "Slide Media Selector",
+            "default": "video",
+            "options": [
+             {
+                "label": "Image",
+                "value": "image"
+              },
+              {
+                "label": "Video",
+                "value": "video"
+              }
+            ]
+          },
+          {
+            "type": "range",
+            "id": "slide_media_width",
+            "min": 0,
+            "max": 100,
+            "step": 2,
+            "unit": "%",
+            "label": "Slide Media Width",
+            "info": "Only for 2 columns",
+            "default": 50
+          },
+          {
+            "type": "range",
+            "id": "slide_media_radius",
+            "min": 0,
+            "max": 100,
+            "step": 2,
+            "unit": "px",
+            "label": "Slide Media Border Radius",
+            "default": 0
+          },
+          {
+            "type": "select",
+            "id": "slide_media_position_mobile",
+            "label": "Slide Media position on Mobile",
+            "default": "column",
+            "options": [
+             {
+                "label": "Top",
+                "value": "column"
+              },
+              {
+                "label": "Bottom",
+                "value": "column-reverse"
+              }
+            ]
+          },
+          {
+            "type": "checkbox",
+            "id": "media_custom",
+            "label": "Use Custom Height",
+            "default": false
+          },
+          {
+            "type": "range",
+            "id": "media_height",
+            "min": 0,
+            "max": 600,
+            "step": 10,
+            "unit": "px",
+            "label": "Slide Media Height",
+            "default": 400
+          },
+          {
+            "type": "range",
+            "id": "media_height_mobile",
+            "min": 0,
+            "max": 600,
+            "step": 10,
+            "unit": "px",
+            "label": "Slide Media Height - Mobile",
+            "default": 400
+          },
+          {
+            "type": "header",
+            "content": "Slide Image"
+          },
+          {
+            "type": "image_picker",
+            "id": "slide_image",
+            "label": "Slide Image"
+          },
+          {
+            "type": "header",
+            "content": "Slide Video"
+          },
+          {
+            "type": "video",
+            "id": "slide_video",
+            "label": "Slide Video from Shopify"
+          },
+          {
+            "type": "video_url",
+            "id": "slide_video_url",
+            "label": "Slide Video Embed from Url",
+            "accept": ["youtube", "vimeo"],
+            "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "info": "Shows when no Shopify-hosted video is selected."
+          },
+          {
+            "type": "image_picker",
+            "id": "slide_poster",
+            "label": "Slide Poster"
+          },
+          {
+            "type": "image_picker",
+            "id": "slide_icon",
+            "label": "Slide Icon Play"
+          },
+          {
+            "type": "range",
+            "id": "slide_icon_size",
+            "min": 0,
+            "max": 150,
+            "step": 10,
+            "unit": "px",
+            "label": "Slide Icon Size",
+            "default": 30
+          },
+          {
+            "type": "checkbox",
+            "id": "slide_controls",
+            "label": "Show Controls on Video",
+            "default": true
+          },
+          {
+            "type": "checkbox",
+            "id": "slide_autoplay",
+            "label": "Autoplay Video",
+            "default": false
+          },
+          {
+            "type": "checkbox",
+            "id": "slide_loop",
+            "label": "Loop Video",
+            "default": false
+          },
+          {
+            "type": "header",
+            "content": "Secondary Slide Media"
+          },
+          {
+            "type": "select",
+            "id": "secondary_slide_media",
+            "label": "Secondary Slide Media Selector",
+            "default": "video",
+            "options": [
+             {
+                "label": "Image",
+                "value": "image"
+              },
+              {
+                "label": "Video",
+                "value": "video"
+              }
+            ]
+          },
+          {
+            "type": "range",
+            "id": "secondary_slide_media_radius",
+            "min": 0,
+            "max": 100,
+            "step": 2,
+            "unit": "px",
+            "label": "Secondary Slide Media Border Radius",
+            "default": 0
+          },
+          {
+            "type": "checkbox",
+            "id": "secondary_media_custom",
+            "label": "Secondary Use Custom Height",
+            "default": true
+          },
+          {
+            "type": "range",
+            "id": "secondary_media_height",
+            "min": 0,
+            "max": 600,
+            "step": 10,
+            "unit": "px",
+            "label": "Secondary Slide Media Height",
+            "default": 400
+          },
+          {
+            "type": "range",
+            "id": "secondary_media_height_mobile",
+            "min": 0,
+            "max": 600,
+            "step": 10,
+            "unit": "px",
+            "label": "Secondary Slide Media Height - Mobile",
+            "default": 170
+          },
+          {
+            "type": "header",
+            "content": "Secondary Slide Image"
+          },
+          {
+            "type": "image_picker",
+            "id": "secondary_slide_image",
+            "label": "Secondary Slide Image"
+          },
+          {
+            "type": "header",
+            "content": "Secondary Slide Video"
+          },
+          {
+            "type": "video",
+            "id": "secondary_slide_video",
+            "label": "Slide Video from Shopify"
+          },
+          {
+            "type": "video_url",
+            "id": "secondary_slide_video_url",
+            "label": "Slide Video Embed from Url",
+            "accept": ["youtube", "vimeo"],
+            "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "info": "Shows when no Shopify-hosted video is selected."
+          },
+          {
+            "type": "image_picker",
+            "id": "secondary_slide_poster",
+            "label": "Slide Poster"
+          },
+          {
+            "type": "image_picker",
+            "id": "secondary_slide_icon",
+            "label": "Slide Icon Play"
+          },
+          {
+            "type": "range",
+            "id": "secondary_slide_icon_size",
+            "min": 0,
+            "max": 150,
+            "step": 10,
+            "unit": "px",
+            "label": "Slide Icon Size",
+            "default": 30
+          },
+          {
+            "type": "checkbox",
+            "id": "secondary_slide_controls",
+            "label": "Show Controls on Video",
+            "default": true
+          },
+          {
+            "type": "checkbox",
+            "id": "secondary_slide_autoplay",
+            "label": "Autoplay Video",
+            "default": false
+          },
+          {
+            "type": "checkbox",
+            "id": "secondary_slide_loop",
+            "label": "Loop Video",
+            "default": false
+          },
+          {
+            "type": "header",
+            "content": "Slide Text"
+          },
+          {
+            "type": "range",
+            "id": "text_padding_horizontal",
+            "min": 0,
+            "max": 40,
+            "step": 4,
+            "unit": "px",
+            "label": "Slide Text Padding Horizontal",
+            "default": 16
+          },
+          {
+            "type": "range",
+            "id": "text_padding_horizontal_mobile",
+            "min": 0,
+            "max": 40,
+            "step": 4,
+            "unit": "px",
+            "label": "Slide Text Padding Horizontal - Mobile",
+            "default": 16
+          },
+          {
+            "type": "range",
+            "id": "text_padding_vertical",
+            "min": 0,
+            "max": 40,
+            "step": 4,
+            "unit": "px",
+            "label": "Slide Text Padding Vertical",
+            "default": 16
+          },
+          {
+            "type": "range",
+            "id": "text_padding_vertical_mobile",
+            "min": 0,
+            "max": 40,
+            "step": 4,
+            "unit": "px",
+            "label": "Slide Text Padding Vertical - Mobile",
+            "default": 40
+          },
+          {
+            "type": "range",
+            "id": "text_border_thickness",
+            "min": 0,
+            "max": 10,
+            "step": 1,
+            "unit": "px",
+            "label": "Slide Text Border Thickness",
+            "default": 2
+          },
+          {
+            "type": "range",
+            "id": "text_radius",
+            "min": 0,
+            "max": 100,
+            "step": 2,
+            "unit": "px",
+            "label": "Slide Text Border Radius",
+            "default": 0
+          },
+          {
+            "type": "header",
+            "content": "Heading"
+          },
+          {
+            "type": "text",
+            "id": "heading",
+            "label": "Heading",
+            "default": "Heading"
+          },
+          {
+            "type": "checkbox",
+            "id": "heading_custom",
+            "label": "Use Custom Font",
+            "default": false
+          },
+          {
+            "type": "font_picker",
+            "id": "heading_font",
+            "label": "Heading Font Family",
+            "default": "assistant_n4"
+          },
+          {
+            "type": "range",
+            "id": "heading_size",
+            "min": 0,
+            "max": 72,
+            "step": 2,
+            "unit": "px",
+            "label": "Heading Size",
+            "default": 38
+          },
+          {
+            "type": "range",
+            "id": "heading_letter",
+            "min": 0,
+            "max": 5,
+            "step": 0.1,
+            "unit": "px",
+            "label": "Heading Letter Spacing",
+            "default": 0
+          },
+          {
+            "type": "range",
+            "id": "heading_height",
+            "min": 50,
+            "max": 200,
+            "step": 10,
+            "unit": "%",
+            "label": "Heading Line Height",
+            "default": 100
+          },
+          {
+            "type": "select",
+            "id": "heading_align",
+            "label": "Heading Text Align",
+            "default": "center",
+            "options": [
+             {
+                "label": "Center",
+                "value": "center"
+              },
+              {
+                "label": "Left",
+                "value": "left"
+              },
+              {
+                "label": "Right",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "type": "header",
+            "content": "Sub-Heading"
+          },
+          {
+            "type": "richtext",
+            "id": "sub_heading",
+            "label": "Sub-Heading",
+            "default": "<p>Sub-Heading</p>"
+          },
+          {
+            "type": "checkbox",
+            "id": "sub_heading_custom",
+            "label": "Use Custom Font",
+            "default": false
+          },
+          {
+            "type": "font_picker",
+            "id": "sub_heading_font",
+            "label": "Sub-Heading Font Family",
+            "default": "assistant_n4"
+          },
+          {
+            "type": "range",
+            "id": "sub_heading_size",
+            "min": 0,
+            "max": 72,
+            "step": 2,
+            "unit": "px",
+            "label": "Sub-Heading Size",
+            "default": 22
+          },
+          {
+            "type": "range",
+            "id": "sub_heading_letter",
+            "min": 0,
+            "max": 5,
+            "step": 0.1,
+            "unit": "px",
+            "label": "Sub-Heading Letter Spacing",
+            "default": 0
+          },
+          {
+            "type": "range",
+            "id": "sub_heading_height",
+            "min": 50,
+            "max": 200,
+            "step": 10,
+            "unit": "%",
+            "label": "Sub-Heading Line Height",
+            "default": 100
+          },
+          {
+            "type": "select",
+            "id": "sub_heading_align",
+            "label": "Sub-Heading Text Align",
+            "default": "center",
+            "options": [
+             {
+                "label": "Center",
+                "value": "center"
+              },
+              {
+                "label": "Left",
+                "value": "left"
+              },
+              {
+                "label": "Right",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "type": "range",
+            "id": "sub_heading_mt",
+            "min": 0,
+            "max": 100,
+            "step": 4,
+            "unit": "px",
+            "label": "Sub-Heading Margin Top",
+            "default": 12
+          },
+          {
+            "type": "header",
+            "content": "Text"
+          },
+          {
+            "type": "richtext",
+            "id": "text",
+            "label": "Text",
+            "default": "<p>Text</p>"
+          },
+          {
+            "type": "checkbox",
+            "id": "text_custom",
+            "label": "Use Custom Font",
+            "default": false
+          },
+          {
+            "type": "font_picker",
+            "id": "text_font",
+            "label": "Text Font Family",
+            "default": "assistant_n4"
+          },
+          {
+            "type": "range",
+            "id": "text_size",
+            "min": 0,
+            "max": 72,
+            "step": 2,
+            "unit": "px",
+            "label": "Text Size",
+            "default": 22
+          },
+          {
+            "type": "range",
+            "id": "text_letter",
+            "min": 0,
+            "max": 5,
+            "step": 0.1,
+            "unit": "px",
+            "label": "Text Letter Spacing",
+            "default": 0
+          },
+          {
+            "type": "range",
+            "id": "text_height",
+            "min": 50,
+            "max": 200,
+            "step": 10,
+            "unit": "%",
+            "label": "Text Line Height",
+            "default": 100
+          },
+          {
+            "type": "select",
+            "id": "text_align",
+            "label": "Text Align",
+            "default": "center",
+            "options": [
+             {
+                "label": "Center",
+                "value": "center"
+              },
+              {
+                "label": "Left",
+                "value": "left"
+              },
+              {
+                "label": "Right",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "type": "range",
+            "id": "text_mt",
+            "min": 0,
+            "max": 100,
+            "step": 4,
+            "unit": "px",
+            "label": "Text Margin Top",
+            "default": 12
+          },
+          {
+            "type": "header",
+            "content": "Link"
+          },
+          {
+            "type": "text",
+            "id": "link",
+            "label": "Link",
+            "default": "Link"
+          },
+          {
+            "type": "url",
+            "id": "link_url",
+            "label": "Link Url"
+          },
+          {
+            "type": "checkbox",
+            "id": "link_custom",
+            "label": "Use Custom Font",
+            "default": false
+          },
+          {
+            "type": "font_picker",
+            "id": "link_font",
+            "label": "Link Font Family",
+            "default": "assistant_n4"
+          },
+          {
+            "type": "range",
+            "id": "link_size",
+            "min": 0,
+            "max": 72,
+            "step": 2,
+            "unit": "px",
+            "label": "Link Size",
+            "default": 22
+          },
+          {
+            "type": "range",
+            "id": "link_letter",
+            "min": 0,
+            "max": 5,
+            "step": 0.1,
+            "unit": "px",
+            "label": "Link Letter Spacing",
+            "default": 0
+          },
+          {
+            "type": "range",
+            "id": "link_height",
+            "min": 50,
+            "max": 200,
+            "step": 10,
+            "unit": "%",
+            "label": "Link Line Height",
+            "default": 100
+          },
+          {
+            "type": "select",
+            "id": "link_align",
+            "label": "Link Text Align",
+            "default": "center",
+            "options": [
+             {
+                "label": "Center",
+                "value": "center"
+              },
+              {
+                "label": "Left",
+                "value": "left"
+              },
+              {
+                "label": "Right",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "link_style",
+            "label": "Link Style",
+            "default": "button",
+            "options": [
+             {
+                "label": "Button",
+                "value": "button"
+              },
+              {
+                "label": "Text",
+                "value": "text"
+              }
+            ]
+          },
+          {
+            "type": "range",
+            "id": "link_padding_horizontal",
+            "min": 0,
+            "max": 40,
+            "step": 4,
+            "unit": "px",
+            "label": "Link Padding Horizontal",
+            "default": 40
+          },
+          {
+            "type": "range",
+            "id": "link_padding_vertical",
+            "min": 0,
+            "max": 40,
+            "step": 4,
+            "unit": "px",
+            "label": "Link Padding Vertical",
+            "default": 12
+          },
+          {
+            "type": "range",
+            "id": "link_border_thickness",
+            "min": 0,
+            "max": 10,
+            "step": 1,
+            "unit": "px",
+            "label": "Link Border Thickness",
+            "default": 0
+          },
+          {
+            "type": "range",
+            "id": "link_radius",
+            "min": 0,
+            "max": 100,
+            "step": 2,
+            "unit": "px",
+            "label": "Link Border Radius",
+            "default": 0
+          },
+          {
+            "type": "range",
+            "id": "link_mt",
+            "min": 0,
+            "max": 100,
+            "step": 4,
+            "unit": "px",
+            "label": "Link Margin Top",
+            "default": 12
+          },
+          {
+            "type": "header",
+            "content": "Colors"
+          },
+          {
+            "type": "color",
+            "id": "slide_heading_color",
+            "label": "Slide Heading Color",
+            "default": "#000000"
+          },
+          {
+            "type": "color",
+            "id": "slide_sub_heading_color",
+            "label": "Slide Sub-Heading Color",
+            "default": "#000000"
+          },
+          {
+            "type": "color",
+            "id": "slide_text_color",
+            "label": "Slide Text Color",
+            "default": "#000000"
+          },
+          {
+            "type": "color",
+            "id": "slide_link_color",
+            "label": "Slide Link Color",
+            "default": "#FFFFFF"
+          },
+          {
+            "type": "color",
+            "id": "slide_link_hover_color",
+            "label": "Slide Link Hover Color",
+            "default": "#FFFFFF"
+          },
+          {
+            "type": "color",
+            "id": "slide_link_bg_color",
+            "label": "Slide Link Background Color",
+            "default": "#000000"
+          },
+          {
+            "type": "color",
+            "id": "slide_link_bg_hover_color",
+            "label": "Slide Link Background Hover Color",
+            "default": "#000000"
+          },
+          {
+            "type": "color",
+            "id": "slide_link_border_color",
+            "label": "Slide Link Border Color",
+            "default": "#000000"
+          },
+          {
+            "type": "color",
+            "id": "slide_link_border_hover_color",
+            "label": "Slide Link Border Hover Color",
+            "default": "#000000"
+          },
+          {
+            "type": "color",
+            "id": "slide_text_bg_color",
+            "label": "Slide Text Background Color",
+            "default": "#DCDCDC"
+          },
+          {
+            "type": "color",
+            "id": "slide_text_border_color",
+            "label": "Slide Text Border Color",
+            "default": "#000000"
+          },
+          {
+            "type": "color",
+            "id": "slide_bg_color",
+            "label": "Slide Background Color"
+          }
+        ]
+      }
+    ],
+    "presets": [
+       {
+          "name": "SS - Split Slider Video",
+          "blocks": [
+            {
+              "type": "slide"
+            },
+            {
+              "type": "slide"
+            }
+          ]
+       }
+    ]
+  }
+{% endschema %}

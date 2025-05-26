@@ -1,0 +1,274 @@
+{%- comment -%}
+  This file has been modified by the Yoast SEO for Shopify app.
+  You can learn more about this (and learn how to cleanly revert these changes) at https://yoa.st/removing-theme-changes.
+{%- endcomment -%}
+<!doctype html>
+<html
+  class="no-js{% if settings.theme_mode_default == "dark" %} dark{% endif %}"
+  lang="{{ request.locale.iso_code }}"
+  {% if settings.lang_direction contains request.locale.iso_code %}
+    dir="rtl"
+  {% endif %}
+>
+{% include 'wp-page-speed-optimization-header' %}
+{% comment %}
+  <head>
+{% include 'speedboostr-seo' %}
+{% include 'limespot' %}{% render 'yoast-seo' %}
+{% endcomment %}
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="">
+    {% if settings.show_canonical_url_collection and template.name == 'collection' %}
+      {%- comment -%}Auto-disabled. Yoast plugin is taking care of Meta Tags output.{%- endcomment -%}
+      {%- if disabled_by_yoast_seo -%}
+        <link rel="canonical" href="{{ canonical_url | split: '?' | first }}">
+        {%- comment -%} End Yoast auto-disable. {%- endcomment -%}
+      {%- endif -%}
+    {% else %}
+      {%- comment -%}Auto-disabled. Yoast plugin is taking care of Meta Tags output.{%- endcomment -%}
+      {%- if disabled_by_yoast_seo -%}
+        <link rel="canonical" href="{{ canonical_url }}">
+        {%- comment -%} End Yoast auto-disable. {%- endcomment -%}
+      {%- endif -%}
+    {% endif %}
+
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- endif -%}
+
+    {%- unless settings.type_header_font.system? and settings.type_body_font.system? -%}
+      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+    {%- endunless -%}
+
+    {%- comment -%}Auto-disabled. Yoast plugin is taking care of SEO output.{%- endcomment -%}
+    {%- if disabled_by_yoast_seo -%}
+      <title>
+        {{ page_title }}
+        {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+        {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+        {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+      </title>
+      {%- comment -%} End Yoast auto-disable. {%- endcomment -%}
+    {%- endif -%}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    {% if template contains "product" %}
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+    {% endif %}
+
+    {% if page_description %}
+      {%- comment -%}Auto-disabled. Yoast plugin is taking care of Meta Tags output.{%- endcomment -%}
+      {%- if disabled_by_yoast_seo -%}
+        <meta name="description" content="{{ page_description | escape }}">
+        {%- comment -%} End Yoast auto-disable. {%- endcomment -%}
+      {%- endif -%}
+    {% endif %}
+
+    {% liquid
+      render 'meta-tags'
+      render 'font-face'
+      echo 'theme.css' | asset_url | stylesheet_tag: preload: true
+      render 'css-variables'
+      render 'theme-mode-control'
+    %}
+    {% liquid
+      echo 'custom.css' | asset_url | stylesheet_tag: preload: true
+    %}
+    {% if request.page_type == 'policy' %}
+      {{ 'page.css' | asset_url | stylesheet_tag: preload: true }}
+    {% endif %}
+    <!-- OutlinkStickyBtn CODE Start -->
+    {% if template.name == 'product' %}{% render ('outlink-sticky') %}{% endif %}
+    <!-- OutlinkStickyBtn END -->
+    {{ content_for_header }}
+    {{ settings.additional_head }}
+
+    <script type="text/javascript">
+      window.ProductSample = window.ProductSample || {};
+      if (typeof ProductSample === 'undefined') {
+        var ProductSample = {};
+      }
+      {% if product and product.metafields.custom.other_names_aka.value != blank %}
+      ProductSample.customSamplesProperties = {
+        "Other Names (AKA)": {{ product.metafields.custom.other_names_aka.value | json }}
+      };
+      {% endif %}
+      document.addEventListener("DOMContentLoaded", (event) => {
+        document.body.addEventListener("ready.productSamples", function (result) {
+          const preorderBISCheck = document.querySelector('.timesact-button-bis');
+          if (preorderBISCheck) {
+            document.body.addEventListener("afterRenderButton.productSamples", function (result) {
+              const data = result.detail;
+              const sampleButton = data.button;
+              if (sampleButton) {
+                const sampleButtonEl = sampleButton.querySelector('.product-samples-button');
+                if (sampleButtonEl) {
+                  sampleButtonEl.classList.add('sample-disabled');
+                  sampleButtonEl.innerText = 'Sold Out';
+                }
+              }
+            })
+          }
+        });
+      });
+    </script>
+  <script data-custom-wpsob="1">function a(e){const t=e.getBoundingClientRect();return t.top>=0&&t.left>=0&&t.bottom<=(window.innerHeight||document.documentElement.clientHeight)&&t.right<=(window.innerWidth||document.documentElement.clientWidth)}function b(e){e.hasAttribute("data-wpsob-width")&&e.removeAttribute("width"),e.hasAttribute("data-wpsob-height")&&e.removeAttribute("height")}function c(){const e=document.querySelectorAll("img");for(let t=0;t<e.length;t++)a(e[t])&&b(e[t])}function d(){const e=document.querySelectorAll("img");for(let t=0;t<e.length;t++)b(e[t])}window.onload=c,window.addEventListener("scroll",d);</script>  <!--CPC-->
+</head>
+  <body
+    class="gradient  overflow-x-hidden text-[{{ settings.text_base_size | times: 0.007875 }}rem] md:text-[{{ settings.text_base_size | times: 0.00875 }}rem]{% if settings.lang_direction contains request.locale.iso_code %} rtl{% endif %}"
+    x-data
+    :class="$store.xPopup.open && 'overflow-hidden padding-scrollbar'"
+  >
+    <a
+      class="skip-to-content absolute -z-10 button button-solid hidden lg:block pt-2.5 pb-2.5 pl-6 pr-6 lg:pt-3 lg:pb-3 mt-0.5 ml-0.5 leading-normal justify-center cursor-pointer focus-visible:z-60"
+      href="#MainContent"
+    >
+      {{ 'accessibility.skip_to_text' | t }}
+    </a>
+
+    {% case settings.selected_preset %}
+      {% when 'breath' %}
+        {% sections 'header-group-breath' %}
+      {% when 'swirl' %}
+        {% sections 'header-group-swirl' %}
+      {% when 'whiff' %}
+        {% sections 'header-group-whiff' %}
+      {% when 'puff' %}
+        {% sections 'header-group-puff' %}
+      {% else %}
+        {% sections 'header-group' %}
+    {% endcase %}
+
+    <main
+      id="MainContent"
+      class="content-for-layout focus-none outline-none theme-template-{{ template.name }} theme-template-suffix-{{ template.suffix | default: 'none' }}"
+      role="main"
+      tabindex="-1"
+    >
+      {{ content_for_layout }}
+<limespot></limespot>
+    </main>
+
+    {% case settings.selected_preset %}
+      {% when 'breath' %}
+        {% sections 'footer-group-breath' %}
+      {% when 'swirl' %}
+        {% sections 'footer-group-swirl' %}
+      {% when 'whiff' %}
+        {% sections 'footer-group-whiff' %}
+      {% when 'puff' %}
+        {% sections 'footer-group-puff' %}
+      {% else %}
+        {% sections 'footer-group' %}
+    {% endcase %}
+
+    {% case settings.selected_preset %}
+      {% when 'breath' %}
+        {% sections 'aside-group-breath' %}
+      {% when 'swirl' %}
+        {% sections 'aside-group-swirl' %}
+      {% when 'whiff' %}
+        {% sections 'aside-group-whiff' %}
+      {% when 'puff' %}
+        {% sections 'aside-group-puff' %}
+      {% else %}
+        {% sections 'aside-group' %}
+    {% endcase %}
+
+    {% if settings.enable_scroll_top_desktop or settings.enable_scroll_top_mobile %}
+      {% render 'scroll-to-top' %}
+    {% endif %}
+
+    <ul hidden>
+      <li id="a11y-refresh-page-message">{{ 'accessibility.refresh_page' | t }}</li>
+      <li id="a11y-new-window-message">{{ 'accessibility.link_messages.new_window' | t }}</li>
+    </ul>
+
+    <script>
+      window.Eurus = {
+        sliderScript: '{{ 'splide4.1.3.js' | asset_url }}',
+        cart_error: `{{ 'sections.cart.cart_error' | t }}`,
+        cart_quantity_error_html: '{{ 'sections.cart.cart_quantity_error_html' | t: quantity: '[quantity]' }}',
+        loadedScript: [],
+        cart_add_url: '{{ routes.cart_add_url }}'
+      };
+    </script>
+    {{ 'ajaxify.css' | asset_url | stylesheet_tag }}
+    {{ 'ajaxify.js' | asset_url | script_tag }}
+    {{ 'spreadrwidget.js' | asset_url | script_tag }}
+    <!-- 
+    <script
+    src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+    crossorigin="anonymous"
+    ></script> -->
+    {%- if request.design_mode -%}
+      <script src="{{ 'theme-editor-alpine-custom.js' | asset_url }}" defer></script>
+      <script src="{{ 'theme-editor.js' | asset_url }}" defer></script>
+    {%- endif -%}
+    <script src="{{ 'jquery.js' | asset_url }}" defer></script>
+    <script src="{{ 'theme.js' | asset_url }}" defer></script>
+    <script src="{{ 'vendors.js' | asset_url }}" defer></script>
+
+    {% render 'popups' %}
+
+   
+
+    <script>
+      window.addEventListener("load", (event) => {
+        deferScriptLoad('instant.page', '{{ 'instant.page.v5.1.1.js' | asset_url }}', () => {}, true);
+      });
+    </script>
+
+
+    <!-- **BEGIN** Hextom FSB Integration // Main Include - DO NOT MODIFY -->
+    {% render 'hextom_fsb_main', product: product, customer: customer %}
+    <!-- **END** Hextom FSB Integration // Main Include - DO NOT MODIFY -->
+    <style>
+      .sold-by {
+      display: flex;
+      margin: 10px 0;
+      color: #2f2f2f;
+      justify-content: center;
+      }
+    </style>
+    <script src="https://cdn-widgetsrepository.yotpo.com/v1/loader/mJcMHu3TQ8Y8YW6mVRrtdGwVa48lPPJTHuSztL5s" async></script>
+  <!-- WPD Start -->
+                {% if customer.tags.size > 0 and template != 'cart' %}
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                      let checkoutbtninterval = setInterval(function(){
+                        var x=document.querySelectorAll("input[name='checkout'], button[name='checkout'], input[name='goto_pp'], button[name='goto_pp'], input[name='goto_gc'], button[name='goto_gc'], [href$='checkout']");
+                        var WPD_RedirectToCart = function(e) {
+                          	e.stopPropagation();
+                            e.preventDefault();
+                            window.location = '/cart';
+                            };
+                            for (var i = 0; i < x.length; i++) {
+                                x[i].addEventListener('click', WPD_RedirectToCart, false);
+                            }
+                        },500)
+                });
+              </script>
+               {% endif %}
+         
+
+               {% if customer.tags.size > 0 and template == 'cart' %}
+                 {% include 'wcp_cart' %}
+               {% endif %}
+               <!-- WPD End -->
+  </body>
+
+<!--Speed Optimized By SpeedBoostr WebPlanex Infotech App-->
+</html>
+
+
+<style>
+shopify-payment-terms {
+    display: none !important;
+}
+</style>

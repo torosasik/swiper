@@ -1,0 +1,30 @@
+{% liquid
+  if settings.lang_direction contains request.locale.iso_code
+    assign is_rtl = true
+  else
+    assign is_rtl = false
+  endif
+%}
+{%- if number_of_lines_shown > 0 -%}
+  {%- style -%}
+    .truncate-line-clamped.line-clamp-{{ blockID }} {
+      -webkit-line-clamp: {{ number_of_lines_shown }};
+    }
+  {%- endstyle -%}
+  <div class="truncate-container" x-data="xTruncateText">
+    <div
+        class="truncate-text truncate-line-clamped {{ class_truncate_text }} line-clamp-{{ blockID }}" 
+        x-intersect.once="$nextTick(() => { setTruncate($el); load($el) })"
+    >
+      <div class="text-truncate truncate-inner relative rte{% if text_alignment_mobile == 'right' or text_alignment_mobile == 'text-right' and is_rtl == false %} add-dot-mobile{% endif %}{% if text_alignment == 'right' and is_rtl == false %} add-dot{% else %} add-dot-none{% endif %}"
+      >
+        {{ content | replace: '<iframe ', '<iframe loading="lazy" ' }}
+      </div>
+    </div>
+    <template x-if="truncatable" x-show="truncatable">
+      <button class="button-link relative effect-inline inline mt-4 mb-4" x-transition @click.prevent="open($el);" x-show="truncated">{{ read_more_label }}</button>
+    </template>
+  </div>
+{% else %}
+  <div class="rte">{{ content | replace: '<iframe ', '<iframe loading="lazy" ' }}</div>
+{% endif %}

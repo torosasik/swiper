@@ -1,0 +1,215 @@
+<section class="slider-cont-col">
+  <h2 class="sub-col-title">{{ section.settings.title | upcase }}</h2>
+  <div class="slider-wrap-col">
+    {% for block in section.blocks %}
+      {%- assign collection = block.settings.collection -%}
+      {%- assign collection_image = block.settings.image | default: collection.featured_image -%}
+      {%- assign collection_url = block.settings.url | default: collection.url -%}
+      {%- assign title = block.settings.title | default: collection.title -%}
+      <a title="{{ title }}" class="cust-col-link" href="{{ collection_url }}">
+        <div class="cust-collection-slider">
+          <div class="slider-collec-image-wrap">
+            <img
+              width="{{ section.settings.image_size }}rem"
+              height="auto"
+              loading="lazy"
+              sizes="{{ section.settings.image_size }}px"
+              class="slider-collec-image"
+              src="{{ collection_image | image_url }}"
+            >
+          </div>
+          <div class="slider-collec-name-wrap">
+            <h2 class="slider-collec-name">{{ title }}</h2>
+          </div>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+
+<style>
+  .slider-cont-col {
+    background: {{ section.settings.bg }};
+    margin: {{ section.settings.margin }}px 0px;
+  }
+
+  .sub-col-title {
+    width: 100%;
+    text-align: center;
+    margin: 0;
+  }
+
+  .slider-wrap-col {
+    padding: 20px;
+    gap: 20px;
+    overflow-x: auto;
+    white-space: nowrap;
+    display: flex;
+  }
+
+  @media (min-width: 700px) {
+    .slider-wrap-col {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      padding: 20px;
+      overflow: visible;
+      white-space: normal;
+      border-bottom: 0.2rem solid #000;
+    }
+  }
+
+  .cust-collection-slider {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .slider-collec-image-wrap {
+    width: {{ section.settings.image_size }}rem;
+    aspect-ratio: {{ section.settings.aspect_ratio }};
+    height: auto;
+    overflow: hidden;
+  }
+
+  .slider-collec-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: solid;
+    border-width: {{ section.settings.br }}px;
+    border-color: {{ section.settings.br_color }};
+  }
+
+  .slider-collec-name-wrap {
+    width: 100%;
+    background-color: white;
+    padding: 10px 0;
+  }
+
+  .slider-collec-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    margin: 0;
+    text-align: center;
+    font-size: {{ section.settings.text_size }}px;
+    color: black;
+  }
+
+  .cust-col-link {
+    text-decoration: none;
+    transition: 0.3s ease-in-out;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Profile Collection Slider",
+  "settings": [
+    {
+      "type": "color_background",
+      "id": "bg",
+      "label": "Background Color"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "Sub Collection"
+    },
+    {
+      "type": "range",
+      "id": "image_size",
+      "label": "Image Size",
+      "min": 10,
+      "max": 100,
+      "default": 15
+    },
+    {
+      "type": "select",
+      "id": "aspect_ratio",
+      "label": "Image Type",
+      "default": "16/9",
+      "options": [
+        {
+          "label": "Portrait",
+          "value": "3/4"
+        },
+        {
+          "label": "Square",
+          "value": "1/1"
+        },
+        {
+          "label": "Landscape",
+          "value": "16/9"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "label": "Text Size",
+      "min": 10,
+      "max": 110,
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "br",
+      "label": "Border Width",
+      "min": 1,
+      "max": 20,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "margin",
+      "label": "Section Margin",
+      "min": 0,
+      "max": 50,
+      "default": 0
+    },
+    {
+      "type": "color_background",
+      "id": "br_color",
+      "label": "Border Color",
+      "default": "#fff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "profile",
+      "name": "Profile Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Select Collection"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "title",
+          "label": "Collection Title"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Select Image"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Collection Url"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Profile Collection Slider"
+    }
+  ]
+}
+{% endschema %}

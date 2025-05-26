@@ -1,0 +1,28 @@
+{% comment %}
+  {% assign sold_by_variations = 'Sold by,Sold By,SOLD BY' | split: ',' %}
+  {% for variation in sold_by_variations %}
+    {% if product.description contains variation %}
+      {% assign sold_by_parts = product.description | split: variation %}
+      {% assign seller_info = sold_by_parts[1] | split: '.' | first | strip %}
+      {% assign seller_info_words = seller_info | split: ' ' | slice: 0, 2 | join: ' ' %}
+      <div class="sold-by">
+        <p class="sold-by-text">
+          Sold By: <span>{{ seller_info_words | replace: ':', '' }}</span>
+        </p>
+      </div>
+      {% if product.metafields.my_fields.price_per_square_ != blank %}
+        {% assign per_square = product.metafields.my_fields.price_per_square_ %}
+        <p class="sold-by-text">{{ per_square }} /per Sq. Ft</p>
+      {% endif %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+{% endcomment %}
+{% if product.compare_at_price != blank %}
+  <div class="save-text">
+    {% if product.compare_at_price > product.price %}
+      {% assign savings = product.compare_at_price | minus: product.price %}
+      <p class="save-numbers">SAVE {{ savings | money_with_currency }}</p>
+    {% endif %}
+  </div>
+{% endif %}

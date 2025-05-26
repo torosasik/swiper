@@ -1,0 +1,1 @@
+window.Eurus.loadedScript.includes("product-tabs.js")||(window.Eurus.loadedScript.push("product-tabs.js"),requestAnimationFrame((()=>{document.addEventListener("alpine:init",(()=>{Alpine.data("xProductTabs",(()=>({open:0,openMobile:!1,tabActive:"",setTabActive(){const t=this.$el.dataset.tabtitle;this.tabActive=t}})))}))})));

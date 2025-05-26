@@ -1,0 +1,1235 @@
+{%- assign shp_cur = shop.currency -%}
+{% assign curs = 'AED=>&#1583;.&#1573;,AFN=>&#65;&#102;,ALL=>&#76;&#101;&#107;,AMD=>,ANG=>&#402;,AOA=>&#75;&#122;,ARS=>&#36;,AUD=>&#36;,AWG=>&#402;,AZN=>&#1084;&#1072;&#1085;,BAM=>&#75;&#77;,BBD=>&#36;,BDT=>&#2547;,BGN=>&#1083;&#1074;,BHD=>.&#1583;.&#1576;,BIF=>&#70;&#66;&#117;,BMD=>&#36;,BND=>&#36;,BOB=>&#36;&#98;,BRL=>&#82;&#36;,BSD=>&#36;,BTN=>&#78;&#117;&#46;,BWP=>&#80;,BYR=>&#112;&#46;,BZD=>&#66;&#90;&#36;,CAD=>&#36;,CDF=>&#70;&#67;,CHF=>&#67;&#72;&#70;,CLF=>,CLP=>&#36;,CNY=>&#165;,COP=>&#36;,CRC=>&#8353;,CUP=>&#8396;,CVE=>&#36;,CZK=>&#75;&#269;,DJF=>&#70;&#100;&#106;,DKK=>&#107;&#114;,DOP=>&#82;&#68;&#36;,DZD=>&#1583;&#1580;,EGP=>&#163;,ETB=>&#66;&#114;,EUR=>&#8364;,FJD=>&#36;,FKP=>&#163;,GBP=>&#163;,GEL=>&#4314;,GHS=>&#162;,GIP=>&#163;,GMD=>&#68;,GNF=>&#70;&#71;,GTQ=>&#81;,GYD=>&#36;,HKD=>&#36;,HNL=>&#76;,HRK=>&#107;&#110;,HTG=>&#71;,HUF=>&#70;&#116;,IDR=>&#82;&#112;,ILS=>&#8362;,INR=>&#8377;,IQD=>&#1593;.&#1583;,IRR=>&#65020;,ISK=>&#107;&#114;,JEP=>&#163;,JMD=>&#74;&#36;,JOD=>&#74;&#68;,JPY=>&#165;,KES=>&#75;&#83;&#104;,KGS=>&#1083;&#1074;,KHR=>&#6107;,KMF=>&#67;&#70;,KPW=>&#8361;,KRW=>&#8361;,KWD=>&#1583;.&#1603;,KYD=>&#36;,KZT=>&#1083;&#1074;,LAK=>&#8365;,LBP=>&#163;,LKR=>&#8360;,LRD=>&#36;,LSL=>&#76;,LTL=>&#76;&#116;,LVL=>&#76;&#115;,LYD=>&#1604;.&#1583;,MAD=>&#1583;.&#1605;.,//?MDL=>&#76;,MGA=>&#65;&#114;,MKD=>&#1076;&#1077;&#1085;,MMK=>&#75;,MNT=>&#8366;,MOP=>&#77;&#79;&#80;&#36;,MRO=>&#85;&#77;,MUR=>&#8360;,MVR=>.&#1923;,MWK=>&#77;&#75;,MXN=>&#36;,MYR=>&#82;&#77;,MZN=>&#77;&#84;,NAD=>&#36;,NGN=>&#8358;,NIO=>&#67;&#36;,NOK=>&#107;&#114;,NPR=>&#8360;,NZD=>&#36;,OMR=>&#65020;,PAB=>&#66;&#47;&#46;,PEN=>&#83;&#47;&#46;,PGK=>&#75;,PHP=>&#8369;,PKR=>&#8360;,PLN=>&#122;&#322;,PYG=>&#71;&#115;,QAR=>&#65020;,RON=>&#108;&#101;&#105;,RSD=>&#1044;&#1080;&#1085;&#46;,RUB=>&#1088;&#1091;&#1073;,RWF=>&#1585;.&#1587;,SAR=>&#65020;,SBD=>&#36;,SCR=>&#8360;,SDG=>&#163;,SEK=>&#107;&#114;,SGD=>&#36;,SHP=>&#163;,SLL=>&#76;&#101;,SOS=>&#83;,SRD=>&#36;,STD=>&#68;&#98;,SVC=>&#36;,SYP=>&#163;,SZL=>&#76;,THB=>&#3647;,TJS=>&#84;&#74;&#83;,TJS(guess)TMT=>&#109;,TND=>&#1583;.&#1578;,TOP=>&#84;&#36;,TRY=>&#8356;,TTD=>&#36;,TWD=>&#78;&#84;&#36;,TZS=>,UAH=>&#8372;,UGX=>&#85;&#83;&#104;,USD=>&#36;,UYU=>&#36;&#85;,UZS=>&#1083;&#1074;,VEF=>&#66;&#115;,VND=>&#8363;,VUV=>&#86;&#84;,WST=>&#87;&#83;&#36;,XAF=>&#70;&#67;&#70;&#65;,XCD=>&#36;,XDR=>,XOF=>,XPF=>&#70;,YER=>&#65020;,ZAR=>&#82;,ZMK=>&#90;&#75;,ZWL=>&#90;&#36;'
+  | split: ','
+%}
+
+{% for cur in curs %}
+  {%- assign new_cur = cur | split: '=>' -%}
+  {%- assign epc_currency = new_cur[0] -%}
+
+  {%- assign epc_symbol = new_cur[1] -%}
+
+  {% if shp_cur == epc_currency %}
+    {% assign epc_shop_currency = epc_symbol %}
+  {% endif %}
+{% endfor %}
+
+{% if product.metafields.epc_custom_fields.mesasurement_unit != blank %}
+  {% assign measurement_unit = product.metafields.epc_custom_fields.mesasurement_unit %}
+  {% if measurement_unit == 'm2' %}
+    {% assign measurement_unit = 'm<sup>2</sup>' %}
+  {% endif %}
+
+{% else %}
+  {% assign measurement_unit = 'sqft' %}
+{% endif %}
+
+{% if product.metafields.epc_custom_fields.product_type != blank %}
+  {% assign measurement_unit = product.metafields.epc_custom_fields.product_type %}
+
+{% else %}
+  {% assign measurement_unit = 'sqft' %}
+{% endif %}
+
+{% if product.metafields.epc_custom_fields.product_type != blank %}
+  {% assign p_type = product.metafields.epc_custom_fields.product_type %}
+
+  {% if p_type == 'BOX' %}
+    {% assign t_box_type = ' /Box ' %}
+    <h3 class="prj_specs">Project Specs</h3>
+    <div class="top_prcs prod_sku_vend col-xs-12 col-sm-12 col-lg-12 col-xl-12">
+      {% if product.metafields.epc_custom_fields.rate_per_sqft != blank %}
+        <div class="price_part col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 no-padding">
+          <div class="price_per_unit">
+            <div class="price_per_unit_val">
+              {% assign pr_price = product.selected_or_first_available_variant.price
+                | money_without_currency
+                | remove: ','
+              %}
+              {% assign sqaure_foot_per_roll = product.metafields.epc_custom_fields.sq_ft_per_box | strip %}
+              {% assign price_per_box_sqft = pr_price | divided_by: sqaure_foot_per_roll | round: 2 %}
+
+              <h3 class="prd_psprc">
+                {{ epc_shop_currency }}
+                {{ price_per_box_sqft }}
+                <small
+                  >/<span class="measurement_unit">{{ measurement_unit }}</span></small
+                >
+              </h3>
+
+              {% assign rate_per_sqft = product.metafields.epc_custom_fields.rate_per_sqft | strip %}
+
+              {% if product.metafields.epc_custom_fields.sq_ft_per_box != blank %}
+                {% assign sqftpb = product.metafields.epc_custom_fields.sq_ft_per_box | strip %}
+
+              {% else %}
+                {% assign pr_price = product.selected_or_first_available_variant.price
+                  | money_without_currency
+                  | remove: ','
+                %}
+                {% assign r_p_s = product.metafields.epc_custom_fields.rate_per_sqft %}
+
+                {% assign sqftpb = pr_price | divided_by: r_p_s | round: 2 %}
+              {% endif %}
+
+              {% assign rate_per_sqft = rate_per_sqft | plus: 0 %}
+
+              {% comment %}
+                {% assign sqftpb = sqftpb | plus:0 %}
+              {% endcomment %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+      <!-- Show Per Box Product Price -->
+
+      <div class="price_part col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 no-padding">
+        <div class="price_per_unit">
+          <div class="price_per_unit_val">
+            {% unless product.price_max == 0 and settings.custom_price0_text != blank %}
+              <h3 class="prd_prc">
+                {{ epc_shop_currency -}}
+                {{-
+                  product.selected_or_first_available_variant.price
+                  | money_without_currency
+                  | strip_html
+                  | remove: ','
+                }}
+                <small>{{ t_box_type }}</small>
+              </h3>
+
+            {% else %}
+
+            {% endunless %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Show Per Box Product Price End -->
+
+      {% if sqftpb != blank %}
+        <div class="price_part col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 no-padding">
+          <div class="price_per_unit">
+            <div class="price_per_unit_val">
+              <h3 class="prd_tspi">
+                {{ sqftpb }}
+                <small
+                  ><span class="measurement_unit">{{ measurement_unit }}</span>/Box</small
+                >
+              </h3>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="calc-inst1 calc-add-product col-xs-12 col-sm-12 col-lg-12 ">
+      <div class="calc">
+        <div class="price-attr opt-qty-section">
+          <div class="calc-1 my-prod-table1 calculator-form-ele">
+            <label id="epc_label_none" for="squarefoot">
+              <fieldset class="opt-qty-input">
+                <legend>{{ measurement_unit }}</legend>
+                <input
+                  type="tel"
+                  id="squarefoot"
+                  data-p_type="{{p_type}}"
+                  data-rps="{{rate_per_sqft}}"
+                  data-sqftpb="{{sqftpb}}"
+                  data-pr_price="{{ product.selected_or_first_available_variant.price | money_without_currency | strip_html| remove :','  }}"
+                  data-currency="{{ epc_shop_currency }}"
+                  step="0.00000000000001"
+                  name="properties[_Square_Footage]"
+                  class="squarefoot calc-input txtbox product-details-mc"
+                  autofocus
+                >
+              </fieldset>
+            </label>
+          </div>
+
+          <div class="opt-order-estimator">
+            <div class="opt-order-estimator-inner">
+              <div class="calc-2 my-prod-table1 calculator-form-ele text-center">
+                <input
+                  type="tel"
+                  id="qty"
+                  name="quantity"
+                  data-p_type="{{p_type}}"
+                  data-rps="{{rate_per_sqft}}"
+                  data-sqftpb="{{sqftpb}}"
+                  data-pr_price="{{ product.selected_or_first_available_variant.price | money_without_currency | strip_html| remove :','  }}"
+                  tabindex="-1"
+                  data-currency="{{ epc_shop_currency }}"
+                  class="qty lbox txtbox calc-input main-qty product-quantity product-details-mc"
+                  value=""
+                  min="1"
+                >
+                <div class="lbox">
+                  <span class="unitType">Boxes</span>
+                  <p class="info">
+                    will cover <span class="opt-coverage-area">0</span>
+                    <span class="measurement_unit">{{ measurement_unit }}</span>
+                  </p>
+                </div>
+              </div>
+              <div class="calc-sub calculator-form-ele text-center">
+                <span class="subtotal" data-raw-price="0"></span>
+                <p class="info">estimated total</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="calc_errors"></div>
+      </div>
+    </div>
+    <script>
+      /* main-qty start*/
+      var typingTimer1 = null;
+      var doneTypingInterval1 = 400;
+
+      var $input1 = $('.main-qty');
+
+      $input1.on('keydown', function (evt1) {
+        clearTimeout(typingTimer1);
+      });
+
+      $input1.on('keyup', function (evt1) {
+        var rps = $(this).data('rps');
+        var sqftpb =$(this).data('sqftpb');
+        var p_type =$(this).data('p_type');
+        var main_qty = $(this);
+        var data_currency = $(this).data('currency');
+        var pr_price = $(this).data('pr_price');
+
+        clearTimeout(typingTimer1);
+
+
+        typingTimer1 = setTimeout(function doneTyping1 () {
+
+      calculate_quantity_main(main_qty, sqftpb , pr_price,p_type,data_currency)
+
+
+      }, doneTypingInterval1);
+
+       $(window).keyup(function (e) {
+              var code = (e.keyCode ? e.keyCode : e.which);
+              if (code == 9) {
+                 console.log('I was tabbed!');
+                calculate_quantity_main(main_qty, sqftpb , pr_price,p_type,data_currency)
+              }
+          });
+
+
+      });
+      /* main-qty end*/
+
+
+      /* squarefoot start*/
+
+      var typingTimer2 = null;
+      var doneTypingInterval2 = 400;
+
+      var $input2 = $('.squarefoot');
+
+      $input2.on('keydown', function (evt2) {
+        clearTimeout(typingTimer2);
+      });
+
+      $input2.on('keyup', function (evt2) {
+        var rps = $(this).data('rps');
+        var sqftpb =$(this).data('sqftpb');
+        var squarefoot = $(this);
+        var p_type =$(this).data('p_type');
+        var data_currency = $(this).data('currency');
+        var pr_price = $(this).data('pr_price');
+
+        clearTimeout(typingTimer2);
+        typingTimer2 = setTimeout(function doneTyping2 () {
+
+      calculate_heartbeat_main(squarefoot, sqftpb , pr_price ,p_type,data_currency)
+
+
+
+      }, doneTypingInterval2);
+
+       $(window).keyup(function (e) {
+              var code = (e.keyCode ? e.keyCode : e.which);
+              if (code == 9) {
+                 console.log('I was tabbed!');
+                calculate_heartbeat_main(squarefoot, sqftpb , pr_price ,p_type,data_currency)
+              }
+          });
+
+      });
+
+
+
+
+      /* squarefoot end*/
+    </script>
+  {% elsif p_type == 'TILES' %}
+    {% assign t_box_type = ' / Tile ' %}
+    <h3 class="prj_specs">Project Specs</h3>
+    <div class="top_prcs prod_sku_vend col-xs-12 col-sm-12 col-lg-12 col-xl-12">
+      {% if product.metafields.epc_custom_fields.rate_per_sqft_tiles != blank %}
+        <div class="price_part col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 no-padding">
+          <div class="price_per_unit">
+            <div class="price_per_unit_val">
+              {% assign pr_price = product.selected_or_first_available_variant.price
+                | money_without_currency
+                | remove: ','
+              %}
+              {% assign sqaure_foot_per_roll = product.metafields.epc_custom_fields.sq_ft_per_box_tiles | strip %}
+              {% assign price_per_box_sqft = pr_price | divided_by: sqaure_foot_per_roll | round: 2 %}
+
+              <h3 class="prd_psprc">
+                {{ epc_shop_currency }}
+                {{ price_per_box_sqft }}
+                <small
+                  >/<span class="measurement_unit">{{ measurement_unit }}</span></small
+                >
+              </h3>
+
+              {% assign rate_per_sqft = product.metafields.epc_custom_fields.rate_per_sqft_tiles | strip %}
+
+              {% if product.metafields.epc_custom_fields.sq_ft_per_box_tiles != blank %}
+                {% assign sqftpb = product.metafields.epc_custom_fields.sq_ft_per_box_tiles | strip %}
+
+              {% else %}
+                {% assign pr_price = product.selected_or_first_available_variant.price
+                  | money_without_currency
+                  | remove: ','
+                %}
+                {% assign r_p_s = product.metafields.epc_custom_fields.rate_per_sqft_tiles %}
+
+                {% assign sqftpb = pr_price | divided_by: r_p_s | round: 2 %}
+              {% endif %}
+
+              {% assign rate_per_sqft = rate_per_sqft | plus: 0 %}
+
+              {% comment %}
+                {% assign sqftpb = sqftpb | plus:0 %}
+              {% endcomment %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+      <!-- Show Per Box Product Price -->
+
+      <div class="price_part col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 no-padding">
+        <div class="price_per_unit">
+          <div class="price_per_unit_val">
+            {% unless product.price_max == 0 and settings.custom_price0_text != blank %}
+              <h3 class="prd_prc">
+                {{ epc_shop_currency -}}
+                {{-
+                  product.selected_or_first_available_variant.price
+                  | money_without_currency
+                  | strip_html
+                  | remove: ','
+                }}
+                <small>{{ t_box_type }}</small>
+              </h3>
+
+            {% else %}
+
+            {% endunless %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Show Per Box Product Price End -->
+
+      {% if sqftpb != blank %}
+        <div class="price_part col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 no-padding">
+          <div class="price_per_unit">
+            <div class="price_per_unit_val">
+              <h3 class="prd_tspi">
+                {{ sqftpb }}
+                <small
+                  ><span class="measurement_unit">{{ measurement_unit }}</span>/Box</small
+                >
+              </h3>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="calc-inst1 calc-add-product col-xs-12 col-sm-12 col-lg-12 ">
+      <div class="calc">
+        <div class="price-attr opt-qty-section">
+          <div class="calc-1 my-prod-table1 calculator-form-ele">
+            <label id="epc_label_none" for="squarefoot">
+              <fieldset class="opt-qty-input">
+                <legend>{{ measurement_unit }}</legend>
+                <input
+                  type="tel"
+                  id="squarefoot"
+                  data-p_type="{{p_type}}"
+                  data-rps="{{rate_per_sqft}}"
+                  data-sqftpb="{{sqftpb}}"
+                  data-pr_price="{{ product.selected_or_first_available_variant.price | money_without_currency | strip_html| remove :','  }}"
+                  data-currency="{{ epc_shop_currency }}"
+                  step="0.00000000000001"
+                  name="properties[_Square_Footage]"
+                  class="squarefoot calc-input txtbox product-details-mc"
+                  autofocus
+                >
+              </fieldset>
+            </label>
+          </div>
+
+          <div class="opt-order-estimator">
+            <div class="opt-order-estimator-inner">
+              <div class="calc-2 my-prod-table1 calculator-form-ele text-center">
+                <input
+                  type="tel"
+                  id="qty"
+                  name="quantity"
+                  data-p_type="{{p_type}}"
+                  data-rps="{{rate_per_sqft}}"
+                  data-sqftpb="{{sqftpb}}"
+                  data-pr_price="{{ product.selected_or_first_available_variant.price | money_without_currency | strip_html| remove :','  }}"
+                  tabindex="-1"
+                  data-currency="{{ epc_shop_currency }}"
+                  class="qty lbox txtbox calc-input main-qty product-quantity product-details-mc"
+                  value=""
+                  min="1"
+                >
+                <div class="lbox">
+                  <span class="unitType">Boxes</span>
+                  <p class="info">
+                    will cover <span class="opt-coverage-area">0</span>
+                    <span class="measurement_unit">{{ measurement_unit }}</span>
+                  </p>
+                </div>
+              </div>
+              <div class="calc-sub calculator-form-ele text-center">
+                <span class="subtotal" data-raw-price="0"></span>
+                <p class="info">estimated total</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="calc_errors"></div>
+      </div>
+    </div>
+    <script>
+      /* main-qty start*/
+      var typingTimer1 = null;
+      var doneTypingInterval1 = 400;
+
+      var $input1 = $('.main-qty');
+
+      $input1.on('keydown', function (evt1) {
+        clearTimeout(typingTimer1);
+      });
+
+      $input1.on('keyup', function (evt1) {
+        var rps = $(this).data('rps');
+        var sqftpb =$(this).data('sqftpb');
+        var p_type =$(this).data('p_type');
+        var main_qty = $(this);
+        var data_currency = $(this).data('currency');
+        var pr_price = $(this).data('pr_price');
+
+        clearTimeout(typingTimer1);
+
+
+        typingTimer1 = setTimeout(function doneTyping1 () {
+
+      calculate_quantity_main(main_qty, sqftpb , pr_price,p_type,data_currency)
+
+
+      }, doneTypingInterval1);
+
+       $(window).keyup(function (e) {
+              var code = (e.keyCode ? e.keyCode : e.which);
+              if (code == 9) {
+                 console.log('I was tabbed!');
+                calculate_quantity_main(main_qty, sqftpb , pr_price,p_type,data_currency)
+              }
+          });
+
+
+      });
+      /* main-qty end*/
+
+
+      /* squarefoot start*/
+
+      var typingTimer2 = null;
+      var doneTypingInterval2 = 400;
+
+      var $input2 = $('.squarefoot');
+
+      $input2.on('keydown', function (evt2) {
+        clearTimeout(typingTimer2);
+      });
+
+      $input2.on('keyup', function (evt2) {
+        var rps = $(this).data('rps');
+        var sqftpb =$(this).data('sqftpb');
+        var squarefoot = $(this);
+        var p_type =$(this).data('p_type');
+        var data_currency = $(this).data('currency');
+        var pr_price = $(this).data('pr_price');
+
+        clearTimeout(typingTimer2);
+        typingTimer2 = setTimeout(function doneTyping2 () {
+
+      calculate_heartbeat_main(squarefoot, sqftpb , pr_price ,p_type,data_currency)
+
+
+
+      }, doneTypingInterval2);
+
+       $(window).keyup(function (e) {
+              var code = (e.keyCode ? e.keyCode : e.which);
+              if (code == 9) {
+                 console.log('I was tabbed!');
+                calculate_heartbeat_main(squarefoot, sqftpb , pr_price ,p_type,data_currency)
+              }
+          });
+
+      });
+
+
+
+
+      /* squarefoot end*/
+    </script>
+
+  {% elsif p_type == 'PIECE' %}
+    {% assign t_box_type = ' /Piece ' %}
+    <h3 class="prj_specs">Project Specs</h3>
+    <div class="top_prcs prod_sku_vend col-xs-12 col-sm-12  col-lg-12 col-xl-12">
+      {% if product.metafields.epc_custom_fields.rate_per_piece != blank %}
+        <div class="price_part col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 no-padding">
+          <div class="price_per_unit">
+            <div class="price_per_unit_val">
+              {% assign pr_price = product.selected_or_first_available_variant.price
+                | money_without_currency
+                | remove: ','
+              %}
+              {% assign sqaure_foot_per_roll = product.metafields.epc_custom_fields.pieces_per_box | strip %}
+              {% assign price_per_piece = pr_price | divided_by: sqaure_foot_per_roll | round: 2 %}
+
+              <h3 class="prd_psprc">
+                {{ epc_shop_currency -}}
+                {{- price_per_piece }}
+                <small>/Sf</small>
+              </h3>
+              {% assign rate_per_sqft = product.metafields.epc_custom_fields.rate_per_piece | strip %}
+
+              {% if product.metafields.epc_custom_fields.pieces_per_box != blank %}
+                {% assign sqftpb = product.metafields.epc_custom_fields.pieces_per_box | strip %}
+
+              {% else %}
+                {% assign pr_price = product.selected_or_first_available_variant.price
+                  | money_without_currency
+                  | remove: ','
+                %}
+                {% assign r_p_s = product.metafields.epc_custom_fields.rate_per_piece %}
+
+                {% assign sqftpb = pr_price | divided_by: r_p_s | round: 2 %}
+              {% endif %}
+
+              {% assign rate_per_sqft = rate_per_sqft | plus: 0 %}
+
+              {% comment %}
+                {% assign sqftpb = sqftpb | plus:0 %}
+              {% endcomment %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+      <!-- Show Per Box Product Price -->
+
+      <div class="price_part col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 no-padding">
+        <div class="price_per_unit">
+          <div class="price_per_unit_val">
+            {% unless product.price_max == 0 and settings.custom_price0_text != blank %}
+              <h3 class="prd_prc">
+                {{ epc_shop_currency -}}
+                {{-
+                  product.selected_or_first_available_variant.price
+                  | money_without_currency
+                  | strip_html
+                  | remove: ','
+                }}
+                <small>{{ t_box_type }}</small>
+              </h3>
+
+            {% else %}
+
+            {% endunless %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Show Per Box Product Price End -->
+
+      {% if sqftpb != blank %}
+        <div class="price_part col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 no-padding">
+          <div class="price_per_unit">
+            <div class="price_per_unit_val">
+              <h3 class="prd_tspi">
+                {{ sqftpb }}
+                <small> Pieces/Box</small>
+              </h3>
+            </div>
+          </div>
+        </div>
+        </div>
+      {% endif %}
+
+      <div class="calc-inst1 calc-add-product col-xs-12 col-sm-12  col-lg-12 ">
+        <div class="calc">
+          <div class="price-attr opt-qty-section">
+            <div class="calc-1 my-prod-table1 calculator-form-ele">
+              <label id="epc_label_none" for="squarefoot">
+                <fieldset class="opt-qty-input">
+                  <legend>{{ measurement_unit }}</legend>
+                  <input
+                    type="tel"
+                    id="squarefoot"
+                    data-p_type="BOX"
+                    data-rps="{{rate_per_sqft}}"
+                    data-sqftpb="{{sqftpb}}"
+                    data-pr_price="{{ product.selected_or_first_available_variant.price | money_without_currency | strip_html| remove :','  }}"
+                    data-currency="{{ epc_shop_currency }}"
+                    step="0.00000000000001"
+                    name="properties[_Square_Feet]"
+                    class="squarefoot calc-input txtbox product-details-mc"
+                    autofocus
+                  >
+                </fieldset>
+              </label>
+            </div>
+            <div class="opt-order-estimator">
+              <div class="opt-order-estimator-inner">
+                <div class="calc-2 my-prod-table1 calculator-form-ele text-center">
+                  <input
+                    type="tel"
+                    id="qty"
+                    name="quantity"
+                    data-p_type="{{p_type}}"
+                    data-rps="{{rate_per_sqft}}"
+                    data-sqftpb="{{sqftpb}}"
+                    data-pr_price="{{ product.selected_or_first_available_variant.price | money_without_currency | strip_html| remove :','  }}"
+                    tabindex="-1"
+                    data-currency="{{ epc_shop_currency }}"
+                    class="qty lbox txtbox calc-input main-qty product-quantity product-details-mc"
+                    value=""
+                    min="1"
+                  >
+                  <div class="lbox">
+                    <span class="unitType">Pieces</span>
+                    <p class="info">
+                      will cover <span class="opt-coverage-area">0</span>
+                      <span class="measurement_unit">{{ measurement_unit }}</span>
+                    </p>
+                  </div>
+                </div>
+                <div class="calc-sub calculator-form-ele text-center">
+                  <span class="subtotal" data-raw-price="0"></span>
+                  <p class="info">estimated total</p>
+                </div>
+              </div>
+            </div>
+
+            <div style="clear:both;"></div>
+          </div>
+          <div id="calc_errors"></div>
+        </div>
+      </div>
+      <script>
+                            /* main-qty start*/
+        var typingTimer1 = null;
+        var doneTypingInterval1 = 400;
+
+        var $input1 = $('.main-qty');
+
+        $input1.on('keydown', function (evt1) {
+          clearTimeout(typingTimer1);
+        });
+
+        $input1.on('keyup', function (evt1) {
+          var rps = $(this).data('rps');
+          var sqftpb =$(this).data('sqftpb');
+          var main_qty = $(this);
+          var p_type =$(this).data('p_type');
+          var data_currency = $(this).data('currency');
+          var pr_price = $(this).data('pr_price');
+
+          clearTimeout(typingTimer1);
+
+          typingTimer1 = setTimeout(function doneTyping1 () {
+
+        calculate_quantity_main(main_qty, sqftpb ,pr_price,p_type,data_currency)
+
+
+        }, doneTypingInterval1);
+
+          $(window).keyup(function (e) {
+                var code = (e.keyCode ? e.keyCode : e.which);
+                if (code == 9) {
+                   console.log('I was tabbed!');
+                  calculate_quantity_main(main_qty, sqftpb , pr_price,p_type,data_currency)
+                }
+            });
+
+        });
+        /* main-qty end*/
+
+
+        /* squarefoot start*/
+
+        var typingTimer2 = null;
+        var doneTypingInterval2 = 400;
+
+        var $input2 = $('.squarefoot');
+
+        $input2.on('keydown', function (evt2) {
+          clearTimeout(typingTimer2);
+        });
+
+        $input2.on('keyup', function (evt2) {
+          var rps = $(this).data('rps');
+          var sqftpb =$(this).data('sqftpb');
+          var squarefoot = $(this);
+          var p_type =$(this).data('p_type');
+          var data_currency = $(this).data('currency');
+          var pr_price = $(this).data('pr_price');
+
+          clearTimeout(typingTimer2);
+          typingTimer2 = setTimeout(function doneTyping2 () {
+
+        calculate_heartbeat_main(squarefoot, sqftpb , pr_price,p_type,data_currency)
+
+
+
+        }, doneTypingInterval2);
+
+          $(window).keyup(function (e) {
+                var code = (e.keyCode ? e.keyCode : e.which);
+                if (code == 9) {
+                   console.log('I was tabbed!');
+                  calculate_heartbeat_main(squarefoot, sqftpb , pr_price ,p_type,data_currency)
+                }
+            });
+
+        });
+
+        /* squarefoot end*/
+      </script>
+  {% elsif p_type == 'LINEAL' %}
+    {% assign t_box_type = ' /Lineal ' %}
+    <h3 class="prj_specs">Project Specs</h3>
+    <div class="top_prcs prod_sku_vend col-xs-12 col-sm-12  col-lg-12 col-xl-12">
+      {% if product.metafields.epc_custom_fields.rate_per_lineal_ft != blank %}
+        <div class="price_part col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 no-padding">
+          <div class="price_per_unit">
+            <div class="price_per_unit_val">
+              {% assign pr_price = product.selected_or_first_available_variant.price
+                | money_without_currency
+                | remove: ','
+              %}
+              {% assign sqaure_foot_per_roll = product.metafields.epc_custom_fields.lineal_ft_per_piece | strip %}
+              {% assign price_per_lineal = pr_price | divided_by: sqaure_foot_per_roll | round: 2 %}
+
+              <h3 class="prd_psprc">
+                {{ epc_shop_currency -}}
+                {{- price_per_lineal }}
+                <small>/Lf</small>
+              </h3>
+
+              {% assign rate_per_sqft = product.metafields.epc_custom_fields.rate_per_lineal_ft | strip %}
+
+              {% if product.metafields.epc_custom_fields.lineal_ft_per_piece != blank %}
+                {% assign sqftpb = product.metafields.epc_custom_fields.lineal_ft_per_piece | strip %}
+
+              {% else %}
+                {% assign pr_price = product.selected_or_first_available_variant.price
+                  | money_without_currency
+                  | remove: ','
+                %}
+                {% assign r_p_s = product.metafields.epc_custom_fields.rate_per_lineal_ft %}
+
+                {% assign sqftpb = pr_price | divided_by: r_p_s | round: 2 %}
+              {% endif %}
+
+              {% assign rate_per_sqft = rate_per_sqft | plus: 0 %}
+
+              {% comment %}
+                {% assign sqftpb = sqftpb | plus:0 %}
+              {% endcomment %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- Show Per Box Product Price -->
+
+      <div class="price_part col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 no-padding">
+        <div class="price_per_unit">
+          <div class="price_per_unit_val">
+            {% unless product.price_max == 0 and settings.custom_price0_text != blank %}
+              <h3 class="prd_prc">
+                {{ epc_shop_currency -}}
+                {{-
+                  product.selected_or_first_available_variant.price
+                  | money_without_currency
+                  | strip_html
+                  | remove: ','
+                }}
+                <small>{{ t_box_type }}</small>
+              </h3>
+
+            {% else %}
+
+            {% endunless %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Show Per Box Product Price End -->
+
+      {% if sqftpb != blank %}
+        <div class="price_part col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 no-padding">
+          <div class="price_per_unit">
+            <div class="price_per_unit_val">
+              <h3 class="prd_tspi">
+                {{ sqftpb }}
+                <small>Lf/Piece</small>
+              </h3>
+            </div>
+          </div>
+        </div>
+        </div>
+
+        <div class="calc-inst1 calc-add-product col-xs-12 col-sm-12  col-lg-12 ">
+          <div class="calc">
+            <div class="price-attr opt-qty-section">
+              <div class="calc-1 my-prod-table1 calculator-form-ele">
+                <label id="epc_label_none" for="squarefoot">
+                  <fieldset class="opt-qty-input">
+                    <legend>{{ measurement_unit }}</legend>
+                    <input
+                      type="tel"
+                      id="squarefoot"
+                      data-p_type="{{p_type}}"
+                      data-rps="{{rate_per_sqft}}"
+                      data-sqftpb="{{sqftpb}}"
+                      data-pr_price="{{ product.selected_or_first_available_variant.price | money_without_currency | strip_html| remove :','  }}"
+                      data-currency="{{ epc_shop_currency }}"
+                      step="0.00000000000001"
+                      name="properties[_Square_Feet]"
+                      class="squarefoot calc-input txtbox  product-details-mc"
+                      autofocus
+                    >
+                  </fieldset>
+                </label>
+              </div>
+              <div class="opt-order-estimator">
+                <div class="opt-order-estimator-inner">
+                  <div class="calc-2 my-prod-table1 calculator-form-ele text-center">
+                    <input
+                      type="tel"
+                      id="qty"
+                      data-p_type="{{p_type}}"
+                      name="properties[_Pieces_Required]"
+                      data-rps="{{rate_per_sqft}}"
+                      data-sqftpb="{{sqftpb}}"
+                      data-pr_price="{{ product.selected_or_first_available_variant.price | money_without_currency | strip_html| remove :','  }}"
+                      data-currency="{{ epc_shop_currency }}"
+                      class="qty lbox txtbox calc-input main-qty product-quantity product-details-mc"
+                      value=""
+                      min="1"
+                    >
+                    <div class="lbox">
+                      <span class="unitType">Pieces</span>
+                      <p class="info">
+                        will cover <span class="opt-coverage-area">0</span>
+                        <span class="measurement_unit">{{ measurement_unit }}</span>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="calc-sub calculator-form-ele text-center">
+                    <span class="subtotal" data-raw-price="0"></span>
+                    <p class="info">estimated total</p>
+                  </div>
+                </div>
+              </div>
+              <div style="clear:both;"></div>
+            </div>
+            <div id="calc_errors"></div>
+          </div>
+        </div>
+        <script>
+                              /* main-qty start*/
+          var typingTimer1 = null;
+          var doneTypingInterval1 = 400;
+
+          var $input1 = $('.main-qty');
+
+          $input1.on('keydown', function (evt1) {
+            clearTimeout(typingTimer1);
+          });
+
+          $input1.on('keyup', function (evt1) {
+            var rps = $(this).data('rps');
+            var sqftpb =$(this).data('sqftpb');
+            var main_qty = $(this);
+            var p_type =$(this).data('p_type');
+            var data_currency = $(this).data('currency');
+            var pr_price = $(this).data('pr_price');
+            clearTimeout(typingTimer1);
+
+            typingTimer1 = setTimeout(function doneTyping1 () {
+
+          calculate_quantity_main(main_qty, sqftpb , pr_price,p_type,data_currency)
+
+
+          }, doneTypingInterval1);
+
+            $(window).keyup(function (e) {
+                  var code = (e.keyCode ? e.keyCode : e.which);
+                  if (code == 9) {
+                     console.log('I was tabbed!');
+                    calculate_quantity_main(main_qty, sqftpb , pr_price,p_type,data_currency)
+                  }
+              });
+
+          });
+          /* main-qty end*/
+
+
+          /* squarefoot start*/
+
+          var typingTimer2 = null;
+          var doneTypingInterval2 = 400;
+
+          var $input2 = $('.squarefoot');
+
+          $input2.on('keydown', function (evt2) {
+            clearTimeout(typingTimer2);
+          });
+
+          $input2.on('keyup', function (evt2) {
+            var rps = $(this).data('rps');
+            var sqftpb =$(this).data('sqftpb');
+            var squarefoot = $(this);
+            var p_type =$(this).data('p_type');
+            var data_currency = $(this).data('currency');
+            var pr_price = $(this).data('pr_price');
+
+            clearTimeout(typingTimer2);
+            typingTimer2 = setTimeout(function doneTyping2 () {
+
+          calculate_heartbeat_main(squarefoot, sqftpb , pr_price ,p_type,data_currency)
+
+
+
+          }, doneTypingInterval2);
+
+           $(window).keyup(function (e) {
+                  var code = (e.keyCode ? e.keyCode : e.which);
+                  if (code == 9) {
+                     console.log('I was tabbed!');
+                    calculate_heartbeat_main(squarefoot, sqftpb , pr_price ,p_type,data_currency)
+                  }
+              });
+
+
+          });
+
+          /* squarefoot end*/
+        </script>
+      {% endif %}
+  {% elsif p_type == 'ROLL' %}
+    {% assign t_box_type = ' /Roll ' %}
+    <h3 class="prj_specs">Project Specs</h3>
+    <div class="top_prcs prod_sku_vend col-xs-12 col-sm-12  col-lg-12 col-xl-12">
+      {% if product.metafields.epc_custom_fields.rate_per_sqft_roll != blank %}
+        <div class="price_part col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 no-padding">
+          <div class="price_per_unit">
+            <div class="price_per_unit_val">
+              {% if product.metafields.epc_custom_fields.sqaure_foot_per_roll != blank %}
+                {% assign pr_price = product.selected_or_first_available_variant.price
+                  | money_without_currency
+                  | remove: ','
+                %}
+                {% assign sqaure_foot_per_roll = product.metafields.epc_custom_fields.sqaure_foot_per_roll | strip %}
+                {% assign price_per_roll = pr_price | divided_by: sqaure_foot_per_roll %}
+
+              {% else %}
+
+              {% endif %}
+
+              <h3 class="prd_psprc">
+                {{ epc_shop_currency -}}
+                {{- price_per_roll | round: 2 }}
+                <small
+                  >/<span class="measurement_unit">{{ measurement_unit }}</span></small
+                >
+              </h3>
+
+              {% assign rate_per_sqft = product.metafields.epc_custom_fields.rate_per_sqft_roll | strip %}
+
+              {% if product.metafields.epc_custom_fields.sqaure_foot_per_roll != blank %}
+                {% assign sqftpb = product.metafields.epc_custom_fields.sqaure_foot_per_roll | strip %}
+
+              {% else %}
+                {% assign pr_price = product.selected_or_first_available_variant.price
+                  | money_without_currency
+                  | remove: ','
+                %}
+                {% assign r_p_s = product.metafields.epc_custom_fields.rate_per_sqft_roll %}
+
+                {% assign sqftpb = pr_price | divided_by: r_p_s | round: 2 %}
+              {% endif %}
+
+              {% assign rate_per_sqft = rate_per_sqft | plus: 0 %}
+
+              {% comment %}
+                {% assign sqftpb = sqftpb | plus:0 %}
+              {% endcomment %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+      <!-- Show Per Box Product Price -->
+
+      <div class="price_part col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 no-padding">
+        <div class="price_per_unit">
+          <div class="price_per_unit_val">
+            {% unless product.price_max == 0 and settings.custom_price0_text != blank %}
+              <h3 class="prd_prc">
+                {{ epc_shop_currency -}}
+                {{-
+                  product.selected_or_first_available_variant.price
+                  | money_without_currency
+                  | strip_html
+                  | remove: ','
+                }}
+                <small>{{ t_box_type }}</small>
+              </h3>
+
+            {% else %}
+
+            {% endunless %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Show Per Box Product Price End -->
+      {% if sqftpb != blank %}
+        <div class="price_part col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 no-padding">
+          <div class="price_per_unit">
+            <div class="price_per_unit_val">
+              <h3 class="prd_tspi">
+                {{ sqftpb }}
+                <small
+                  ><span class="measurement_unit">{{ measurement_unit }}</span> / roll</small
+                >
+              </h3>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="calc-inst1 calc-add-product col-xs-12 col-sm-12  col-lg-12 ">
+      <div class="calc">
+        <div class="price-attr opt-qty-section">
+          <div class="calc-1 my-prod-table1 calculator-form-ele">
+            <label id="epc_label_none" for="squarefoot">
+              <fieldset class="opt-qty-input">
+                <legend>{{ measurement_unit }}</legend>
+                <input
+                  type="tel"
+                  id="squarefoot"
+                  data-p_type="{{p_type}}"
+                  data-rps="{{rate_per_sqft}}"
+                  data-sqftpb="{{sqftpb}}"
+                  data-pr_price="{{ product.selected_or_first_available_variant.price | money_without_currency | strip_html| remove :','  }}"
+                  data-currency="{{ epc_shop_currency }}"
+                  step="0.00000000000001"
+                  name="properties[_Square_Feet]"
+                  class="squarefoot calc-input txtbox  product-details-mc"
+                  autofocus
+                >
+              </fieldset>
+            </label>
+          </div>
+          <div class="opt-order-estimator">
+            <div class="opt-order-estimator-inner">
+              <div class="calc-2 my-prod-table1 calculator-form-ele text-center">
+                <input
+                  id="qty"
+                  data-p_type="{{p_type}}"
+                  type="tel"
+                  name="properties[_Rolls_Required]"
+                  data-rps="{{rate_per_sqft}}"
+                  data-sqftpb="{{sqftpb}}"
+                  data-pr_price="{{ product.selected_or_first_available_variant.price | money_without_currency | strip_html| remove :','  }}"
+                  data-currency="{{ epc_shop_currency }}"
+                  class="qty lbox txtbox calc-input main-qty product-quantity product-details-mc"
+                  value=""
+                  min="1"
+                >
+                <div class="lbox">
+                  <span class="unitType">ROLLS</span>
+                  <p class="info">
+                    will cover <span class="opt-coverage-area">0</span>
+                    <span class="measurement_unit">{{ measurement_unit }}</span>
+                  </p>
+                </div>
+              </div>
+              <div class="calc-sub calculator-form-ele text-center">
+                <span class="subtotal" data-raw-price="0"></span>
+                <p class="info">estimated total</p>
+              </div>
+            </div>
+          </div>
+          <div style="clear:both;"></div>
+        </div>
+        <div id="calc_errors"></div>
+      </div>
+    </div>
+    <script>
+                        /* main-qty start*/
+      var typingTimer1 = null;
+      var doneTypingInterval1 = 400;
+
+      var $input1 = $('.main-qty');
+
+      $input1.on('keydown', function (evt1) {
+        clearTimeout(typingTimer1);
+      });
+
+      $input1.on('keyup', function (evt1) {
+        var rps = $(this).data('rps');
+        var sqftpb =$(this).data('sqftpb');
+        var p_type =$(this).data('p_type');
+        var main_qty = $(this);
+        var data_currency = $(this).data('currency');
+        var pr_price = $(this).data('pr_price');
+        clearTimeout(typingTimer1);
+
+        typingTimer1 = setTimeout(function doneTyping1 () {
+
+      calculate_quantity_main(main_qty, sqftpb , pr_price ,p_type,data_currency)
+
+
+      }, doneTypingInterval1);
+
+        $(window).keyup(function (e) {
+              var code = (e.keyCode ? e.keyCode : e.which);
+              if (code == 9) {
+                 console.log('I was tabbed!');
+                calculate_quantity_main(main_qty, sqftpb , pr_price,p_type,data_currency)
+              }
+          });
+
+
+      });
+      /* main-qty end*/
+
+
+      /* squarefoot start*/
+
+      var typingTimer2 = null;
+      var doneTypingInterval2 = 400;
+
+      var $input2 = $('.squarefoot');
+
+      $input2.on('keydown', function (evt2) {
+        clearTimeout(typingTimer2);
+      });
+
+      $input2.on('keyup', function (evt2) {
+        var rps = $(this).data('rps');
+        var sqftpb =$(this).data('sqftpb');
+        var squarefoot = $(this);
+        var p_type =$(this).data('p_type');
+        var data_currency = $(this).data('currency');
+        var pr_price = $(this).data('pr_price');
+
+        clearTimeout(typingTimer2);
+        typingTimer2 = setTimeout(function doneTyping2 () {
+
+      calculate_heartbeat_main(squarefoot, sqftpb , pr_price,p_type,data_currency)
+
+
+
+      }, doneTypingInterval2);
+
+        $(window).keyup(function (e) {
+              var code = (e.keyCode ? e.keyCode : e.which);
+              if (code == 9) {
+                 console.log('I was tabbed!');
+                calculate_heartbeat_main(squarefoot, sqftpb , pr_price ,p_type,data_currency)
+              }
+          });
+
+      });
+
+      /* squarefoot end*/
+    </script>
+
+  {% else %}
+    {% assign t_box_type = ' ' %}
+  {% endif %}
+{% endif %}
+
+<!-- Calculator End -->
+
+<!-- Cutsom instock -->
+
+{% if product.metafields.epc_custom_fields.product_type != blank %}
+  {% assign p_type = product.metafields.epc_custom_fields.product_type %}
+
+  {% if p_type == 'BOX' %}
+    {% assign inventory_suffix = 'boxes' %}
+  {% elsif p_type == 'PIECE' %}
+    {% assign inventory_suffix = 'pieces' %}
+  {% elsif p_type == 'LINEAL' %}
+    {% assign inventory_suffix = 'pieces' %}
+  {% elsif p_type == 'ROLL' %}
+    {% assign inventory_suffix = 'rolls' %}
+  {% else %}
+    {% assign inventory_suffix = ' ' %}
+  {% endif %}
+{% endif %}
+<div id="variant-inventory-custom " class="variant-inventory-custom">
+  {% if product.variants.first.inventory_management == 'shopify' %}
+    {% if product.variants.first.inventory_quantity > 0 %}
+      {% assign oot = '' %}
+      We currently have {{ product.variants.first.inventory_quantity }}
+      {{ inventory_suffix }} in stock.
+      <input
+        type="hidden"
+        id="check_inventory"
+        class="check_inventory"
+        value="{{ product.variants.first.inventory_quantity }}"
+      >
+    {% else %}
+      {% assign oot = 'disabled' %}
+      The product is out of stock
+      <input
+        type="hidden"
+        id="check_inventory"
+        class="check_inventory"
+        value="{{ product.variants.first.inventory_quantity }}"
+      >
+    {% endif %}
+  {% else %}
+    This product is available
+  {% endif %}
+</div>
+
+<!-- Custom Instock End -->

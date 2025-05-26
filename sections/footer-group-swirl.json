@@ -1,0 +1,88 @@
+{
+  "name": "t:sections.footer.name",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "footer-0": {
+          "type": "link_list",
+          "settings": {
+            "open_by_default": false,
+            "heading_menu": "Quick Links",
+            "menu": "2-0-quick-links",
+            "show_social_icons": false
+          }
+        },
+        "link_list_feRwPP": {
+          "type": "link_list",
+          "settings": {
+            "open_by_default": false,
+            "heading_menu": "Company Information",
+            "menu": "2-0-company-information",
+            "show_social_icons": false
+          }
+        },
+        "footer-1": {
+          "type": "link_list",
+          "settings": {
+            "open_by_default": false,
+            "heading_menu": "Policies & Terms",
+            "menu": "2-0-policies-terms",
+            "show_social_icons": false
+          }
+        },
+        "footer-3": {
+          "type": "email_footer",
+          "disabled": true,
+          "settings": {
+            "open_by_default": true,
+            "heading_email": "SUBSCRIBE TO OUR EMAILS",
+            "subtext_email": "<p>Apply for our free membership to receive exclusive deals, news and events.<\/p>",
+            "show_social_icons": true
+          }
+        }
+      },
+      "block_order": [
+        "footer-0",
+        "link_list_feRwPP",
+        "footer-1",
+        "footer-3"
+      ],
+      "settings": {
+        "columns_desktop": 5,
+        "show_language_selector": true,
+        "show_currency_selector": true,
+        "show_social_icons": true,
+        "payment_enable": true,
+        "show_copyright": true,
+        "add_copyright_text": "",
+        "additional_layout": "horizontal",
+        "show_powered": false,
+        "enable_follow_on_shop": false,
+        "top_padding": 0,
+        "bottom_padding": 24,
+        "top_padding_mobile": 0,
+        "bottom_padding_mobile": 20
+      }
+    },
+    "custom_liquid_erKHUA": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<script>\n  \/\/ Adjust the width threshold as needed (e.g., 768 or 1024)\n  if (window.innerWidth > 768) { \n    var script = document.createElement('script');\n    script.async = true;\n    script.id = 'roomvoAssistant';\n    script.type = 'text\/javascript';\n    script.setAttribute('data-locale', 'en-us');\n    script.setAttribute('data-position', 'bottom-left');\n    script.src = 'https:\/\/www.roomvo.com\/static\/scripts\/b2b\/common\/assistant.js';\n    document.body.appendChild(script);\n  }\n<\/script>",
+        "full_width": false,
+        "show_section_divider": false,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "full_width_mobile": false,
+        "show_section_divider_mobile": false,
+        "padding_top_mobile": 28,
+        "padding_bottom_mobile": 28
+      }
+    }
+  },
+  "order": [
+    "footer",
+    "custom_liquid_erKHUA"
+  ]
+}

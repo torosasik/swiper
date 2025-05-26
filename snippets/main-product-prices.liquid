@@ -1,0 +1,88 @@
+{% assign title_size = settings.text_base_size | times: 0.01375 %}
+
+<div class="{{ container }} price">
+  <div class="price-container">
+    {%- # Main price display -%}
+    <div class="flex items-baseline price-main-container">
+      {% if product.compare_at_price > product.price %}
+        <span class="line-through text-gray-500 mr-2 compare-price">{{ product.compare_at_price | money }}</span>
+      {% endif %}
+      
+      <span class="main-price">
+        {{ product.price | money }}
+      </span>
+
+      {% if product.metafields.my_fields.box_area %}
+        <span class="unit-text"> / per {{ product.metafields.measuringunitsatd.measuring_units_atd | default: "Unit" }}</span>
+        <span class="coverage-text">
+          (Covers {{ product.metafields.my_fields.box_area | remove: "sq. ft." | strip }} sq. ft.)
+        </span>
+      {% else %}
+        <span class="unit-text">
+          /{{ product.metafields.measuringunitsatd.measuring_units_atd | default: "Unit" }}
+        </span>
+      {% endif %}
+    </div>
+
+    {%- # Price per square foot (only for box-type products) -%}
+    {% if product.metafields.my_fields.box_area %}
+      {% assign box_area = product.metafields.my_fields.box_area %}
+      {% assign price_squared = product.price | divided_by: box_area | round: 2 %}
+      {% assign price_squared = price_squared | money %}
+        {% if price_squared != blank %}
+          <div class="mt-3 flex items-baseline sqft-price-container">
+            <span class="sqft-price">
+              {{ price_squared }}
+            </span>
+            <span class="sqft-unit">
+              / per Sq. Ft.
+            </span>
+          </div>
+        {% endif %}
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  .price-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .main-price {
+    font-size: 32px !important;
+    color: #ff0000 !important;
+    font-weight: bold !important;
+    line-height: 1 !important;
+  }
+  
+  .unit-text {
+    font-size: 16px !important;
+    color: #333333 !important;
+    margin-left: 8px !important;
+  }
+  
+  .coverage-text {
+    font-size: 16px !important;
+    color: #666666 !important;
+    margin-left: 8px !important;
+  }
+  
+  .sqft-price {
+    font-size: 24px !important;
+    color: #333333 !important;
+    font-weight: 500 !important;
+  }
+  
+  .sqft-unit {
+    font-size: 16px !important;
+    color: #666666 !important;
+    margin-left: 4px !important;
+  }
+  
+  .price-main-container,
+  .sqft-price-container {
+    display: flex !important;
+    align-items: baseline !important;
+  }
+</style>
