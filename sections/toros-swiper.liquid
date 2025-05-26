@@ -1,0 +1,127 @@
+<!-- Swiper.js CSS & JS (only include once per page!) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<!-- Featured Mosaic Collections Swiper Slider -->
+<div class="swiper my-mosaic-slider" style="margin-bottom:40px;">
+  <div class="swiper-wrapper">
+    <!-- Fame -->
+    <div class="swiper-slide">
+      <a href="/collections/fame-mosaic-tile-collection">
+        <img src="//www.americantiledepot.com/cdn/shop/collections/fame-mosaic-tile-collection.jpg?v=1737251728&amp;width=600" alt="Fame Mosaic Tile Collection">
+        <div class="slide-label">Fame Mosaic Tile Collection</div>
+      </a>
+    </div>
+    <!-- Aster -->
+    <div class="swiper-slide">
+      <a href="/collections/aster-mosaic-tile-collection">
+        <img src="//www.americantiledepot.com/cdn/shop/collections/aster-mosaic-tile-collection.jpg?v=1737251671&amp;width=600" alt="Aster Mosaic Tile Collection">
+        <div class="slide-label">Aster Mosaic Tile Collection</div>
+      </a>
+    </div>
+    <!-- Band -->
+    <div class="swiper-slide">
+      <a href="/collections/band-mosaic-tile-collection">
+        <img src="//www.americantiledepot.com/cdn/shop/collections/band-mosaic-tile-collection.jpg?v=1737251990&amp;width=600" alt="Band Mosaic Tile Collection">
+        <div class="slide-label">Band Mosaic Tile Collection</div>
+      </a>
+    </div>
+    <!-- Arrow -->
+    <div class="swiper-slide">
+      <a href="/collections/arrow-mosaic-tile-collection">
+        <img src="//www.americantiledepot.com/cdn/shop/collections/arrow-mosaic-tile-collection.jpg?v=1737251763&amp;width=600" alt="Arrow Mosaic Tile Collection">
+        <div class="slide-label">Arrow Mosaic Tile Collection</div>
+      </a>
+    </div>
+    <!-- Orb Night -->
+    <div class="swiper-slide">
+      <a href="/collections/orb-night-mosaic-tile-collection">
+        <img src="//www.americantiledepot.com/cdn/shop/collections/orb-night-mosaic-tile-collection.jpg?v=1737251838&amp;width=600" alt="Orb Night Mosaic Tile Collection">
+        <div class="slide-label">Orb Night Mosaic Tile Collection</div>
+      </a>
+    </div>
+    <!-- Add more slides as needed -->
+  </div>
+  <div class="swiper-button-next"></div>
+  <div class="swiper-button-prev"></div>
+</div>
+
+<style>
+.my-mosaic-slider {
+  max-width: 1350px;
+  margin: 0 auto 40px auto;
+}
+.my-mosaic-slider .swiper-slide {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(60,60,60,0.10);
+  overflow: hidden;
+  text-align: center;
+  transition: box-shadow 0.2s;
+  padding-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.my-mosaic-slider .swiper-slide img {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 18px 18px 0 0;
+  margin: 0 auto;
+}
+.my-mosaic-slider .slide-label {
+  margin: 12px auto 0 auto;
+  padding: 6px 22px;
+  border-radius: 16px;
+  background: #F5F8FC;
+  color: #232323;
+  font-size: 16px;
+  font-weight: 500;
+  max-width: 280px;
+  white-space: normal;
+  box-shadow: 0 2px 8px rgba(60,60,60,0.05);
+}
+.my-mosaic-slider .swiper-button-next,
+.my-mosaic-slider .swiper-button-prev {
+  color: #232323;
+}
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    new Swiper('.my-mosaic-slider', {
+      effect: 'coverflow',
+      grabCursor: true,
+      centeredSlides: true,
+      slidesPerView: 'auto',
+      loop: true,
+      coverflowEffect: {
+        rotate: 30,
+        stretch: 0,
+        depth: 180,
+        modifier: 1,
+        slideShadows: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      breakpoints: {
+        0: { slidesPerView: 1.2, spaceBetween: 14 },
+        600: { slidesPerView: 2.1, spaceBetween: 24 },
+        900: { slidesPerView: 3.2, spaceBetween: 28 },
+        1200: { slidesPerView: 4.2, spaceBetween: 36 }
+      }
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Toros Swiper Slider",
+  "settings": []
+}
+{% endschema %} 
