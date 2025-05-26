@@ -1,0 +1,134 @@
+{% comment %}
+  Toros Swiper Section
+  Custom Swiper.js slider for featured mosaic tile collections.
+{% endcomment %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<style>
+  .my-mosaic-slider {
+    max-width: 1350px;
+    margin: 0 auto 40px auto;
+  }
+  .my-mosaic-slider .swiper-slide {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(60,60,60,0.10);
+    overflow: hidden;
+    text-align: center;
+    transition: box-shadow 0.2s;
+    padding-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .my-mosaic-slider .swiper-slide img {
+    display: block;
+    width: 100%;
+    max-width: 320px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 18px 18px 0 0;
+    margin: 0 auto;
+  }
+  .my-mosaic-slider .slide-label {
+    margin: 12px auto 0 auto;
+    padding: 6px 22px;
+    border-radius: 16px;
+    background: #F5F8FC;
+    color: #232323;
+    font-size: 16px;
+    font-weight: 500;
+    max-width: 280px;
+    white-space: normal;
+    box-shadow: 0 2px 8px rgba(60,60,60,0.05);
+  }
+  .my-mosaic-slider .swiper-button-next,
+  .my-mosaic-slider .swiper-button-prev {
+    color: #232323;
+  }
+</style>
+
+<div class="swiper my-mosaic-slider" style="margin-bottom:40px;">
+  <div class="swiper-wrapper">
+    {% for block in section.blocks %}
+      <div class="swiper-slide">
+        <a href="{{ block.settings.collection_url }}">
+          {% if block.settings.collection_image != blank %}
+            <img src="{{ block.settings.collection_image | img_url: '600x' }}" alt="{{ block.settings.collection_label }}">
+          {% endif %}
+          <div class="slide-label">{{ block.settings.collection_label }}</div>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+  <div class="swiper-button-next"></div>
+  <div class="swiper-button-prev"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+  setTimeout(function() {
+    new Swiper('.my-mosaic-slider', {
+      effect: 'coverflow',
+      grabCursor: true,
+      centeredSlides: true,
+      slidesPerView: 'auto',
+      loop: true,
+      coverflowEffect: {
+        rotate: 30,
+        stretch: 0,
+        depth: 180,
+        modifier: 1,
+        slideShadows: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      breakpoints: {
+        0: { slidesPerView: 1.2, spaceBetween: 14 },
+        600: { slidesPerView: 2.1, spaceBetween: 24 },
+        900: { slidesPerView: 3.2, spaceBetween: 28 },
+        1200: { slidesPerView: 4.2, spaceBetween: 36 }
+      }
+    });
+  }, 300);
+</script>
+
+{% schema %}
+{
+  "name": "Toros Swiper",
+  "tag": "section",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "collection_slide",
+      "name": "Collection Slide",
+      "settings": [
+        {
+          "type": "url",
+          "id": "collection_url",
+          "label": "Collection Link"
+        },
+        {
+          "type": "image_picker",
+          "id": "collection_image",
+          "label": "Collection Image"
+        },
+        {
+          "type": "text",
+          "id": "collection_label",
+          "label": "Collection Name"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 15,
+  "presets": [
+    {
+      "name": "Toros Swiper",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %} 
