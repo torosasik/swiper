@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "name": "t:sections.header.name",
   "type": "header",
@@ -6,7 +15,7 @@
       "type": "apps",
       "blocks": {
         "smart_announcement_bar_app_block_hM4bNg": {
-          "type": "shopify:\/\/apps\/smart-announcement-bar\/blocks\/app-block\/2e4d8eae-ba5a-4dc9-8d5a-85d9fc648446",
+          "type": "shopify://apps/smart-announcement-bar/blocks/app-block/2e4d8eae-ba5a-4dc9-8d5a-85d9fc648446",
           "disabled": true,
           "settings": {}
         }
@@ -158,7 +167,7 @@
           "settings": {
             "heading": "NATURAL STONE",
             "menu": "new-menu",
-            "menu_item_link": "shopify:\/\/collections\/natural-stone",
+            "menu_item_link": "shopify://collections/natural-stone",
             "open_new_window": false,
             "tab_style": "vertical",
             "see_more_link": "",
@@ -232,7 +241,7 @@
           "settings": {
             "heading": "NATURAL STONE",
             "menu": "new-menu",
-            "menu_item_link": "shopify:\/\/collections\/natural-stone",
+            "menu_item_link": "shopify://collections/natural-stone",
             "open_new_window": false,
             "see_more_link": "",
             "see_more_open_new_window": false,
@@ -304,7 +313,7 @@
           "settings": {
             "heading": "TILE",
             "menu": "tile",
-            "menu_item_link": "shopify:\/\/collections\/tile",
+            "menu_item_link": "shopify://collections/tile",
             "open_new_window": false,
             "tab_style": "vertical",
             "see_more_link": "",
@@ -378,7 +387,7 @@
           "settings": {
             "heading": "TILE",
             "menu": "tile",
-            "menu_item_link": "shopify:\/\/collections\/tile",
+            "menu_item_link": "shopify://collections/tile",
             "open_new_window": false,
             "see_more_link": "",
             "see_more_open_new_window": false,
@@ -450,7 +459,7 @@
           "settings": {
             "heading": "PERFORMANCE FLOORING",
             "menu": "performance-flooring",
-            "menu_item_link": "shopify:\/\/collections\/performance-flooring",
+            "menu_item_link": "shopify://collections/performance-flooring",
             "open_new_window": false,
             "tab_style": "vertical",
             "see_more_link": "",
@@ -524,7 +533,7 @@
           "settings": {
             "heading": "PERFORMANCE FLOORING",
             "menu": "performance-flooring",
-            "menu_item_link": "shopify:\/\/collections\/performance-flooring",
+            "menu_item_link": "shopify://collections/performance-flooring",
             "open_new_window": false,
             "see_more_link": "",
             "see_more_open_new_window": false,
@@ -596,7 +605,7 @@
           "settings": {
             "heading": "ACCESSORIES",
             "menu": "accessories-1",
-            "menu_item_link": "shopify:\/\/collections\/natural-stone-accessories",
+            "menu_item_link": "shopify://collections/natural-stone-accessories",
             "open_new_window": false,
             "tab_style": "vertical",
             "see_more_link": "",
@@ -670,7 +679,7 @@
           "settings": {
             "heading": "ACCESSORIES",
             "menu": "accessories-1",
-            "menu_item_link": "shopify:\/\/collections\/natural-stone-accessories",
+            "menu_item_link": "shopify://collections/natural-stone-accessories",
             "open_new_window": false,
             "see_more_link": "",
             "see_more_open_new_window": false,
@@ -742,7 +751,7 @@
           "settings": {
             "heading": "CARE",
             "menu": "installation-care",
-            "menu_item_link": "shopify:\/\/collections\/installation-care",
+            "menu_item_link": "shopify://collections/installation-care",
             "open_new_window": false,
             "tab_style": "vertical",
             "see_more_link": "",
@@ -816,7 +825,7 @@
           "settings": {
             "heading": "INSTALLATION & CARE",
             "menu": "installation-care-1",
-            "menu_item_link": "shopify:\/\/collections\/care-maintenance",
+            "menu_item_link": "shopify://collections/care-maintenance",
             "open_new_window": false,
             "see_more_link": "",
             "see_more_open_new_window": false,
@@ -888,7 +897,7 @@
           "settings": {
             "heading": "CLEARANCE",
             "menu": "",
-            "menu_item_link": "shopify:\/\/collections\/sale",
+            "menu_item_link": "shopify://collections/sale",
             "open_new_window": false,
             "see_more_link": "",
             "see_more_open_new_window": false,
@@ -961,7 +970,7 @@
           "settings": {
             "heading": "INSPIRATION",
             "menu": "",
-            "menu_item_link": "shopify:\/\/collections\/inspiration",
+            "menu_item_link": "shopify://collections/inspiration",
             "open_new_window": false,
             "see_more_link": "",
             "see_more_open_new_window": false,
@@ -1055,8 +1064,8 @@
         "full_width": true,
         "logo_position": "left-center",
         "sticky_header_type": "none",
-        "logo": "shopify:\/\/shop_images\/original-9920-3403825.png",
-        "logo_dark": "shopify:\/\/shop_images\/layer_1008.png",
+        "logo": "shopify://shop_images/original-9920-3403825.png",
+        "logo_dark": "shopify://shop_images/layer_1008.png",
         "logo_width": 130,
         "logo_width_mobile": 100,
         "show_social_icons": true,
@@ -1087,7 +1096,7 @@
           "settings": {
             "heading": "NATURAL STONE",
             "menu": "new-menu",
-            "menu_item_link": "shopify:\/\/collections\/all-products",
+            "menu_item_link": "shopify://collections/all-products",
             "open_new_window": false
           }
         },
@@ -1096,7 +1105,7 @@
           "settings": {
             "heading": "TILE",
             "menu": "tile",
-            "menu_item_link": "shopify:\/\/collections\/all-products",
+            "menu_item_link": "shopify://collections/all-products",
             "open_new_window": false
           }
         },
@@ -1105,7 +1114,7 @@
           "settings": {
             "heading": "ACCESSORIES",
             "menu": "accessories-1",
-            "menu_item_link": "shopify:\/\/collections\/all-products",
+            "menu_item_link": "shopify://collections/all-products",
             "open_new_window": false
           }
         },
@@ -1123,7 +1132,7 @@
           "settings": {
             "heading": "INSTALLATION & CARE",
             "menu": "installation-care-1",
-            "menu_item_link": "shopify:\/\/collections\/all-products",
+            "menu_item_link": "shopify://collections/all-products",
             "open_new_window": false
           }
         },
@@ -1132,7 +1141,7 @@
           "settings": {
             "heading": "SALE",
             "menu": "",
-            "menu_item_link": "shopify:\/\/collections\/sale",
+            "menu_item_link": "shopify://collections/sale",
             "open_new_window": false
           }
         },
@@ -1141,7 +1150,7 @@
           "settings": {
             "heading": "INSPIRATION",
             "menu": "",
-            "menu_item_link": "shopify:\/\/collections\/inspiration",
+            "menu_item_link": "shopify://collections/inspiration",
             "open_new_window": false
           }
         },
@@ -1181,7 +1190,7 @@
       "type": "apps",
       "blocks": {
         "conversagent_gqa_block_cb_EwhdYV": {
-          "type": "shopify:\/\/apps\/conversagent\/blocks\/gqa-block-cb\/9dcb9616-f02a-40f7-b434-36f4866f2140",
+          "type": "shopify://apps/conversagent/blocks/gqa-block-cb/9dcb9616-f02a-40f7-b434-36f4866f2140",
           "settings": {
             "gqa_agentName": "Alexa",
             "gqa_agentTagLine": "AI Assistant",
@@ -1211,6 +1220,42 @@
       "settings": {
         "include_margins": true
       }
+    },
+    "toros_swiper_hr9cEN": {
+      "type": "toros-swiper",
+      "blocks": {
+        "collection_slide_p4FmzY": {
+          "type": "collection_slide",
+          "settings": {
+            "collection_url": "https://www.americantiledepot.com/collections/tile-stone-look",
+            "collection_image": "shopify://shop_images/24x48-Sunstone-Basalt-Lappato-Stone-Look-Polished-Porcelain-Tile-6_793075cd-6814-4955-9cab-ee1ba4d0bf11.jpg",
+            "collection_label": "Stone Look"
+          }
+        },
+        "collection_slide_c4frhf": {
+          "type": "collection_slide",
+          "settings": {
+            "collection_url": "https://www.americantiledepot.com/collections/tile-slate-look",
+            "collection_image": "shopify://shop_images/12x24-aurelian-torrento-dark-slate-look-matte-porcelain-tile-3.jpg",
+            "collection_label": "Slate Look"
+          }
+        },
+        "collection_slide_iDNQf8": {
+          "type": "collection_slide",
+          "settings": {
+            "collection_url": "https://www.americantiledepot.com/collections/tile-onyx-look",
+            "collection_image": "shopify://shop_images/24x48-mystic-beige-matte-onyx-look-porcelain-tile-3.jpg",
+            "collection_label": "Onyx Look"
+          }
+        }
+      },
+      "block_order": [
+        "collection_slide_p4FmzY",
+        "collection_slide_c4frhf",
+        "collection_slide_iDNQf8"
+      ],
+      "name": "Toros Swiper",
+      "settings": {}
     }
   },
   "order": [
@@ -1219,6 +1264,7 @@
     "ss_scrolling_announcement_bar_2_qMxt8t",
     "header",
     "mobile-navigation",
-    "1729467892c9dff134"
+    "1729467892c9dff134",
+    "toros_swiper_hr9cEN"
   ]
 }
