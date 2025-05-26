@@ -1,25 +1,39 @@
 {% comment %}
-  Toros Swiper Section
-  Custom Swiper.js slider for featured mosaic tile collections.
+  Toros Swiper Section - Advanced Customizer Version
+  Fully customizable Swiper.js slider for Shopify, with section and block settings.
 {% endcomment %}
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 <style>
+  .toros-swiper-section {
+    background: {{ section.settings.section_bg }};
+    margin-top: {{ section.settings.margin_top }}px;
+    margin-bottom: {{ section.settings.margin_bottom }}px;
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    padding-left: {{ section.settings.padding_sides }}px;
+    padding-right: {{ section.settings.padding_sides }}px;
+    {% if section.settings.full_width %}width: 100vw; max-width: 100vw;{% endif %}
+  }
   .my-mosaic-slider {
-    max-width: 1350px;
+    max-width: {{ section.settings.slider_max_width }}px;
     margin: 0 auto 40px auto;
   }
   .my-mosaic-slider .swiper-slide {
-    background: #fff;
-    border-radius: 18px;
-    box-shadow: 0 8px 32px rgba(60,60,60,0.10);
+    background: {{ section.settings.slide_bg }};
+    border-radius: {{ section.settings.slide_radius }}px;
+    box-shadow: 0 8px 32px {{ section.settings.slide_shadow_color | color_modify: 'alpha', section.settings.slide_shadow_opacity | divided_by: 100.0 }};
     overflow: hidden;
     text-align: center;
     transition: box-shadow 0.2s;
-    padding-bottom: 16px;
+    padding-bottom: {{ section.settings.slide_padding_vertical }}px;
+    padding-top: {{ section.settings.slide_padding_vertical }}px;
+    padding-left: {{ section.settings.slide_padding_horizontal }}px;
+    padding-right: {{ section.settings.slide_padding_horizontal }}px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    border: {{ section.settings.slide_border_thickness }}px solid {{ section.settings.slide_border_color }};
   }
   .my-mosaic-slider .swiper-slide img {
     display: block;
@@ -27,42 +41,57 @@
     max-width: 320px;
     height: 180px;
     object-fit: cover;
-    border-radius: 18px 18px 0 0;
+    border-radius: {{ section.settings.slide_radius }}px {{ section.settings.slide_radius }}px 0 0;
     margin: 0 auto;
   }
   .my-mosaic-slider .slide-label {
     margin: 12px auto 0 auto;
     padding: 6px 22px;
     border-radius: 16px;
-    background: #F5F8FC;
-    color: #232323;
+    background: {{ section.settings.slide_label_bg }};
+    color: {{ section.settings.slide_label_color }};
     font-size: 16px;
     font-weight: 500;
     max-width: 280px;
     white-space: normal;
-    box-shadow: 0 2px 8px rgba(60,60,60,0.05);
+    box-shadow: 0 2px 8px {{ section.settings.slide_shadow_color | color_modify: 'alpha', 0.05 }};
   }
   .my-mosaic-slider .swiper-button-next,
   .my-mosaic-slider .swiper-button-prev {
-    color: #232323;
+    color: {{ section.settings.arrow_color }};
+    background: {{ section.settings.arrow_bg_color }};
+    border-radius: 50%;
+    border: {{ section.settings.arrow_border_thickness }}px solid {{ section.settings.arrow_border_color }};
+    width: {{ section.settings.arrow_size }}px;
+    height: {{ section.settings.arrow_size }}px;
+    font-size: {{ section.settings.arrow_icon_size }}px;
+    top: 50%;
+    transform: translateY(-50%);
   }
 </style>
 
-<div class="swiper my-mosaic-slider" style="margin-bottom:40px;">
-  <div class="swiper-wrapper">
-    {% for block in section.blocks %}
-      <div class="swiper-slide">
-        <a href="{{ block.settings.collection_url }}">
-          {% if block.settings.collection_image != blank %}
-            <img src="{{ block.settings.collection_image | img_url: '600x' }}" alt="{{ block.settings.collection_label }}">
-          {% endif %}
-          <div class="slide-label">{{ block.settings.collection_label }}</div>
-        </a>
-      </div>
-    {% endfor %}
+<div class="toros-swiper-section">
+  <div class="swiper my-mosaic-slider" style="margin-bottom:40px;">
+    <div class="swiper-wrapper">
+      {% for block in section.blocks %}
+        <div class="swiper-slide">
+          <a href="{{ block.settings.collection_url }}">
+            {% if block.settings.collection_image != blank %}
+              <img src="{{ block.settings.collection_image | img_url: '600x' }}" alt="{{ block.settings.collection_label }}">
+            {% endif %}
+            <div class="slide-label">{{ block.settings.collection_label }}</div>
+            {% if block.settings.button_text != blank %}
+              <div style="margin-top:10px;">
+                <a href="{{ block.settings.button_url }}" class="swiper-btn" style="background: {{ section.settings.button_bg }}; color: {{ section.settings.button_color }}; border-radius: {{ section.settings.button_radius }}px; padding: 8px 18px; text-decoration: none; font-weight: 600;">{{ block.settings.button_text }}</a>
+              </div>
+            {% endif %}
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
   </div>
-  <div class="swiper-button-next"></div>
-  <div class="swiper-button-prev"></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -72,10 +101,10 @@
       effect: 'coverflow',
       grabCursor: true,
       centeredSlides: true,
-      slidesPerView: 'auto',
+      slidesPerView: {{ section.settings.slides_per_view | default: 'auto' }},
       loop: true,
       coverflowEffect: {
-        rotate: 30,
+        rotate: {{ section.settings.slide_rotate }},
         stretch: 0,
         depth: 180,
         modifier: 1,
@@ -86,10 +115,10 @@
         prevEl: '.swiper-button-prev',
       },
       breakpoints: {
-        0: { slidesPerView: 1.2, spaceBetween: 14 },
-        600: { slidesPerView: 2.1, spaceBetween: 24 },
-        900: { slidesPerView: 3.2, spaceBetween: 28 },
-        1200: { slidesPerView: 4.2, spaceBetween: 36 }
+        0: { slidesPerView: {{ section.settings.slides_per_view_mobile | default: 1.2 }}, spaceBetween: 14 },
+        600: { slidesPerView: {{ section.settings.slides_per_view_tablet | default: 2.1 }}, spaceBetween: 24 },
+        900: { slidesPerView: {{ section.settings.slides_per_view_desktop | default: 3.2 }}, spaceBetween: 28 },
+        1200: { slidesPerView: {{ section.settings.slides_per_view_large | default: 4.2 }}, spaceBetween: 36 }
       }
     });
   }, 300);
@@ -99,36 +128,57 @@
 {
   "name": "Toros Swiper",
   "tag": "section",
-  "settings": [],
+  "settings": [
+    {"type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff"},
+    {"type": "range", "id": "margin_top", "label": "Margin top", "min": 0, "max": 100, "step": 1, "default": 0},
+    {"type": "range", "id": "margin_bottom", "label": "Margin bottom", "min": 0, "max": 100, "step": 1, "default": 0},
+    {"type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 100, "step": 1, "default": 0},
+    {"type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 100, "step": 1, "default": 0},
+    {"type": "range", "id": "padding_sides", "label": "Padding sides", "min": 0, "max": 100, "step": 1, "default": 0},
+    {"type": "checkbox", "id": "full_width", "label": "Full Width", "default": false},
+    {"type": "range", "id": "slider_max_width", "label": "Slider Max Width (px)", "min": 400, "max": 2000, "step": 10, "default": 1350},
+    {"type": "range", "id": "slides_per_view", "label": "Slides Per View (Desktop)", "min": 1, "max": 8, "step": 1, "default": 4},
+    {"type": "range", "id": "slides_per_view_mobile", "label": "Slides Per View (Mobile)", "min": 1, "max": 3, "step": 0.1, "default": 1.2},
+    {"type": "range", "id": "slides_per_view_tablet", "label": "Slides Per View (Tablet)", "min": 1, "max": 6, "step": 0.1, "default": 2.1},
+    {"type": "range", "id": "slides_per_view_desktop", "label": "Slides Per View (Large Desktop)", "min": 1, "max": 8, "step": 0.1, "default": 3.2},
+    {"type": "range", "id": "slides_per_view_large", "label": "Slides Per View (XL Desktop)", "min": 1, "max": 10, "step": 0.1, "default": 4.2},
+    {"type": "range", "id": "slide_rotate", "label": "Slide Rotate (deg)", "min": 0, "max": 60, "step": 1, "default": 30},
+    {"type": "color", "id": "slide_bg", "label": "Slide Background", "default": "#ffffff"},
+    {"type": "color", "id": "slide_border_color", "label": "Slide Border Color", "default": "#000000"},
+    {"type": "range", "id": "slide_border_thickness", "label": "Slide Border Thickness (px)", "min": 0, "max": 10, "step": 1, "default": 0},
+    {"type": "color", "id": "slide_shadow_color", "label": "Slide Shadow Color", "default": "#000000"},
+    {"type": "range", "id": "slide_shadow_opacity", "label": "Slide Shadow Opacity (%)", "min": 0, "max": 100, "step": 1, "default": 10},
+    {"type": "range", "id": "slide_radius", "label": "Slide/Card Border Radius (px)", "min": 0, "max": 40, "step": 1, "default": 18},
+    {"type": "range", "id": "slide_padding_vertical", "label": "Slide Padding Vertical (px)", "min": 0, "max": 40, "step": 1, "default": 16},
+    {"type": "range", "id": "slide_padding_horizontal", "label": "Slide Padding Horizontal (px)", "min": 0, "max": 40, "step": 1, "default": 0},
+    {"type": "color", "id": "slide_label_bg", "label": "Slide Label Background", "default": "#F5F8FC"},
+    {"type": "color", "id": "slide_label_color", "label": "Slide Label Color", "default": "#232323"},
+    {"type": "color", "id": "arrow_color", "label": "Arrow Color", "default": "#232323"},
+    {"type": "color", "id": "arrow_bg_color", "label": "Arrow Background Color", "default": "#ffffff"},
+    {"type": "color", "id": "arrow_border_color", "label": "Arrow Border Color", "default": "#232323"},
+    {"type": "range", "id": "arrow_border_thickness", "label": "Arrow Border Thickness (px)", "min": 0, "max": 10, "step": 1, "default": 0},
+    {"type": "range", "id": "arrow_size", "label": "Arrow Size (px)", "min": 20, "max": 80, "step": 1, "default": 40},
+    {"type": "range", "id": "arrow_icon_size", "label": "Arrow Icon Size (px)", "min": 10, "max": 40, "step": 1, "default": 20},
+    {"type": "color", "id": "button_bg", "label": "Button Background", "default": "#1C4170"},
+    {"type": "color", "id": "button_color", "label": "Button Text Color", "default": "#ffffff"},
+    {"type": "range", "id": "button_radius", "label": "Button Border Radius (px)", "min": 0, "max": 40, "step": 1, "default": 16}
+  ],
   "blocks": [
     {
       "type": "collection_slide",
       "name": "Collection Slide",
       "settings": [
-        {
-          "type": "url",
-          "id": "collection_url",
-          "label": "Collection Link"
-        },
-        {
-          "type": "image_picker",
-          "id": "collection_image",
-          "label": "Collection Image"
-        },
-        {
-          "type": "text",
-          "id": "collection_label",
-          "label": "Collection Name"
-        }
+        {"type": "url", "id": "collection_url", "label": "Collection Link"},
+        {"type": "image_picker", "id": "collection_image", "label": "Collection Image"},
+        {"type": "text", "id": "collection_label", "label": "Collection Name"},
+        {"type": "text", "id": "button_text", "label": "Button Text"},
+        {"type": "url", "id": "button_url", "label": "Button URL"}
       ]
     }
   ],
   "max_blocks": 15,
   "presets": [
-    {
-      "name": "Toros Swiper",
-      "category": "Custom"
-    }
+    {"name": "Toros Swiper", "category": "Custom"}
   ]
 }
 {% endschema %} 
